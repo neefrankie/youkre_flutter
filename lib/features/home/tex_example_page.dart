@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
-import '../../core/ui/widgets/math_svg_view.dart';
 import '../../core/ui/widgets/math_widget.dart';
 import '../../core/ui/widgets/table_widget.dart';
 
@@ -60,20 +59,6 @@ M =\begin{bmatrix}1 & 0 \\0 & 1\end{bmatrix}\begin{bmatrix}1 & 0 \\0 & 1\end{bma
             MathInlineWidget(paragraph: r'''When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$  and they are:'''),
 
             MathBlockWidget(latex: r"""x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"""),
-
-            Text("Use flutter_tex svg to render latex:"),
-
-            MathInlineSVGView(paragraph: r'''$\dfrac{a}{b}$. When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$  and they are:'''),
-
-            MathSVGView(latex: r"""x = {-b \pm \sqrt{b^2-4ac} \over 2a}"""),
-
-            MathSVGView(latex: r"""
-\begin{align*}
-\frac{dy}{dx} &= 2x \\
-&= 2 \times 2 \\
-&= 4
-\end{align*}
-"""),
 
             TableWidget(
                 rows: [

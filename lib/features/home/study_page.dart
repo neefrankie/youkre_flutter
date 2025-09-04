@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 
 class StudyPage extends StatelessWidget {
   String markdown = r"""
@@ -26,8 +25,6 @@ $$
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownWidget(
-      data: markdown,
-    );
+    return Text("data");
   }
 }

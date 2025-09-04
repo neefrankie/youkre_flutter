@@ -34,12 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  flutter_tex: ^5.1.10
   json_annotation: ^4.9.0
   equatable: ^2.0.7
   flutter_math_fork: ^0.7.4
   path: ^1.9.1
-  markdown_widget: ^2.3.2+8
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +62,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/calculus-made-easy/
+    - assets/css/
+    - assets/elementary-algebra/
+    - assets/elementary-statistics/
+    - assets/elementary-trigonometry/
     - assets/images/
+    - assets/js/
+    - assets/logos/
+    - assets/db.sqlite3
 
   # To add assets to your application, add an assets section, like this:
   # assets:
