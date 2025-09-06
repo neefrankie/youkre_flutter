@@ -1,30 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:youkre_flutter/core/ui/widgets/markdown_view.dart';
 
 class StudyPage extends StatelessWidget {
-  String markdown = r"""
-Inline equation: $y = ax + b$
 
-Display equation: $$equation$$
+  const StudyPage({super.key});
 
-根据**幂法则**：
+  final String example = r"""
+# Welcome to SwiftUI
 
-$$
-\frac{d}{dx}x^a = ax^{a-1}
-$$
+## Welcome to SwiftUI
 
-这里 a = 13，所以：
+### Welcome to SwiftUI
+
+This is a custom **Markdown** renderer.
+
+- Easy to use
+- Supports *basic* styling
+- [Visit Apple](https://apple.com)
+
+## Thanks for Reading
+
+\[ \frac{dy}{dx} = u\, \frac{dv}{dx} + v\, \frac{du}{dx} \]
+
+Order of Operations are:
+
+* Parentheses (Brackets) first
+* Exponents (Orders, Powers, Square Roots, etc.) next
+* Multiplication and Division (left-to-right) next
+* Addition and Subtraction (left-to-right) last
+
+So we do the division and multiplication before the addition:
 
 \begin{align*}
-&\frac{d}{dx}x^{13} \\
-= &13x^{13-1} \\
-= &13x^{12}
+6 \div 3 = 2 \\
+4 \times 2 = 8
 \end{align*}
-""";
 
-  StudyPage({super.key});
+So 
+
+\begin{align*}
+&6 \div 3 + 4 \times 2 \\
+= &2 + 8 \\
+= &10
+\end{align*}
+
+$$
+\frac{d}{dx}x^{13} = 13x^{12}
+$$
+
+| 科学 | 34 | 
+| --- | --- |
+| 英语 | 90 | 
+| 历史 | 87 | 
+| 数学 | 34 |  
+| 地理 | 55 |""";
 
   @override
   Widget build(BuildContext context) {
-    return Text("data");
+    return MarkdownView(markdown: example, isScrollable: true);
   }
 }
