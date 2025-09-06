@@ -7,6 +7,7 @@ class Course {
   final String? summary;
   final String? keywords;
   final IconSymbol? icons;
+  final String exerciseCover;
   final int contentVersion;
 
   Course({
@@ -16,8 +17,13 @@ class Course {
     this.summary,
     this.keywords,
     this.icons,
+    required this.exerciseCover,
     this.contentVersion = 1,
   });
+
+  String exerciseCoverPath() {
+    return 'assets/images/cover/$exerciseCover';
+  }
 
   // Hashable: hash(into:) → 在 Dart 中通常用 == + hashCode 体现
   // 这里我们按 slug 哈希（Swift 版本）
