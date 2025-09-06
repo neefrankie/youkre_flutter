@@ -38,6 +38,10 @@ dependencies:
   equatable: ^2.0.7
   flutter_math_fork: ^0.7.4
   path: ^1.9.1
+  shared_preferences: ^2.5.3
+  collection: ^1.19.1
+  sqflite: ^2.4.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -64,13 +68,15 @@ flutter:
   assets:
     - assets/calculus-made-easy/
     - assets/css/
+    - assets/css/fonts/
     - assets/elementary-algebra/
     - assets/elementary-statistics/
     - assets/elementary-trigonometry/
-    - assets/images/
+    - assets/images/cover/
+    - assets/images/exercise/
     - assets/js/
     - assets/logos/
-    - assets/db.sqlite3
+    - assets/db/db.sqlite3
 
   # To add assets to your application, add an assets section, like this:
   # assets:
