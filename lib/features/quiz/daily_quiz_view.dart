@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youkre_flutter/core/data/exercise_data_source.dart';
 import 'package:youkre_flutter/core/models/course_kind.dart';
+import 'package:youkre_flutter/core/models/daily_exercise_info.dart';
 import 'package:youkre_flutter/core/services/preference_service.dart';
+import 'package:youkre_flutter/core/models/exercise.dart';
+import 'package:youkre_flutter/core/utils/datetime.dart';
 
-import '../../core/models/exercise.dart';
-import '../../core/models/multiple_choice.dart';
 import 'daily_quiz_card.dart';
 
 class DailyQuizView extends StatefulWidget {
@@ -16,51 +17,42 @@ class DailyQuizView extends StatefulWidget {
 
 class _DailyQuizViewState extends State<DailyQuizView> {
   final _prefs = PreferenceService();
+  late Future<Exercise> _exerciseFuture;
 
-  bool _isLoading = false;
-
-  final Exercise exercise = Exercise(
-      id: "test",
-      levelId: "test-level",
-      prompts: r"""
-\begin{align*}
-\frac{dy}{dx} &= 2x \\
-&= 2 \times 2 \\
-&= 4
-\end{align*}
-""",
-      multipleChoice: MultipleChoice(
-          choices: [
-            'Option 1',
-            'Option 2',
-            'Option 3',
-            'Option 4',
-          ],
-          correctIndex: 0
-      ),
-      explanation: 'This part give you a detailed explanation on how to solve this problem.'
-  );
+  @override
+  void initState() {
+    super.initState();
+    _exerciseFuture = _getOrFindExercise();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // padding: const EdgeInsets.all(16.0),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _content()
+    return FutureBuilder<Exercise?>(
+        future: _exerciseFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final exercise = snapshot.data!;
+            return _buildExercise(exercise);
+          }
+
+          if (snapshot.hasError) {
+            return Text('加载失败: ${snapshot.error}');
+          }
+
+          return CircularProgressIndicator();
+        }
     );
   }
 
-  Widget _content() {
+  Widget _buildExercise(Exercise exercise) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
           title: Text('每日一题'),
           contentPadding: EdgeInsets.zero,
           trailing: IconButton(
-            onPressed: () {
-              _selectCourse();
-            },
+            onPressed: _selectCourse,
             icon: Icon(Icons.settings)
           ),
         ),
@@ -74,7 +66,7 @@ class _DailyQuizViewState extends State<DailyQuizView> {
   Future<void> _selectCourse() async {
     final selected = _prefs.getCourse();
 
-    final result = await showDialog<CourseKind>(
+    final newCourseKind = await showDialog<CourseKind>(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
@@ -89,9 +81,14 @@ class _DailyQuizViewState extends State<DailyQuizView> {
       }
     );
 
-    if (result != null) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('course', result.name);
+    if (newCourseKind != null) {
+      final currentKind = _prefs.getCourse();
+      if (currentKind == newCourseKind) {
+        return;
+      }
+      setState(() {
+        _exerciseFuture = _onSwitchCourse(newCourseKind);
+      });
     }
   }
 
@@ -103,5 +100,47 @@ class _DailyQuizViewState extends State<DailyQuizView> {
         if (selected) Icon(Icons.check, color: Colors.teal),
       ],
     );
+  }
+
+  Future<Exercise> _getOrFindExercise() async {
+    final kind = _prefs.getCourse();
+    final dailyExInfo = _prefs.getDailyExerciseInfo();
+
+    if (dailyExInfo == null) {
+      return await _loadNewDailyExercise(kind);
+    }
+
+    final String currentDate = getCurrentDateAsString();
+
+    if (dailyExInfo.lastDate != currentDate) {
+      return await _loadNewDailyExercise(kind);
+    }
+
+    return _loadTodayExercise(dailyExInfo.exerciseId, kind);
+  }
+
+  Future<Exercise> _onSwitchCourse(CourseKind kind) async {
+    await _prefs.setCourse(kind);
+
+    return _loadNewDailyExercise(kind);
+  }
+
+  Future<Exercise> _loadNewDailyExercise(CourseKind kind) async {
+    final exercise = await ExerciseDataSource().findRandomExercise(kind);
+    final dailyExInfo = DailyExerciseInfo.today(exerciseId: exercise.id);
+
+    await _prefs.saveDailyExerciseInfo(dailyExInfo);
+
+    return exercise;
+  }
+
+  Future<Exercise> _loadTodayExercise(String id, CourseKind kind) async {
+    final currentExercise = await ExerciseDataSource().findExerciseById(id);
+
+    if (currentExercise == null) {
+      return await _loadNewDailyExercise(kind);
+    }
+
+    return currentExercise;
   }
 }
