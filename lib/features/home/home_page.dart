@@ -8,17 +8,16 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          spacing: 16,
-          children: [
-            DailyQuizView(),
-            CourseListView(),
-          ],
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        DailyQuizView(),
+        ListTile(
+          title: Text('更多练习'),
+          contentPadding: EdgeInsets.zero,
         ),
-      ),
+        CourseListView(),
+      ],
     );
   }
 }
