@@ -1,38 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
-import 'package:youkre_flutter/core/models/exercise_level.dart';
 import 'package:youkre_flutter/features/exercise/exercise_view.dart';
 
+import 'package:youkre_flutter/core/models/course_session.dart';
+import 'package:youkre_flutter/features/exercise/exercise_viewmodel.dart';
 
-class ExerciseDetailView extends StatefulWidget {
-  final ExerciseLevel level;
+
+class ExerciseDetailView extends StatelessWidget {
   final Exercise exercise;
-  final Function(int index, bool isCorrect) onAnswer;
+  final LevelProgress levelProgress;
+  final CourseSession courseSession;
+  final bool isLast;
+  final GestureTapCallback onSummary;
+  final ValueChanged<ExerciseProgress> onAnswer;
 
   const ExerciseDetailView({
     super.key,
-    required this.level,
-    required this.onAnswer,
     required this.exercise,
+    required this.levelProgress,
+    required this.courseSession,
+    required this.isLast,
+    required this.onAnswer,
+    required this.onSummary,
   });
 
   @override
-  State<ExerciseDetailView> createState() => _ExerciseDetailViewState();
-}
-
-class _ExerciseDetailViewState extends State<ExerciseDetailView> {
-  // TODO: load exercise progress
-
-  @override
   Widget build(BuildContext context) {
-    return ExerciseView(
-      exercise: widget.exercise,
-      selectedIndex: null, // TODO: sync from exercise progress
-      onClick: (index) {
-        // TODO: change exercise progress selected index.
-        widget.onAnswer(index, true);
+    return ChangeNotifierProvider(
+      create: (_) {
+        final vm = ExerciseViewModel();
+        vm.loadData(
+            exercise: exercise,
+            courseSession: courseSession,
+            levelProgress: levelProgress
+        );
+        return vm;
       },
+      child: Builder(
+        builder: (context) {
+          return Consumer<ExerciseViewModel>(
+              builder: (context, vm, child) {
+                return ExerciseView(
+                  exercise: exercise,
+                  selectedIndex: vm.selectedIndex,
+                  onClick: (selectedIndex) {
+                    onCheckAnswer(context, selectedIndex);
+                  },
+                  extra: (isLast && vm.selectedIndex != null) ? finishButton() : null,
+                );
+              }
+          );
+        }
+      ),
     );
   }
 
+  Widget finishButton() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ElevatedButton(
+        onPressed: onSummary,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: const Text(
+          '完成',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+  }
+
+  void onCheckAnswer(BuildContext context, int selectedIndex) {
+    final vm = context.watch<ExerciseViewModel>();
+    final newProgress = vm.checkAnswer(selectedIndex, exercise);
+    onAnswer(newProgress);
+    vm.updateProgress(newProgress);
+  }
 }

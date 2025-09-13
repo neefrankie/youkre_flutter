@@ -7,11 +7,14 @@ class ExerciseView extends StatelessWidget {
   final Exercise exercise;
   final int? selectedIndex;
   final ValueChanged<int> onClick;
+  final Widget? extra;
 
   const ExerciseView({
     super.key,
     required this.exercise,
-    this.selectedIndex, required this.onClick
+    this.selectedIndex,
+    required this.onClick,
+    this.extra
   });
 
   @override
@@ -32,6 +35,7 @@ class ExerciseView extends StatelessWidget {
             );
           },
         ),
+        if (extra != null) extra!,
       ],
     );
   }
