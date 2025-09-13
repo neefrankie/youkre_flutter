@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youkre_flutter/core/data/database.dart';
 import 'package:youkre_flutter/core/services/database_service.dart';
 import 'package:youkre_flutter/core/services/preference_service.dart';
 
@@ -19,6 +20,7 @@ void main() async {
   final dbPath = await dbService.getDatabasePath();
   print('db path: $dbPath');
 
+  AppDatabase.instance();
   runApp(const App());
 }
 
