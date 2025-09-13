@@ -15,11 +15,6 @@ ExerciseLevel _$ExerciseLevelFromJson(Map<String, dynamic> json) =>
       chapterSlug: json['chapter_slug'] as String,
       title: json['title'] as String,
       contentVersion: (json['content_version'] as num?)?.toInt() ?? 1,
-      exercises:
-          (json['exercises'] as List<dynamic>?)
-              ?.map((e) => Exercise.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
     );
 
 Map<String, dynamic> _$ExerciseLevelToJson(ExerciseLevel instance) =>
@@ -31,5 +26,4 @@ Map<String, dynamic> _$ExerciseLevelToJson(ExerciseLevel instance) =>
       'chapter_slug': instance.chapterSlug,
       'title': instance.title,
       'content_version': instance.contentVersion,
-      'exercises': instance.exercises,
     };
