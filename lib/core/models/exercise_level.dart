@@ -1,4 +1,3 @@
-// models/exercise_level.dart
 import 'package:json_annotation/json_annotation.dart';
 import 'chapter_link.dart';
 import 'exercise.dart'; // 确保已定义 Exercise
@@ -17,9 +16,8 @@ class ExerciseLevel {
   @JsonKey(name: 'chapter_slug')
   final String chapterSlug;
   final String title;
-  @JsonKey(name: 'content_version') // 修复拼写：Versoin → Version
+  @JsonKey(name: 'content_version')
   final int contentVersion;
-  final List<Exercise> exercises;
 
   ExerciseLevel({
     required this.id,
@@ -29,7 +27,6 @@ class ExerciseLevel {
     required this.chapterSlug,
     required this.title,
     this.contentVersion = 1,
-    this.exercises = const [], // 默认空列表
   });
 
   // 工厂构造函数：从 JSON 创建
@@ -61,3 +58,4 @@ class ExerciseLevel {
   @override
   String toString() => 'ExerciseLevel(id: $id, title: $title)';
 }
+
