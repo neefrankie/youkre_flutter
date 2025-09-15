@@ -10,7 +10,7 @@ class DatabaseService {
   static final DatabaseService _instance = DatabaseService._();
   factory DatabaseService() => _instance;
 
-  static const String _dbAssetPath = 'assets/db/db.sqlite3';
+  static const String _dbAssetPath = 'assets/db/db_v1.sqlite3';
   static const String _dbName = 'course.db';
   static const int _currentVersion = 1;
 
