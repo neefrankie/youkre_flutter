@@ -14,15 +14,12 @@ class CourseViewModel extends ChangeNotifier {
   final Map<String, bool> _levelsCompleted = {};
   CourseSession? _session;
 
-  CourseViewModel({
-    required this.course,
-  });
+  CourseViewModel({required this.course});
 
   bool get isLoading => _loading;
   String? get error => _error;
   List<ExerciseLevel> get levels => _levels;
   CourseSession? get courseSession => _session;
-
 
   ExerciseLevel? get currentLevel {
     final index = _session?.lastLevelIndex;
@@ -85,9 +82,14 @@ class CourseViewModel extends ChangeNotifier {
       final db = AppDatabase.instance();
       final levels = await ExerciseDataSource().loadLevels(course);
 
-      final session = await db.sessionDao.loadOrCreateSession(course, levelCount: levels.length);
+      final session = await db.sessionDao.loadOrCreateSession(
+        course,
+        levelCount: levels.length,
+      );
 
-      final allLevelProgress = await db.levelDao.getLatestProgressForSession(session.id);
+      final allLevelProgress = await db.levelDao.getLatestProgressForSession(
+        session.id,
+      );
 
       _session = session;
       for (var progress in allLevelProgress) {
@@ -98,7 +100,7 @@ class CourseViewModel extends ChangeNotifier {
       notifyListeners();
 
       if (!session.isCompleted) {
-        await markSessionComplete();
+        await tryCompleteSession();
       }
     } catch (e) {
       _error = e.toString();
@@ -123,21 +125,17 @@ class CourseViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> markSessionComplete() async {
+  Future<void> tryCompleteSession() async {
     if (!allLevelsComplete) {
       return;
     }
 
     final newSession = _session?.markComplete();
-    if (newSession == null) {
+    _session = newSession;
+
+    if (newSession?.isCompleted == true) {
       return;
     }
-
-    try {
-      final db = AppDatabase.instance();
-      await db.sessionDao.updateSession(newSession);
-    } catch (e) {
-      print(e.toString());
-    }
+    await updateSession();
   }
 }
