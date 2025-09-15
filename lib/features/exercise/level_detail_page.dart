@@ -12,10 +12,7 @@ import 'exercise_bottom_bar.dart';
 class LevelDetailPage extends StatefulWidget {
   final CourseViewModel courseViewModel;
 
-  const LevelDetailPage({
-    super.key,
-    required this.courseViewModel,
-  });
+  const LevelDetailPage({super.key, required this.courseViewModel});
 
   @override
   State<LevelDetailPage> createState() => _LevelDetailPage();
@@ -61,17 +58,15 @@ class _LevelDetailPage extends State<LevelDetailPage> {
               courseSession: widget.courseViewModel.courseSession,
             );
             return vm;
-          }
-        )
+          },
+        ),
       ],
       child: Consumer<CourseViewModel>(
         builder: (context, vm, child) {
           return Scaffold(
             appBar: AppBar(
               title: Text(vm.navTitle),
-              actions: [
-                _buildNextButton(context),
-              ],
+              actions: [_buildNextButton(context)],
             ),
             body: _buildBody(context),
             // bottomNavigationBar: _isLastAnswered ? finishButton() : null,
@@ -89,11 +84,11 @@ class _LevelDetailPage extends State<LevelDetailPage> {
   Widget _buildNextButton(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
     return TextButton(
-        onPressed: () {
-          vm.advance();
-          _goToPage(vm.currentPage);
-        },
-        child: Text('下一题')
+      onPressed: () {
+        vm.advance();
+        _goToPage(vm.currentPage);
+      },
+      child: Text('下一题'),
     );
   }
 
@@ -105,12 +100,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     if (vm.error != null) {
       return Text('加载失败: ${vm.error}');
     }
-    return Column(
-      children: [
-        Text(vm.progressText),
-        swipingPage(context),
-      ],
-    );
+    return Column(children: [Text(vm.progressText), swipingPage(context)]);
   }
 
   Widget swipingPage(BuildContext context) {
@@ -155,7 +145,10 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     );
   }
 
-  Future<void> _onExerciseAnswered(BuildContext context, ExerciseProgress exerciseProgress) async {
+  Future<void> _onExerciseAnswered(
+    BuildContext context,
+    ExerciseProgress exerciseProgress,
+  ) async {
     final vm = context.watch<LevelDetailViewModel>();
     final courseVm = context.watch<CourseViewModel>();
 
@@ -172,42 +165,46 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     final courseVm = context.watch<CourseViewModel>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      courseVm.markSessionComplete();
+      courseVm.tryCompleteSession();
     });
 
     SheetManager.presentSheet(
-        context, 
-        child: BottomSheetContainer(
-          onDismiss: () { SheetManager.dismiss(context); }, 
-          title: '总结', 
-          builder: (context, scrollController) {
-            return Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                spacing: 16,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('🎉完成本节练习'),
-                  Text('答对 ${vm.levelProgress?.score} / ${vm.levelProgress?.total}'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      FilledButton(
-                          onPressed: () {
-                            _onRestart(context);
-                            SheetManager.dismiss(context);
-                          }, 
-                          child: Text('再做一遍'),
-                      ),
-                      _nextOrFinishButton(context),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }
-        ),
+      context,
+      child: BottomSheetContainer(
+        onDismiss: () {
+          SheetManager.dismiss(context);
+        },
+        title: '总结',
+        builder: (context, scrollController) {
+          return Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              spacing: 16,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('🎉完成本节练习'),
+                Text(
+                  '答对 ${vm.levelProgress?.score} / ${vm.levelProgress?.total}',
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FilledButton(
+                      onPressed: () {
+                        _onRestart(context);
+                        SheetManager.dismiss(context);
+                      },
+                      child: Text('再做一遍'),
+                    ),
+                    _nextOrFinishButton(context),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -264,6 +261,4 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     SheetManager.dismiss(context);
     Navigator.pop(context);
   }
-
-
 }
