@@ -40,12 +40,15 @@ class ExerciseViewModel extends ChangeNotifier {
   }
 
   ExerciseProgress checkAnswer(int selected, Exercise exercise) {
+    selectedIndex = selected;
+    notifyListeners();
+
     final progress = exerciseProgress;
     if (progress == null) {
       final newProgress = ExerciseProgress.newSession(exercise.id);
       exerciseProgress = newProgress;
       notifyListeners();
-      return ExerciseProgress.newSession(exercise.id);
+      return newProgress;
     }
     if (progress.isCompleted) {
       return progress;

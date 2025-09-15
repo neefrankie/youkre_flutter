@@ -4,7 +4,7 @@ import 'package:youkre_flutter/core/models/exercise.dart';
 import 'package:youkre_flutter/features/exercise/exercise_view.dart';
 
 import 'package:youkre_flutter/core/models/course_session.dart';
-import 'package:youkre_flutter/features/exercise/exercise_viewmodel.dart';
+import 'package:youkre_flutter/features/exercise/viewmodel/exercise_viewmodel.dart';
 
 
 class ExerciseDetailView extends StatelessWidget {

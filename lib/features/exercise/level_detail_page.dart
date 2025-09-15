@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/services/sheet_manager.dart';
 import 'package:youkre_flutter/core/ui/widgets/bottom_sheet.dart';
-import 'package:youkre_flutter/features/exercise/course_detail_viewmodel.dart';
-import 'package:youkre_flutter/features/exercise/exercise_detail_page.dart';
-import 'package:youkre_flutter/features/exercise/level_detail_viewmodel.dart';
+import 'package:youkre_flutter/features/exercise/viewmodel/course_viewmodel.dart';
+import 'package:youkre_flutter/features/exercise/exercise_detail_view.dart';
+import 'package:youkre_flutter/features/exercise/viewmodel/level_viewmodel.dart';
 
 import 'package:youkre_flutter/core/models/course_session.dart';
 import 'exercise_bottom_bar.dart';

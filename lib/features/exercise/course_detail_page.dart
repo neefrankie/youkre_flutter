@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:youkre_flutter/features/exercise/course_detail_viewmodel.dart';
+import 'package:youkre_flutter/features/exercise/viewmodel/course_viewmodel.dart';
 import 'package:youkre_flutter/features/exercise/level_card.dart';
 import 'package:youkre_flutter/features/exercise/level_detail_page.dart';
 
