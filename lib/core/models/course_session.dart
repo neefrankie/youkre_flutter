@@ -40,7 +40,9 @@ class CourseSession {
   CourseSession advanceLevel(int maxIndex) {
     var current = lastLevelIndex;
     if (current == null) {
-      current = 0;
+      if (maxIndex >= 0) {
+        current = 0;
+      }
     } else {
       if (current < maxIndex) {
         current = current + 1;
@@ -55,7 +57,7 @@ class CourseSession {
     required int toLevelIndex,
     required int maxIndex
   }) {
-    if (toLevelIndex < maxIndex) {
+    if (toLevelIndex <= maxIndex) {
       return copyWith(
         lastLevelIndex: toLevelIndex,
       );
