@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:youkre_flutter/features/content/book_list_page.dart';
 import 'package:youkre_flutter/features/home/home_page.dart';
-import 'package:youkre_flutter/features/home/study_page.dart';
 import 'package:youkre_flutter/features/home/tex_example_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         child: <Widget>[
           HomePage(),
-          StudyPage(),
+          BookListPage(),
           TeXExamplePage(),
         ][_selectedIndex],
       ),
