@@ -1,3 +1,4 @@
+import 'package:path/path.dart' as path;
 import 'icon_symbol.dart';
 
 class Course {
@@ -22,7 +23,7 @@ class Course {
   });
 
   String exerciseCoverPath() {
-    return 'assets/images/cover/$exerciseCover';
+    return 'assets/images/cover/${path.basenameWithoutExtension(exerciseCover)}.svg';
   }
 
   // Hashable: hash(into:) → 在 Dart 中通常用 == + hashCode 体现
