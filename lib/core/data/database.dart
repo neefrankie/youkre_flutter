@@ -109,11 +109,10 @@ extension ExerciseProgressEntityX on ExerciseProgressEntity {
 class CourseDao extends DatabaseAccessor<AppDatabase> with _$CourseDaoMixin {
   CourseDao(AppDatabase db) : super(db);
 
-  Future<CourseSessionEntity?> loadLatestSession(String courseId) async {
+  Future<CourseSessionEntity?> loadLastSession(String courseId) async {
     return await (select(courseSessionSchema)
         ..where((tbl) =>
-          tbl.courseId.equals(courseId) &
-          tbl.completedAt.isNull()
+          tbl.courseId.equals(courseId)
         )
         ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
         ..limit(1)
@@ -121,11 +120,9 @@ class CourseDao extends DatabaseAccessor<AppDatabase> with _$CourseDaoMixin {
       .getSingleOrNull();
   }
   
-  Future<CourseSession> createSession(Course course, {
-    required int levelCount
-  }) async {
+  Future<CourseSession> createSession(Course course) async {
     final session = CourseSession
-        .newSession(course.id, levelCount);
+        .newSession(course.id);
 
     final row = session.toCompanion(course.contentVersion);
 
@@ -136,18 +133,18 @@ class CourseDao extends DatabaseAccessor<AppDatabase> with _$CourseDaoMixin {
 
   Future<void> updateSession(CourseSession session) async {
     await (update(courseSessionSchema)
-        ..where((tbl) => tbl.id.equals(session.id))
+      ..where((tbl) => tbl.id.equals(session.id))
     )
-    .write(CourseSessionSchemaCompanion(
-      lastLevelIndex: Value(session.lastLevelIndex),
-      completedAt: Value(session.completedAt),
-    ));
+      .write(CourseSessionSchemaCompanion(
+        lastLevelIndex: Value(session.lastLevelIndex),
+        completedAt: Value(session.completedAt),
+      ));
   }
 
   Future<CourseSession> loadOrCreateSession(Course course, {
     required int levelCount
   }) async {
-    final courseEntity = await loadLatestSession(course.id);
+    final courseEntity = await loadLastSession(course.id);
     if (courseEntity != null) {
       if (courseEntity.contentVersion == course.contentVersion) {
         return courseEntity.toModel();
@@ -158,7 +155,7 @@ class CourseDao extends DatabaseAccessor<AppDatabase> with _$CourseDaoMixin {
       }
     }
 
-    final newSession = await createSession(course, levelCount: levelCount);
+    final newSession = await createSession(course);
     return newSession;
   }
 }
@@ -177,14 +174,13 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
   static const _startedAt = 'started_at';
   static const _courseSessionId = 'course_session_id';
 
-  Future<LevelProgressEntity?> loadLatestProgress(String levelId, {
+  Future<LevelProgressEntity?> findLastLevel(String levelId, {
     required String courseSessionId,
   }) async {
     return await (select(levelProgressSchema)
         ..where((tbl) =>
           tbl.levelId.equals(levelId) &
-          tbl.courseSessionId.equals(courseSessionId) &
-          tbl.completedAt.isNull()
+          tbl.courseSessionId.equals(courseSessionId)
         )
         ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
         ..limit(1)
@@ -192,14 +188,71 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
       .getSingleOrNull();
   }
 
-  Future<LevelProgressEntity?> findProgress(String id) async {
+  Future<LevelProgress> createProgress(ExerciseLevel level, {
+    required CourseSession courseSession,
+    required int exerciseCount
+  }) async {
+    final progress = LevelProgress
+        .newSession(
+      levelId: level.id,
+      exerciseCount: exerciseCount,
+    );
+
+    final row = progress.toCompanion(
+      courseSessionId: courseSession.id,
+      version: level.contentVersion,
+    );
+
+    await into(levelProgressSchema).insert(row);
+
+    return progress;
+  }
+
+  Future<LevelProgress> loadOrCreateProgress(ExerciseLevel level, {
+    required CourseSession session,
+    required int exerciseCount
+  }) async {
+    final levelEntity = await findLastLevel(
+      level.id,
+      courseSessionId: session.id,
+    );
+    if (levelEntity != null) {
+      if (levelEntity.contentVersion == level.contentVersion) {
+        return levelEntity.toModel();
+      } else {
+        await (delete(levelProgressSchema)
+          ..where((t) => t.id.equals(levelEntity.id))
+        ).go();
+      }
+    }
+
+    final courseSession = await createProgress(
+      level,
+      courseSession: session,
+      exerciseCount: exerciseCount,
+    );
+    return courseSession;
+  }
+  
+  Future<LevelProgressEntity?> findLevel(LevelProgress level) async {
     return await (select(levelProgressSchema)
         ..where((tbl) =>
-        tbl.id.equals(id)
+        tbl.id.equals(level.id)
         )
         ..limit(1)
       )
       .getSingleOrNull();
+  }
+
+  Future<void> updateProgress(LevelProgress progress) async {
+    await (update(levelProgressSchema)
+        ..where((tbl) => tbl.id.equals(progress.id))
+      )
+      .write(LevelProgressSchemaCompanion(
+        score: Value(progress.score),
+        lastExerciseIndex: Value(progress.lastExerciseIndex),
+        completedAt: Value(progress.completedAt),
+      ));
   }
 
   Future<List<LevelProgress>> getLatestProgressForSession(
@@ -238,63 +291,6 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
 
     return rows.map((row) => row.toModel()).toList();
   }
-
-  Future<LevelProgress> createProgress(ExerciseLevel level, {
-    required CourseSession courseSession,
-    required int exerciseCount
-  }) async {
-    final progress = LevelProgress
-      .newSession(
-        levelId: level.id,
-        exerciseCount: exerciseCount,
-      );
-
-    final row = progress.toCompanion(
-      courseSessionId: courseSession.id,
-      version: level.contentVersion,
-    );
-
-    await into(levelProgressSchema).insert(row);
-
-    return progress;
-  }
-
-  Future<void> updateProgress(LevelProgress progress) async {
-    await (update(levelProgressSchema)
-        ..where((tbl) => tbl.id.equals(progress.id))
-      )
-      .write(LevelProgressSchemaCompanion(
-        score: Value(progress.score),
-        lastExerciseIndex: Value(progress.lastExerciseIndex),
-        completedAt: Value(progress.completedAt),
-      ));
-  }
-
-  Future<LevelProgress> loadOrCreateProgress(ExerciseLevel level, {
-    required CourseSession session,
-    required int exerciseCount
-  }) async {
-    final levelEntity = await loadLatestProgress(
-      level.id,
-      courseSessionId: session.id,
-    );
-    if (levelEntity != null) {
-      if (levelEntity.contentVersion == level.contentVersion) {
-        return levelEntity.toModel();
-      } else {
-        await (delete(levelProgressSchema)
-          ..where((t) => t.id.equals(levelEntity.id))
-        ).go();
-      }
-    }
-
-    final courseSession = await createProgress(
-      level,
-      courseSession: session,
-      exerciseCount: exerciseCount,
-    );
-    return courseSession;
-  }
 }
 
 @DriftAccessor(
@@ -304,32 +300,6 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
 )
 class ExerciseDao extends DatabaseAccessor<AppDatabase> with _$ExerciseDaoMixin {
   ExerciseDao(AppDatabase db) : super(db);
-
-  // Find exercise progress for a exercise under a certain level progress.
-  Future<ExerciseProgressEntity?> loadLatestProgress({
-    required String exerciseId,
-    required String levelProgressId,
-  }) async {
-    return await (select(exerciseProgressSchema)
-      ..where((tbl) =>
-        tbl.exerciseId.equals(exerciseId) &
-        tbl.levelProgressId.equals(levelProgressId)
-      )
-      ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
-      ..limit(1)
-    )
-        .getSingleOrNull();
-  }
-
-  Future<List<ExerciseProgress>> allProgressOfLevel({
-    required String levelProgressId,
-  }) async {
-    final rows = await (select(exerciseProgressSchema)
-        ..where((tbl) => tbl.levelProgressId.equals(levelProgressId))
-      )
-      .get();
-    return rows.map((row) => row.toModel()).toList();
-  }
 
   Future<ExerciseProgress> createProgress(Exercise exercise, {
     required String courseSessionId,
@@ -348,22 +318,27 @@ class ExerciseDao extends DatabaseAccessor<AppDatabase> with _$ExerciseDaoMixin 
     return session;
   }
 
-  Future<void> updateProgress(ExerciseProgress progress) async {
-    await (update(exerciseProgressSchema)
-      ..where((tbl) => tbl.id.equals(progress.id))
+  // Find exercise progress for a exercise under a certain level progress.
+  Future<ExerciseProgressEntity?> findLastProgress({
+    required String exerciseId,
+    required String levelProgressId,
+  }) async {
+    return await (select(exerciseProgressSchema)
+      ..where((tbl) =>
+        tbl.exerciseId.equals(exerciseId) &
+        tbl.levelProgressId.equals(levelProgressId)
+      )
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
+      ..limit(1)
     )
-    .write(ExerciseProgressSchemaCompanion(
-      selectedIndex: Value(progress.selectedIndex),
-      isCorrect: Value(progress.isCorrect),
-      completedAt: Value(progress.completedAt),
-    ));
+        .getSingleOrNull();
   }
 
   Future<ExerciseProgress> loadOrCreateProgress(Exercise exercise, {
     required CourseSession courseSession,
     required LevelProgress levelProgress,
   }) async {
-    final exerciseProgress = await loadLatestProgress(
+    final exerciseProgress = await findLastProgress(
       exerciseId: exercise.id,
       levelProgressId: levelProgress.id,
     );
@@ -377,6 +352,27 @@ class ExerciseDao extends DatabaseAccessor<AppDatabase> with _$ExerciseDaoMixin 
       levelProgressId: levelProgress.id,
     );
     return newProgress;
+  }
+
+  Future<List<ExerciseProgress>> allProgressOfLevel({
+    required String levelProgressId,
+  }) async {
+    final rows = await (select(exerciseProgressSchema)
+        ..where((tbl) => tbl.levelProgressId.equals(levelProgressId))
+      )
+      .get();
+    return rows.map((row) => row.toModel()).toList();
+  }
+
+  Future<void> updateProgress(ExerciseProgress progress) async {
+    await (update(exerciseProgressSchema)
+        ..where((tbl) => tbl.id.equals(progress.id))
+      )
+      .write(ExerciseProgressSchemaCompanion(
+        selectedIndex: Value(progress.selectedIndex),
+        isCorrect: Value(progress.isCorrect),
+        completedAt: Value(progress.completedAt),
+      ));
   }
 }
 

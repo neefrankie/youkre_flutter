@@ -6,6 +6,7 @@ import 'package:youkre_flutter/core/models/course_kind.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
 import 'package:youkre_flutter/core/models/exercise_level.dart';
 import 'package:youkre_flutter/core/models/multiple_choice.dart';
+import 'package:youkre_flutter/core/models/toc_entry.dart';
 import 'package:youkre_flutter/core/services/database_service.dart';
 
 class ExerciseDataSource {
@@ -73,10 +74,34 @@ class ExerciseDataSource {
       courseTable,
       where: '$colId = ?',
       whereArgs: [id],
+      limit: 1,
     );
     if (maps.isEmpty) return null;
     final row = maps.first;
     return _convertCourse(row);
+  }
+
+  Future<List<TocEntry>> findTocList(Course course) async {
+    final db = await _getDatabase();
+    final maps = await db.query(
+      courseTable,
+      where: '$colId = ?',
+      whereArgs: [course.id],
+      limit: 1,
+    );
+    if (maps.isEmpty) return [];
+    final row = maps.first;
+    return _decodeToc(row);
+  }
+
+  List<TocEntry> _decodeToc(Map<String, Object?> row) {
+    final jsonString = row['toc_list'] as String;
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+    final List<TocEntry> tocEntries = jsonList.map((item) =>
+        TocEntry.fromJson(item)
+      ).toList();
+
+    return tocEntries;
   }
 
   ExerciseLevel _convertLevel(Map<String, Object?> row) {

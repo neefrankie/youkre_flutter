@@ -105,7 +105,7 @@ class $CourseSessionSchemaTable extends CourseSessionSchema
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'course_session_schema';
+  static const String $name = 'course_session';
   @override
   VerificationContext validateIntegrity(
     Insertable<CourseSessionEntity> instance, {
@@ -558,7 +558,7 @@ class $LevelProgressSchemaTable extends LevelProgressSchema
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES course_session_schema (id)',
+      'REFERENCES course_session (id)',
     ),
   );
   @override
@@ -577,7 +577,7 @@ class $LevelProgressSchemaTable extends LevelProgressSchema
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'level_progress_schema';
+  static const String $name = 'level_progress';
   @override
   VerificationContext validateIntegrity(
     Insertable<LevelProgressEntity> instance, {
@@ -1128,7 +1128,7 @@ class $ExerciseProgressSchemaTable extends ExerciseProgressSchema
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES course_session_schema (id)',
+      'REFERENCES course_session (id)',
     ),
   );
   static const VerificationMeta _levelProgressIdMeta = const VerificationMeta(
@@ -1142,7 +1142,7 @@ class $ExerciseProgressSchemaTable extends ExerciseProgressSchema
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES level_progress_schema (id)',
+      'REFERENCES level_progress (id)',
     ),
   );
   @override
@@ -1160,7 +1160,7 @@ class $ExerciseProgressSchemaTable extends ExerciseProgressSchema
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'exercise_progress_schema';
+  static const String $name = 'exercise_progress';
   @override
   VerificationContext validateIntegrity(
     Insertable<ExerciseProgressEntity> instance, {
@@ -1606,27 +1606,27 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ExerciseProgressSchemaTable(this);
   late final Index courseIdIdx = Index(
     'course_id_idx',
-    'CREATE INDEX course_id_idx ON course_session_schema (course_id)',
+    'CREATE INDEX course_id_idx ON course_session (course_id)',
   );
   late final Index courseCompletedIdx = Index(
     'course_completed_idx',
-    'CREATE INDEX course_completed_idx ON course_session_schema (completed_at)',
+    'CREATE INDEX course_completed_idx ON course_session (completed_at)',
   );
   late final Index levelIdIdx = Index(
     'level_id_idx',
-    'CREATE INDEX level_id_idx ON level_progress_schema (level_id)',
+    'CREATE INDEX level_id_idx ON level_progress (level_id)',
   );
   late final Index levelCompletedIdx = Index(
     'level_completed_idx',
-    'CREATE INDEX level_completed_idx ON level_progress_schema (completed_at)',
+    'CREATE INDEX level_completed_idx ON level_progress (completed_at)',
   );
   late final Index exerciseIdIdx = Index(
     'exercise_id_idx',
-    'CREATE INDEX exercise_id_idx ON exercise_progress_schema (exercise_id)',
+    'CREATE INDEX exercise_id_idx ON exercise_progress (exercise_id)',
   );
   late final Index exerciseCompletedIdx = Index(
     'exercise_completed_idx',
-    'CREATE INDEX exercise_completed_idx ON exercise_progress_schema (completed_at)',
+    'CREATE INDEX exercise_completed_idx ON exercise_progress (completed_at)',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
