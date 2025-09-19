@@ -20,48 +20,20 @@ class CourseDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(course.title),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: CourseDetailView(course: course),
-      )
-    );
-  }
-}
-
-class CourseDetailView extends StatefulWidget {
-  final Course course;
-
-  const CourseDetailView({
-    super.key,
-    required this.course
-  });
-
-  @override
-  State<CourseDetailView> createState() => _CourseDetailState();
-}
-
-class _CourseDetailState extends State<CourseDetailView> {
-  late final CourseViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = CourseViewModel(course: widget.course);
-    _viewModel.loadData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _viewModel,
-      child: Builder(
-        builder: (context) {
-          return Consumer<CourseViewModel>(
+      body: ChangeNotifierProvider(
+        create: (_) {
+          final vm = CourseViewModel(course: course);
+          vm.loadData();
+          return vm;
+        },
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Consumer<CourseViewModel>(
             builder: (context, vm, child) {
               return _buildBody(context);
             },
-          );
-        },
+          ),
+        )
       ),
     );
   }
@@ -92,19 +64,20 @@ class _CourseDetailState extends State<CourseDetailView> {
           isLocked: false,
           onTap: () {
             vm.changeLevel(index);
-            onTapLevel();
+            onTapLevel(context);
           },
         );
       }),
     );
   }
 
-  void onTapLevel() {
+  void onTapLevel(BuildContext context) {
+    final vm = context.watch<CourseViewModel>();
     Navigator.push(
       context, 
       MaterialPageRoute(
         builder: (context) => LevelDetailPage(
-          courseViewModel: _viewModel,
+          courseViewModel: vm,
         ),
       ),
     );

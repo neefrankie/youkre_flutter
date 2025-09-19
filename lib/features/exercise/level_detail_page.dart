@@ -57,6 +57,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
               level: widget.courseViewModel.currentLevel,
               courseSession: widget.courseViewModel.courseSession,
             );
+            widget.courseViewModel.updateSession();
             return vm;
           },
         ),
@@ -134,7 +135,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             courseSession: courseSession,
             isLast: vm.isLast,
             onSummary: () {
-              presentSummary(context);
+              _presentSummary(context);
             },
             onAnswer: (ExerciseProgress progress) {
               _onExerciseAnswered(context, progress);
@@ -156,17 +157,12 @@ class _LevelDetailPage extends State<LevelDetailPage> {
 
     final levelProgress = vm.levelProgress;
     if (levelProgress != null && levelProgress.isCompleted) {
-      courseVm.markLevelComplete(levelProgress);
+      courseVm.addCompletedLevel(levelProgress);
     }
   }
 
-  void presentSummary(BuildContext context) {
+  void _presentSummary(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
-    final courseVm = context.watch<CourseViewModel>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      courseVm.tryCompleteSession();
-    });
 
     SheetManager.presentSheet(
       context,
@@ -230,31 +226,36 @@ class _LevelDetailPage extends State<LevelDetailPage> {
 
   void _onRestart(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
-    final courseVm = context.watch<CourseViewModel>();
+
+    vm.restartCurrentLevel(
+      level: widget.courseViewModel.currentLevel,
+      session: widget.courseViewModel.courseSession,
+      course: widget.courseViewModel.course,
+    ).then((prevLevelProgress) {
+      if (prevLevelProgress != null) {
+        widget.courseViewModel.addCompletedLevel(prevLevelProgress);
+      }
+    });
+
     SheetManager.dismiss(context);
-
-    vm.resetState();
-
-    vm.loadData(
-      course: courseVm.course,
-      level: courseVm.currentLevel,
-      courseSession: courseVm.courseSession,
-    );
   }
 
   void _onNextLevel(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
-    final courseVm = context.watch<CourseViewModel>();
+
+    final nextLevel = widget.courseViewModel.moveToNextLevel();
+
+    vm.startNewLevel(
+      level: nextLevel,
+      session: widget.courseViewModel.courseSession,
+      course: widget.courseViewModel.course,
+    ).then((prevLevelProgress) {
+      if (prevLevelProgress != null) {
+        widget.courseViewModel.addCompletedLevel(prevLevelProgress);
+      }
+    });
+
     SheetManager.dismiss(context);
-
-    vm.resetState();
-
-    courseVm.moveToNextLevel();
-    vm.loadData(
-      course: courseVm.course,
-      level: courseVm.currentLevel,
-      courseSession: courseVm.courseSession,
-    );
   }
 
   void _onFinish() {

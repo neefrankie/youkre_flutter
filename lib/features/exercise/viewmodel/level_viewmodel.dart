@@ -24,7 +24,23 @@ class LevelDetailViewModel extends ChangeNotifier {
   List<Exercise> get exercises => _exercises;
   int get currentPage => _currentPage;
 
+  bool showSummary = false;
+
   bool get isLast => _currentPage == _exercises.length - 1;
+
+  bool get lastAnswered {
+    if (_exercises.isEmpty) {
+      return false;
+    }
+
+    final progress = _exerciseStates[_exercises.last.id];
+    if (progress == null) {
+      return false;
+    }
+
+    return progress.isCompleted;
+  }
+
   String get progressText => '${_currentPage+1} / ${_exercises.length}';
 
   Exercise? get currentExercise {
@@ -50,10 +66,18 @@ class LevelDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onSummary() {
+    showSummary = true;
+  }
+
   void advance() {
     if (_currentPage < _exercises.length - 1) {
       _currentPage += 1;
     }
+  }
+
+  void setLevelComplete() {
+    _levelProgress = _levelProgress?.markComplete();
   }
 
   void resetState() {
@@ -62,13 +86,14 @@ class LevelDetailViewModel extends ChangeNotifier {
     _currentPage = 0;
     _levelProgress = null;
     _exerciseStates.clear();
+    showSummary = false;
     notifyListeners();
   }
 
   Future<void> loadData({
-    required Course course,
     required ExerciseLevel? level,
     required CourseSession? courseSession,
+    required Course course,
   }) async {
     _loading = true;
     notifyListeners();
@@ -120,23 +145,104 @@ class LevelDetailViewModel extends ChangeNotifier {
     _exerciseStates[exerciseProgress.exerciseId] = exerciseProgress;
   }
 
+  Future<void> _restart({
+    required ExerciseLevel? level,
+    required CourseSession? courseSession,
+    required Course course,
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    if (courseSession == null) {
+      _loading = false;
+      _error = 'Missing course session';
+      notifyListeners();
+      return;
+    }
+
+    if (level == null) {
+      _loading = false;
+      _error = 'Missing level';
+      notifyListeners();
+      return;
+    }
+
+    try {
+      final db = AppDatabase.instance();
+
+      final levelProgress = await db.levelDao.loadOrCreateProgress(
+        level,
+        session: courseSession,
+        exerciseCount: exercises.length,
+      );
+
+      _levelProgress = levelProgress;
+      _exercises = exercises;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _updateProgress(LevelProgress progress) async {
+    try {
+      final db = AppDatabase.instance();
+      await db.levelDao.updateProgress(progress);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> updateLevelProgress(ExerciseProgress exerciseProgress) async {
     _syncExerciseProgress(exerciseProgress);
 
-    final allComplete = allAnswered;
     final progress = _levelProgress?.moveExercise(
       lastIndex: currentPage,
       score: score,
-      finished: allComplete,
     );
     if (progress != null) {
-      try {
-        final db = AppDatabase.instance();
-        await db.levelDao.updateProgress(progress);
-        _levelProgress = progress;
-      } catch (e) {
-        print(e);
-      }
+      await _updateProgress(progress);
     }
+  }
+
+  Future<LevelProgress?> restartCurrentLevel({
+    ExerciseLevel? level,
+    CourseSession? session,
+    required Course course,
+  }) async {
+    setLevelComplete();
+    
+    final progress = _levelProgress;
+    if (progress != null) {
+      await _updateProgress(progress);
+    }
+
+    resetState();
+
+    await _restart(level: level, courseSession: session, course: course);
+
+    return progress;
+  }
+
+  Future<LevelProgress?> startNewLevel({
+    ExerciseLevel? level,
+    CourseSession? session,
+    required Course course,
+  }) async {
+    setLevelComplete();
+
+    final progress = _levelProgress;
+    if (progress != null) {
+      await _updateProgress(progress);
+    }
+
+    resetState();
+
+    await loadData(level: level, courseSession: session, course: course);
+
+    return progress;
   }
 }

@@ -58,9 +58,10 @@ class CourseViewModel extends ChangeNotifier {
     return _levelsCompleted[levelId] ?? false;
   }
 
-  void moveToNextLevel() {
+  ExerciseLevel? moveToNextLevel() {
     _session = _session?.advanceLevel(_levels.length - 1);
     notifyListeners();
+    return currentLevel;
   }
 
   void changeLevel(int index) {
@@ -70,7 +71,7 @@ class CourseViewModel extends ChangeNotifier {
     );
   }
 
-  void markLevelComplete(LevelProgress progress) {
+  void addCompletedLevel(LevelProgress progress) {
     _levelsCompleted[progress.levelId] = true;
   }
 
@@ -98,10 +99,6 @@ class CourseViewModel extends ChangeNotifier {
       _session = session;
       _levels = levels;
       notifyListeners();
-
-      if (!session.isCompleted) {
-        await tryCompleteSession();
-      }
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -111,31 +108,35 @@ class CourseViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> _updateSession(CourseSession session) async {
+    try {
+      final db = AppDatabase.instance();
+      await db.sessionDao.updateSession(session);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<void> updateSession() async {
     final sess = _session;
     if (sess == null) {
       return;
     }
 
-    try {
-      final db = AppDatabase.instance();
-      await db.sessionDao.updateSession(sess);
-    } catch (e) {
-      print(e.toString());
-    }
+    await _updateSession(sess);
   }
 
   Future<void> tryCompleteSession() async {
-    if (!allLevelsComplete) {
-      return;
-    }
 
     final newSession = _session?.markComplete();
     _session = newSession;
 
-    if (newSession?.isCompleted == true) {
+    if (newSession == null) {
       return;
     }
-    await updateSession();
+    if (!newSession.isCompleted) {
+      return;
+    }
+    await _updateSession(newSession);
   }
 }

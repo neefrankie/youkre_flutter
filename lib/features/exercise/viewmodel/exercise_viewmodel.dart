@@ -13,8 +13,8 @@ class ExerciseViewModel extends ChangeNotifier {
 
   Future<void> loadData({
     required Exercise exercise,
-    required CourseSession courseSession,
     required LevelProgress levelProgress,
+    required CourseSession courseSession,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -59,6 +59,9 @@ class ExerciseViewModel extends ChangeNotifier {
     );
     exerciseProgress = newProgress;
     notifyListeners();
+
+    updateProgress(newProgress);
+
     return newProgress;
   }
 

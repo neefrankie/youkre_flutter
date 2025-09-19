@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:youkre_flutter/core/models/course.dart';
 import 'package:youkre_flutter/core/ui/theme/app_colors.dart';
 
@@ -24,23 +25,31 @@ class CourseItemCard extends StatelessWidget {
         onTap: onTap,
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                course.title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: Image.asset(
-                  course.exerciseCoverPath(),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
-          ),
+          child: buildContent(),
         )
       ),
+    );
+  }
+
+  Widget buildContent() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          course.title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        Expanded(
+          child: SvgPicture.asset(
+            course.exerciseCoverPath(),
+            fit: BoxFit.contain,
+          ),
+          // child: Image.asset(
+          //   course.exerciseCoverPath(),
+          //   fit: BoxFit.contain,
+          // ),
+        ),
+      ],
     );
   }
 }
