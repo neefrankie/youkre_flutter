@@ -19,13 +19,13 @@ class CourseSession {
     this.lastLevelIndex,
   });
 
-  factory CourseSession.newSession(String courseId, int levelCount) {
+  factory CourseSession.newSession(String courseId) {
     return CourseSession(
       id: const Uuid().v4(),
       courseId: courseId,
       startedAt: DateTime.now(),
       completedAt: null,
-      lastLevelIndex: levelCount > 0 ? 0 : null,
+      lastLevelIndex: null,
     );
   }
 
@@ -102,6 +102,12 @@ class LevelProgress {
   }
 
   bool get isCompleted => completedAt != null;
+
+  LevelProgress markComplete() {
+    return copyWith(
+      completedAt: DateTime.now(),
+    );
+  }
 
   LevelProgress moveExercise({
     required int lastIndex,
