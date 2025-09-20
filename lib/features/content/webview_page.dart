@@ -28,25 +28,43 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   void initState() {
     super.initState();
+    _startServerIfNeeded();
   }
 
   Future<void> _startServerIfNeeded() async {
     if (!_serverStared) {
-      await _server.start();
-      _serverStared = true;
+      try {
+        await _server.start();
+        _serverStared = true;
+      } catch (e) {
+        print('❌ Failed to start server: $e');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.course.title),
+      ),
       body: InAppWebView(
-        onLoadStart: (controller, url) async {
-          await _startServerIfNeeded();
-        },
+        // onLoadStart: (controller, url) async {
+        //   await _startServerIfNeeded();
+        // },
         initialUrlRequest: URLRequest(
-          url: WebUri('http://localhost:8080/assets/web/${widget.course.slug}/${widget.entry.slug}.html'),
+          url: WebUri('http://localhost:8080/${widget.course.slug}/${widget.entry.slug}.html'),
         ),
+        onLoadResource: (controller, resource) {
+          print('Loaded: ${resource.url}');
+        },
+        // 可选：添加错误处理
+        onReceivedError: (controller, request, error) {
+          print(' onPageError: ${request.url}, message: $error');
+        },
+        onReceivedHttpError: (controller, request, response) {
+          print(' onHttpError: ${request.url}, status: ${response.statusCode}');
+        },
       ),
     );
   }
@@ -58,4 +76,5 @@ class _WebViewPageState extends State<WebViewPage> {
     }
     super.dispose();
   }
+
 }
