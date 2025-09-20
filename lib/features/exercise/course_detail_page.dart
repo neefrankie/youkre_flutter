@@ -72,7 +72,7 @@ class CourseDetailPage extends StatelessWidget {
   }
 
   void onTapLevel(BuildContext context) {
-    final vm = context.watch<CourseViewModel>();
+    final vm = context.read<CourseViewModel>();
     Navigator.push(
       context, 
       MaterialPageRoute(
