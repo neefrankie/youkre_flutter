@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>概率统计入门: 从频数表中计算平均值 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">从频数表中计算平均值</span></h2>
+        <div><p>计算平均值其实很简单：</p>
+
+<div class="text-center"><p><strong>把所有数加起来，再除以总个数。</strong></p></div>
+
+<div class="card">
+<div class="card-header">例：这些数的平均值是多少？</div>
+<div class="card-body">
+
+<div class="math">\[
+6, 11, 7
+\]</div>
+
+<ul>
+<li>先求和：<span class="math">\(6 + 11 + 7 = 24\)</span></li>
+<li>再除以个数（一共 3 个数）：<span class="math">\(24 \div 3 = 8\)</span></li>
+</ul>
+<p>所以平均值是 <span class="math">\(8\)</span>。</p>
+</div>
+</div>
+
+<p>但有时候没有一串具体的数字，而是一张频数表，像这样（“频数”表示出现次数）：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>分数</th>
+  <th>频数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>4</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>1</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>（意思是：分数 <span class="math">\(1\)</span> 出现了 2 次，分数 <span class="math">\(2\)</span> 出现了 5 次，依此类推）</p>
+
+<p>可以把这些数全部列出来：</p>
+
+<div class="math">\[
+\text{平均值} = \frac{1+1 + 2+2+2+2+2 + 3+3+3+3 + 4+4 + 5}{\text{总数}}
+\]</div>
+
+<p>不过，与其重复相加（比如 <span class="math">\(3+3+3+3\)</span>），不如用乘法更方便：</p>
+
+<div class="math">\[
+\text{平均值} = \frac{2×1 + 5×2 + 4×3 + 2×4 + 1×5}{\text{总数}}
+\]</div>
+
+<p>而且，与其一个一个数有多少个数，可以直接加频数：</p>
+
+<div class="math">\[
+\text{平均值} = \frac{2×1 + 5×2 + 4×3 + 2×4 + 1×5}{2 + 5 + 4 + 2 + 1}
+\]</div>
+
+<p>接下来计算：</p>
+
+<div class="math">\begin{align*}
+\text{平均值} &amp;= \frac{2 + 10 + 12 + 8 + 5}{14} \\
+&amp;= \frac{37}{14} \\
+&amp;= 2.64 \cdots
+\end{align*}</div>
+
+<p>这就是如何从频数表中计算平均值！</p>
+
+<p>再来看一个例子：</p>
+
+<div class="card">
+<div class="card-header">例：每个小区共享单车停车区数量</div>
+<div class="card-body">
+
+<p>小伊走遍整条街，统计了每个小区有几个共享单车停车区。结果如下：</p>
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>停车位</th>
+  <th>频数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>27</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>5</td>
+</tr>
+</tbody>
+</table></div><p>问：平均每个小区有几个停车区？</p>
+<p>答：</p>
+<div class="math">\begin{align*}
+\text{平均值} &amp;= \frac{15×1 + 27×2 + 8×3 + 5×4}{15 + 27 + 8 + 5} \\
+&amp;= \frac{15 + 54 + 24 + 20}{55} \\
+&amp;= 2.05 \cdots
+\end{align*}</div>
+
+<p>所以平均值是 <span class="math">\(2.05\)</span>（保留两位小数）</p>
+<p>比起一个个加起来，是不是简单多了！</p>
+</div>
+</div>
+
+<h2>数学符号说明</h2>
+
+<p>现在知道怎么计算均值了，接下来来用数学符号重新写一遍上面的例子。</p>
+
+<p>这个符号：</p>
+
+<div class="math">\[
+\sum
+\]</div>
+
+<p>叫做西格玛(Sigma)，意思是“加起来”。</p>
+
+<p>例如：<span class="math">\(\sum f\)</span> 表示“所有频数加起来”(其中 <span class="math">\(f\)</span> 代表频数)，像这样使用：</p>
+
+<div class="math">\begin{align*}
+\sum f &amp;= 15 + 27 + 8 + 5 \\
+&amp;= 55
+\end{align*}</div>
+
+<p>同样地可以算出“频数 × 数值”的总和：</p>
+
+<div class="math">\begin{align*}
+\sum fx &amp;= 15×1 + 27×2 + 8×3 + 5×4 \\
+&amp;= 113
+\end{align*}</div>
+
+<p>其中 <span class="math">\(f\)</span> 是频数，<span class="math">\(x\)</span> 是对应的数值。</p>
+
+<p>所以，频数表中平均值的公式是：</p>
+
+<div class="math">\[
+\bar{x} = \frac{\sum fx}{\sum f}
+\]</div>
+
+<p>带横线的 <span class="math">\(x\)</span> 表示 <span class="math">\(x\)</span> 的平均值。</p>
+
+<p>现在就可以用标准格式来写这个例子了。</p>
+
+<div class="card">
+<div class="card-header">例：用公式计算下面这张频数表的平均值</div>
+<div class="card-body">
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th><span class="math">\(x\)</span></th>
+  <th><span class="math">\(f\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>27</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>5</td>
+</tr>
+</tbody>
+</table></div><p>代入公式：</p>
+<div class="math">\begin{align*}
+x \text{的均值} &amp;= \frac{\sum fx}{\sum f} \\
+&amp;= \frac{15×1 + 27×2 + 8×3 + 5×4}{15 + 27 + 8 + 5} \\
+&amp;= 2.05
+\end{align*}</div>
+
+<p>搞定！这就是用西格玛符号表达的方式。</p>
+</div>
+</div>
+
+<h2>在表格里直接计算</h2>
+
+<p>通常我们会把计算过程写在表格里，更加清晰。</p>
+
+<div class="card">
+<div class="card-header">例子</div>
+<div class="card-body">
+
+<p>继续上面的例子，在右边加上 <span class="math">\(fx\)</span> 列，然后计算总和：</p>
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th><span class="math">\(x\)</span></th>
+  <th><span class="math">\(f\)</span></th>
+  <th><span class="math">\(fx\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>15</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>27</td>
+  <td>54</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>8</td>
+  <td>24</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>5</td>
+  <td>20</td>
+</tr>
+<tr>
+  <td><strong>合计：</strong></td>
+  <td><strong>55</strong></td>
+  <td><strong>113</strong></td>
+</tr>
+</tbody>
+</table></div><p>然后平均值就很容易算出：</p>
+<div class="math">\[
+x \text{的均值} = \frac{113}{55} = 2.05 \cdots
+\]</div>
+</div>
+</div></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

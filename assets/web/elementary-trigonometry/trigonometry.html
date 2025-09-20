@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>三角函数: 三角函数简介 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">三角函数简介</span></h2>
+        <div><div class="rounded"><p><strong>三角函数</strong>的英文单词是 Trigonometry，源自希腊语 <em>trigonon</em>（三角形）+ <em>metron</em>（测量）</p></div>
+
+<div class="row align-items-center">
+<figure class="col-12 col-sm-4">
+
+<img alt="三角形" src="images/triangle-sss.svg"/>
+</figure>
+<div class="col-12 col-sm-8">
+
+<p>三角函数……讲的就是三角形。</p>
+</div>
+</div>
+
+<p>它能帮助我们计算角度和距离，在科学、工程、电子游戏等领域应用广泛！</p>
+
+<h2>直角三角形</h2>
+
+<p>最受关注的是直角三角形。右下角的小方框表示一个直角：</p>
+
+<div class="row justify-content-center">
+<figure class="col-12 col-md-6">
+
+<img alt="对边、邻边和斜边示意图" src="images/adjacent-opposite-hypotenuse.svg"/>
+</figure>
+</div>
+
+<p>另一个角通常用符号 <span class="math">\(\theta\)</span> 表示，三条边分别称为：</p>
+
+<ul>
+<li><strong>邻边</strong>(Adjacent)：紧挨着角 <span class="math">\(\theta\)</span></li>
+<li><strong>对边</strong>(Opposite)：正对着角 <span class="math">\(\theta\)</span></li>
+<li><strong>斜边</strong>(Hypotenuse)：最长的一条边</li>
+</ul>
+
+<div class="card">
+<div class="card-body">
+<h5 class="card-title">为什么选择直角三角形？</h5>
+
+<p>这个三角形为什么这么重要？</p>
+<p>假设我们可以左右移动或上下移动，但想知道两点之间的直线距离和角度：</p>
+<div class="row justify-content-center">
+<figure class="col-12 col-md-6">
+
+<img alt="距离问题示意图" src="images/trig-why-dist.svg"/>
+</figure>
+</div>
+
+<p>三角函数能帮我们找到缺失的角度和距离。</p>
+<p>或者已知距离和角度，需要确定邻边和对边的位置：</p>
+<div class="row justify-content-center">
+<figure class="col-12 col-md-6">
+
+<img alt="屏幕定位示意图" src="images/trig-why-screen.svg"/>
+</figure>
+</div>
+
+<p>这类问题在工程和电脑动画中很常见。而三角函数正是解答这些问题的工具！</p>
+</div>
+</div>
+
+<h2>正弦、余弦和正切</h2>
+
+<p>三角函数中最主要的三个函数是：正弦、余弦和正切。</p>
+
+<div class="text-center"><p>其实就是直角三角形中一条边除以另一条边的结果。</p></div>
+
+<p>对于任意角 "<em><strong>θ</strong></em>"：</p>
+
+<div class="row align-items-center">
+<div class="col-12 col-sm-8">
+<div class="math">\[
+\sin(\theta) = \frac{\text{对边}}{\text{斜边}}
+\]</div>
+
+<div class="math">\[
+\cos(\theta) = \frac{\text{邻边}}{\text{斜边}}
+\]</div>
+
+<div class="math">\[
+\tan(\theta) = \frac{\text{对边}}{\text{邻边}}
+\]</div>
+</div>
+<figure class="col-12 col-sm-4">
+
+<img alt="对边、邻边和斜边示意图" src="images/adjacent-opposite-hypotenuse.svg"/>
+</figure>
+</div>
+
+<p>正弦、余弦、正切通常简写为 <span class="math">\(\sin\)</span>、<span class="math">\(\cos\)</span> 和 <span class="math">\(\tan\)</span>。</p>
+
+<div class="card">
+<div class="card-header">例：$35^\circ$ 的正弦是多少？</div>
+<div class="card-body row align-items-center">
+<div class="col-12 col-sm-8">
+
+<p>使用这个三角形（长度保留一位小数）：</p>
+<div class="math">\begin{align*}
+\text{sin}(35^\circ) &amp;= \frac{\text{对边}}{\text{斜边}} \\
+&amp;= \frac{2.8}{4.9} \\
+&amp;= 0.57\cdots
+\end{align*}</div>
+
+</div>
+<figure class="col-12 col-sm-4">
+
+<img alt="三角形边长2.8,4.0,4.9" src="images/triangle-28-40-49.svg"/>
+</figure>
+</div>
+</div>
+
+<p>三角形可以更大、更小或旋转，但<strong>只要角度相同，比例就不会变</strong>。</p>
+
+<p>计算器上有 <span class="math">\(\sin\)</span>、<span class="math">\(\cos\)</span> 和 <span class="math">\(\tan\)</span> 键，我们来看怎么用它们：</p>
+
+<div class="card">
+<div class="card-header">例：怎么测一棵树的高度？</div>
+<div class="card-body">
+
+<div class="row">
+<div class="col-12 col-sm-8">
+
+<p>我们够不到树顶，但可以走远一些，用量角器测角度，用激光测距离：</p>
+<ul>
+<li>已知 <strong>斜边</strong></li>
+<li>想知道 <strong>对边</strong></li>
+</ul>
+</div>
+<figure class="col-12 col-sm-4">
+
+<img alt="直角三角形，45度角，斜边20" src="images/trig-45-sin.svg"/>
+</figure>
+</div>
+
+<p><strong>正弦</strong> 是 <strong>对边 / 斜边</strong> 的比值：</p>
+<div class="math">\[
+\sin(45^\circ) = \frac{\text{对边}}{\text{斜边}}
+\]</div>
+
+<p>拿出计算器，输入“45”，然后按 “sin”：</p>
+<div class="math">\[
+\sin(45^\circ) = 0.7071\cdots
+\]</div>
+
+<p>这个数字代表的是边长的比例。也就是说，对边大约是斜边长度的 <span class="math">\(0.7071 \)</span>倍。</p>
+<p>可以把 <span class="math">\(0.7071\)</span> 替代 <span class="math">\(\sin(45^\circ)\)</span> 写入公式：</p>
+<div class="math">\[
+0.7071\cdots = \frac{\text{对边}}{\text{斜边}}
+\]</div>
+
+<p>又知道斜边是 <span class="math">\(20\)</span>：</p>
+<div class="math">\[
+0.7071\cdots = \frac{\text{对边}}{20}
+\]</div>
+
+<p>两边同时乘以 <span class="math">\(20\)</span>：</p>
+<div class="math">\[
+20 × 0.7071\cdots = 对边
+\]</div>
+
+<p>最后得出：</p>
+<div class="math">\[
+对边 \approx 14.14 \text{米}
+\]</div>
+
+</div>
+</div>
+
+<p>等你熟练之后，就可以更快地完成这些步骤：</p>
+
+<div class="math">\begin{align*}
+\sin(45^\circ) &amp;= \frac{\text{对边}}{\text{斜边}} \\
+0.7071\cdots &amp;= \frac{\text{对边}}{20} \\
+\frac{\text{对边}}{20} &amp;= 0.7071\cdots \\
+\text{对边} &amp;= 0.7071\cdots × 20 \\
+\text{对边} &amp;\approx 14.14
+\end{align*}</div>
+
+<h2>单位圆</h2>
+
+<div class="row">
+<div class="col-12 col-sm-8">
+
+<p>单位圆是以原点为中心、半径为 1 的圆。</p>
+<p>因为半径是 1，可以直接测量出正弦、余弦和正切的值。</p>
+</div>
+<figure class="col-12 col-sm-4">
+
+<img alt="单位圆" src="images/unit-circle.svg"/>
+</figure>
+</div>
+
+<h2>角度与弧度</h2>
+
+<p>角度可以用“度”也可以用“弧度”来表示。以下是一些例子：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>角度</th>
+  <th>度数</th>
+  <th>弧度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>直角</td>
+  <td>90°</td>
+  <td>π/2</td>
+</tr>
+<tr>
+  <td>平角</td>
+  <td>180°</td>
+  <td>π</td>
+</tr>
+<tr>
+  <td>一周角</td>
+  <td>360°</td>
+  <td>2π</td>
+</tr>
+</tbody>
+</table></div>
+
+<h2>周期性变化</h2>
+
+<p>由于角是<strong>绕着圆不断旋转</strong>的，因此正弦、余弦和正切函数在每次完整旋转后都会重复一次。</p>
+
+<figure>
+
+<img alt="余弦每360度重复一次" src="images/cosine-repeating.svg"/>
+</figure>
+
+<p>计算一个大于 <span class="math">\(360^\circ\)</span>（即 2π 弧度）的角对应的函数值时，可以减去若干个完整的旋转角度，使其小于 <span class="math">\(360^\circ\)</span>：</p>
+
+<div class="card">
+<div class="card-header">例：$\cos(370^\circ)$ 是多少？</div>
+<div class="card-body">
+
+<p><span class="math">\(370^\circ\)</span> 大于 <span class="math">\(360^\circ\)</span>，先减去 <span class="math">\(360^\circ\)</span>：</p>
+<div class="math">\begin{align*}
+\cos(370^\circ) &amp;= \cos(10^\circ) \\
+&amp;\approx 0.985
+\end{align*}</div>
+
+</div>
+</div>
+
+<p>如果角度小于 <span class="math">\(0\)</span>，那就加上完整的旋转角度。</p>
+
+<div class="card">
+<div class="card-header">例：$−3$ 弧度的正弦是多少？</div>
+<div class="card-body">
+
+<p><span class="math">\(−3\)</span> 小于 <span class="math">\(0\)</span>，我们加上 <span class="math">\(2\pi\)</span> 弧度：</p>
+<div class="math">\begin{align*}
+−3 + 2π &amp;= −3 + 6.283\cdots \\
+&amp;= 3.283\cdots \text{弧度}
+\end{align*}</div>
+
+<div class="math">\begin{align*}
+\sin(−3) &amp;= \sin(3.283\cdots) \\
+&amp;= −0.141 \text{（三位小数）}
+\end{align*}</div>
+
+</div>
+</div>
+
+<h2>解三角形</h2>
+
+<p>三角函数不仅适用于直角三角形，也适用于其他类型的三角形。可以用来<strong>解三角形</strong>，也就是找出未知的边或角。</p>
+
+<div class="card">
+<div class="card-header">例：求角 C 的大小</div>
+<div class="card-body">
+<div class="row align-items-center">
+<div class="col-12 col-sm-8">
+
+<p>根据“三角形内角和为 <span class="math">\(180^\circ\)</span>°”的规则，可得：</p>
+<div class="math">\begin{align*}
+C &amp;= 180^\circ − 76^\circ − 34^\circ \\
+&amp;= 70^\circ
+\end{align*}</div>
+
+</div>
+<figure class="col-12 col-sm-4">
+
+<img alt="ASA 示例图" src="images/trig-asaex1.svg"/>
+</figure>
+</div>
+</div>
+</div>
+
+<h2>其他函数（余切、正割、余割）</h2>
+
+<p>除了正弦、余弦和正切外，还有三种三角函数，也是通过边与边的比值得到的：</p>
+
+<div class="row align-items-center">
+<div class="col-12 col-sm-8">
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>余割函数：</th>
+  <th>$ \csc(\theta) = \frac{\text{斜边}}{\text{对边}} $</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>正割函数：</td>
+  <td>$ \sec(\theta) = \frac{\text{斜边}}{\text{邻边}} $</td>
+</tr>
+<tr>
+  <td>余切函数：</td>
+  <td>$ \cot(\theta) = \frac{\text{邻边}}{\text{对边}} $</td>
+</tr>
+</tbody>
+</table></div></div>
+<figure class="col-12 col-sm-4">
+
+<img alt="对边、邻边、斜边" src="images/adjacent-opposite-hypotenuse.svg"/>
+</figure>
+</div></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

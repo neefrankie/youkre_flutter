@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>概率统计入门: 加权平均数 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">加权平均数</span></h2>
+        <div><p>是一种某些数值比其他数值贡献更大的平均方式。</p>
+
+<h2>平均数</h2>
+
+<p>计算一个简单平均数时，每个数字的权重都是一样的。</p>
+
+<p>比如下面是对 1、2、3 和 4 求平均：</p>
+
+<figure>
+
+<img alt="图片：权重相等时的平均值" src="images/weighted-average-equal.svg"/>
+</figure>
+
+<p>把这几个数加起来，再除以数量：</p>
+
+<div class="math">\begin{align*}
+\text{平均数} &amp;= \frac{1 + 2 + 3 + 4}{4} \\
+&amp;= \frac{10}{4} \\
+&amp;= 2.5
+\end{align*}</div>
+
+<h2>权重</h2>
+
+<p>可以理解为，这4个数各自的“权重”都是 <span class="math">\(\frac{1}{4}\)</span>：</p>
+
+<div class="math">\begin{align*}
+\text{平均数} &amp;= \frac{1}{4} × 1 + \frac{1}{4} × 2 + \frac{1}{4} × 3 + \frac{1}{4} × 4  \\
+&amp;= 0.25 + 0.5 + 0.75 + 1 \\
+&amp;= 2.5
+\end{align*}</div>
+
+<p>结果一样。</p>
+
+<p>现在调整一下。让 <span class="math">\(3\)</span> 的权重变成 <span class="math">\(0.7\)</span>，其他三个数各占 <span class="math">\(0.1\)</span>，这样总和还是 <span class="math">\(1\)</span>：</p>
+
+<figure>
+
+<img alt="图片：某个值权重更大时的结果" src="images/weighted-average-a.svg"/>
+</figure>
+
+<div class="math">\begin{align*}
+\text{平均数} &amp;= 0.1 × 1 + 0.1 × 2 + 0.7 × 3 + 0.1 × 4  \\
+&amp;= 0.1 + 0.2 + 2.1 + 0.4 \\
+&amp;= 2.8
+\end{align*}</div>
+
+<p>这个加权平均数变大了，因为 <span class="math">\(3\)</span> 的权重更大，拉高了整体平均值。</p>
+
+<p>当某些值权重更大时，中间点（平均值）也会跟着变化：</p>
+
+<figure>
+
+<img alt="图：像跷跷板一样的加权平均" src="images/weighted-average-seesaw.svg"/>
+</figure>
+
+<h2>做决定</h2>
+
+<p>在做决策时，如果有些因素更重要，就可以用加权平均来帮助判断。</p>
+
+<div class="card">
+<div class="card-header">例：小萨想买一台新相机，他制定了以下评分标准：</div>
+<div class="card-body">
+
+<ul>
+<li>图像质量 <strong>50%</strong></li>
+<li>电池续航 <strong>30%</strong></li>
+<li>变焦范围 <strong>20%</strong></li>
+</ul>
+<p>索尼相机得分如下：图像质量 8 分（满分 10），电池续航 6 分，变焦范围 7 分。</p>
+<p>佳能相机得分如下：图像质量 9 分，电池续航 4 分，变焦范围 6 分。</p>
+<p>哪台更好？</p>
+<p>算一下加权平均。</p>
+<p>索尼：</p>
+<div class="math">\begin{align*}
+&amp;0.5 × 8 + 0.3 × 6 + 0.2 × 7 \\
+= &amp;4 + 1.8 + 1.4 \\
+= &amp;7.2
+\end{align*}</div>
+
+<p>佳能</p>
+<div class="math">\begin{align*}
+&amp;0.5 × 9 + 0.3 × 4 + 0.2 × 6 \\
+= &amp;4.5 + 1.2 + 1.2 \\
+= &amp;6.9
+\end{align*}</div>
+
+<p>所以小萨决定买索尼。</p>
+</div>
+</div>
+
+<h2>如果权重加起来不是 1 怎么办？</h2>
+
+<p>当权重加起来不等于 1 时，就用总和去除。</p>
+
+<div class="card">
+<div class="card-header">例：阿力通常每周吃 7 次午饭，但有些周只吃了 1 次、2 次或 5 次。</div>
+<div class="card-body">
+
+<p>他的记录如下：</p>
+<ul>
+<li>有 2 周：整周只吃了 1 次</li>
+<li>有 14 周：每周吃 2 次</li>
+<li>有 8 周：每周吃 5 次</li>
+<li>有 32 周：每周吃 7 次</li>
+</ul>
+<p>他每周平均吃几顿午饭？</p>
+<p>用“周数”作为权重，乘上每星期的午饭次数：</p>
+<div class="math">\begin{align*}
+&amp;2 × 1 + 14 × 2 + 8 × 5 + 32 × 7  \\
+= &amp;2 + 28 + 40 + 224 \\
+= &amp;294
+\end{align*}</div>
+
+<p>再把周数加起来：</p>
+<div class="math">\begin{align*}
+\text{总周数} &amp;= 2 + 14 + 8 + 32 \\
+&amp;= 56
+\end{align*}</div>
+
+<p>然后用总饭数除以总周数：</p>
+<div class="math">\begin{align*}
+\text{平均数} &amp;= \frac{294}{56} \\
+&amp;= 5.25
+\end{align*}</div>
+
+</div>
+</div>
+
+<p>不过用表格整理数据更清楚，不容易出错：</p>
+
+<div class="card">
+<div class="card-header">接着上面的例子</div>
+<div class="card-body">
+
+<p>设：</p>
+<ul>
+<li><span class="math">\(w\)</span> 是周数（权重）</li>
+<li><span class="math">\(x\)</span> 是午饭次数（要算平均的值）</li>
+</ul>
+<p>把 <span class="math">\(w\)</span> 和 <span class="math">\(x\)</span> 相乘，再分别求和：</p>
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>权重 <span class="math">\(w\)</span></th>
+  <th>午饭次数 <span class="math">\(x\)</span></th>
+  <th><span class="math">\(wx\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>2</td>
+  <td>1</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td>2</td>
+  <td>28</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>5</td>
+  <td>40</td>
+</tr>
+<tr>
+  <td>32</td>
+  <td>7</td>
+  <td>224</td>
+</tr>
+<tr>
+  <td><span class="math">\(\sum w = 56\)</span></td>
+  <td></td>
+  <td><span class="math">\(\sum wx = 294\)</span></td>
+</tr>
+</tbody>
+</table></div><p>再用总和除一下：</p>
+<div class="math">\begin{align*}
+\text{平均数} &amp;= \frac{294}{56} \\
+&amp;= 5.25
+\end{align*}</div>
+
+<p>和前面的结果一致。</p>
+</div>
+</div>
+
+<p>由此得出公式：</p>
+
+<div class="math">\[
+\text{加权平均数} = \frac{\sum wx}{\sum w}
+\]</div>
+
+<p>换句话说：先把每个权重 <span class="math">\(w\)</span> 和对应的值 <span class="math">\(x\)</span> 相乘，把所有结果加起来，再除以权重的总和。</p>
+
+<h2>小结</h2>
+
+<ul>
+<li><strong>加权平均数</strong>：一种不同数值贡献不同的平均方法。</li>
+<li>如果权重加起来是 1，直接把每个权重和对应数值相乘后加起来就行。</li>
+<li>否则，先乘再求和，最后除以权重总和。</li>
+</ul></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

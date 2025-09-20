@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>初级代数: 解不等式 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">解不等式</span></h2>
+        <div><p>有时候我们需要解这样的不等式：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th><strong>符号</strong></th>
+  <th><strong>含义</strong></th>
+  <th><strong>例子</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>&gt;</td>
+  <td>大于</td>
+  <td><span class="math">\(x + 3 &gt; 2\)</span></td>
+</tr>
+<tr>
+  <td>&lt;</td>
+  <td>小于</td>
+  <td><span class="math">\(7x &lt; 28\)</span></td>
+</tr>
+<tr>
+  <td>≥</td>
+  <td>大于或等于</td>
+  <td><span class="math">\(5 ≥ x − 1\)</span></td>
+</tr>
+<tr>
+  <td>≤</td>
+  <td>小于或等于</td>
+  <td><span class="math">\(2y + 1 ≤ 7\)</span></td>
+</tr>
+</tbody>
+</table></div>
+
+<h2>解不等式的目标</h2>
+
+<p>我们的目标是让 <span class="math">\(x\)</span>（或者别的变量）<strong>单独出现在不等号的左边</strong>，像这样：</p>
+
+<div class="math">\[
+x &lt; 5
+\]</div>
+
+<p>或</p>
+
+<div class="math">\[
+y ≥ 11
+\]</div>
+
+<p>这种情况叫作“已解”。</p>
+
+<div class="card">
+<div class="card-header">例子：$x + 2 &gt; 12$</div>
+<div class="card-body">
+
+<p>两边都减去 <span class="math">\(2\)</span>：</p>
+<div class="math">\[
+x + 2 - 2 &gt; 12 - 2
+\]</div>
+
+<p>简化后：</p>
+<div class="math">\[
+x &gt; 10
+\]</div>
+
+<p>✅ <strong>完成！</strong></p>
+</div>
+</div>
+
+<h2>如何解？</h2>
+
+<p>解不等式和解方程很像，很多步骤是一样的……</p>
+
+<div class="text-center">
+
+<p>但要注意一个关键点：<strong>不等号的方向可能会改变！</strong></p>
+<figure>
+
+<img alt="大于号" src="images/greater-than-symbol.svg"/>
+</figure>
+
+<p>方向就是箭头“指向”哪一边。</p>
+</div>
+
+<div class="card">
+<div class="card-header">有些操作会<strong>改变方向</strong>：</div>
+<div class="card-body text-center">
+
+<p><span class="math">\(&lt;\)</span> 变成 <span class="math">\(&gt;\)</span></p>
+<p><span class="math">\(&gt;\)</span> 变成 <span class="math">\(&lt;\)</span></p>
+<p><span class="math">\(≤\)</span> 变成 <span class="math">\(≥\)</span></p>
+<p><span class="math">\(≥\)</span> 变成 <span class="math">\(≤\)</span></p>
+</div>
+</div>
+
+<h2>安全的操作</h2>
+
+<p>这些操作<strong>不会改变方向</strong>：</p>
+
+<ul>
+<li>两边同时加或减同一个数</li>
+<li>两边同时乘或除以一个<strong>正数</strong></li>
+<li>简化某一边</li>
+</ul>
+
+<div class="card">
+<div class="card-header">例子：$3x &lt; 7 + 3$</div>
+<div class="card-body">
+
+<p>可以先把右边简化：</p>
+<div class="math">\[
+3x &lt; 10
+\]</div>
+</div>
+</div>
+
+<p>以下操作<strong>会改变方向</strong>：</p>
+
+<ul>
+<li>两边同时乘或除以一个<strong>负数</strong></li>
+<li>把左右两边调换位置</li>
+</ul>
+
+<div class="card">
+<div class="card-header">例子：$2y + 7 &lt; 12$</div>
+<div class="card-body">
+
+<p>调换左右两边时，也要<strong>改变不等号方向</strong>：</p>
+<div class="math">\[
+12 &gt; 2y + 7
+\]</div>
+</div>
+</div>
+
+<h2>加减法解不等式</h2>
+
+<p>要解不等式，通常可以在两侧同时加上或者减去一个数，如下：</p>
+
+<div class="card">
+<div class="card-header">例子：$x + 3 &lt; 7$</div>
+<div class="card-body">
+
+<p>两边都减 <span class="math">\(3\)</span>：</p>
+<div class="math">
+\begin{align*}
+x + 3 - 3 &amp;&lt; 7 - 3 \\
+x &amp;&lt; 4
+\end{align*}
+</div>
+
+<p>这就是答案：<span class="math">\(x &lt; 4\)</span>。</p>
+<p>也就是说，<span class="math">\(x\)</span> 可以是任何小于 <span class="math">\(4\)</span> 的数。</p>
+</div>
+</div>
+
+<h3>刚才我们做了什么？</h3>
+
+<p>从 <span class="math">\(x + 3 &lt; 7\)</span>：</p>
+
+<figure>
+
+<img alt="数轴上的不等式 x+3 &amp;lt; 7" src="images/number-line-inequal-xp3lt7.svg"/>
+</figure>
+
+<p>变成了 <span class="math">\(x &lt; 4\)</span>:</p>
+
+<figure>
+
+<img alt="数轴上的不等式 x &amp;lt; 4" src="images/number-line-inequal-xlt4.svg"/>
+</figure>
+
+<h2>如果 <span class="math">\(x\)</span> 出现在右边怎么办？</h2>
+
+<p>没问题，只要调换两边位置，并<strong>反转不等号</strong>！</p>
+
+<div class="card">
+<div class="card-header">例子：$12 &lt; x + 5$</div>
+<div class="card-body">
+
+<p>两边都减 <span class="math">\(5\)</span>：</p>
+<div class="math">\[
+7 &lt; x
+\]</div>
+
+<p>但我们习惯把 <span class="math">\(x\)</span> 放在左边，所以调换位置并反转符号：</p>
+<div class="math">\[
+x &gt; 7
+\]</div>
+
+<p>看到了吗？不等号的尖仍然指向小的那一边，也就是 <span class="math">\(7\)</span>。</p>
+<p>所以答案就是 <span class="math">\(x &gt; 7\)</span>。</p>
+</div>
+</div>
+
+<p>注意：<span class="math">\(x\)</span> 可以放在右侧，但是我们通常习惯放在左侧。</p>
+
+<h2>乘除法解不等式</h2>
+
+<p>我们也常用乘法或除法来解不等式，但要注意正负号。</p>
+
+<h3>正数</h3>
+
+<p>两边乘或除以<strong>正数</strong>，方向不变。</p>
+
+<div class="card">
+<div class="card-header">例子：$3y &lt; 15$</div>
+<div class="card-body">
+
+<p>两边除以 <span class="math">\(3\)</span>：</p>
+<div class="math">\begin{align*}
+\frac{3y}{3} &amp;&lt; \frac{15}{3} \\
+y &amp;&lt; 5
+\end{align*}</div>
+
+<p>答案就是 <span class="math">\(x &gt; 5\)</span>。</p>
+</div>
+</div>
+
+<h3>负数</h3>
+
+<div class="text-center"><p>⚠️ 乘以或者除以负数时，必须反转不等号的方向。</p></div>
+
+<div class="card">
+<div class="card-header">为什么？</div>
+<div class="card-body">
+
+<p>看看数轴就知道了！</p>
+<p>例如，从 <span class="math">\(3\)</span> 到 <span class="math">\(7\)</span> 是增长，但从 <span class="math">\(-3\)</span> 到 <span class="math">\(-7\)</span> 则是减少。</p>
+<figure>
+
+<img alt="数轴上的 -7&amp;lt;-3 和 3&amp;lt;7" src="images/number-line-inequal-pos-neg.svg"/>
+</figure>
+
+<p>所以当两边乘或除以负数时，需要反转方向，例如从 <span class="math">\(&lt;\)</span> 变成 <span class="math">\(&gt;\)</span></p>
+</div>
+</div>
+
+<p>再看一个例子：</p>
+
+<div class="card">
+<div class="card-header">例子：$−2y &lt; −8$</div>
+<div class="card-body">
+
+<p>两边除以 −<span class="math">\(2\)</span>，并反转方向：</p>
+<div class="math">
+\begin{align*}
+-2y &amp;&lt; -8 \\
+-2y \div (-2) &amp;&gt; -8 \div (-2) \\
+y &amp;&gt; 4
+\end{align*}
+</div>
+
+<p>所以正确答案是 <span class="math">\(y &gt; 4\)</span></p>
+</div>
+</div>
+
+<p>请注意，在除以负数的那一步反转了不等号。</p>
+
+<p>记住一句话：</p>
+
+<div class="text-center"><p>乘或除以负数，方向要变。</p></div>
+
+<h2>不要轻易除以变量！</h2>
+
+<div class="card">
+<div class="card-header">例子：$bx &lt; 3b$</div>
+<div class="card-body">
+
+<p>如果直接除以 <span class="math">\(b\)</span>：</p>
+<div class="math">\[
+x &lt; 3
+\]</div>
+
+<p>但如果 <span class="math">\(b\)</span> 是负数，就要反转方向：</p>
+<div class="math">\[
+x &gt; 3
+\]</div>
+
+<p>但我们不知道 <span class="math">\(b\)</span> 是正还是负，所以<strong>不能确定答案</strong>！</p>
+</div>
+</div>
+
+<p>为了方便理解，可以设想用 <span class="math">\(1\)</span> 或者 <span class="math">\(-1\)</span> 代替上例 <span class="math">\(bx &lt; 3b\)</span> 中的 <span class="math">\(b\)</span>：</p>
+
+<ul>
+<li>如果 <span class="math">\(b = 1\)</span>，那么 <span class="math">\(x &lt; 3\)</span></li>
+<li>如果 <span class="math">\(b = −1\)</span>，那么要解的就是 <span class="math">\(−x &lt; −3\)</span>，答案是 <span class="math">\(x &gt; 3\)</span></li>
+</ul>
+
+<p>所以：</p>
+
+<div class="text-center"><p><strong>不要随便用变量去除不等式</strong>，除非你知道它是正数或负数。</p></div>
+
+<h2>更复杂的例子</h2>
+
+<div class="card">
+<div class="card-header">例子：$$\frac{x−3}{2} &lt; −5</div>
+<div class="card-body">
+
+<p>首先，两边乘 <span class="math">\(2\)</span> 来消掉 <span class="math">\(\div 2\)</span>：</p>
+<div class="math">\begin{align*}
+\frac{x−3}{2} \times 2 &amp;&lt; −5 \times 2 \\
+x−3 &amp;&lt; −10
+\end{align*}</div>
+
+<p>然后两边加 3：</p>
+<div class="math">\begin{align*}
+x - 3 + 3 &amp;&lt; -10 + 3 \\
+x &amp;&lt; −7
+\end{align*}</div>
+
+<p>答案是 <span class="math">\(x &lt; −7\)</span>。</p>
+</div>
+</div>
+
+<h2>同时有两个不等式怎么办？</h2>
+
+<div class="card">
+<div class="card-header">例子：$−2 &lt; \frac{6−2x}{3} &lt; 4$</div>
+<div class="card-body">
+
+<p>先两边乘 <span class="math">\(3\)</span>（正数，方向不变）：</p>
+<div class="math">\[
+−6 &lt; 6−2x &lt; 12
+\]</div>
+
+<p>再两边减 <span class="math">\(6\)</span>：</p>
+<div class="math">\[
+−12 &lt; −2x &lt; 6
+\]</div>
+
+<p>再两边除以 <span class="math">\(2\)</span>（正数）：</p>
+<div class="math">\[
+−6 &lt; −x &lt; 3
+\]</div>
+
+<p>最后两边乘 <span class="math">\(−1\)</span>（负数），<strong>方向反转</strong>：</p>
+<div class="math">\[
+6 &gt; x &gt; −3
+\]</div>
+
+<p>为了看起来整齐，最好把较小的数放在左边，较大的数放在右边。所以交换连个数，同时还要反转不等号方向：</p>
+<div class="math">\[
+−3 &lt; x &lt; 6
+\]</div>
+
+</div>
+</div>
+
+<h2>总结</h2>
+
+<ul>
+<li>大多数简单的不等式都可以通过加减乘除来解。</li>
+<li>但注意需要反转符号的情况：<ul>
+<li>乘或除以<strong>负数</strong>时，方向要反转。</li>
+<li>调换左右两边时，方向也要反转。</li>
+</ul>
+</li>
+<li><strong>不要</strong>随意用变量去除不等式，除非你确定变量是正数或负数。</li>
+</ul></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

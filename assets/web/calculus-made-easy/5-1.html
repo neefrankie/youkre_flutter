@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易微积分5.1: 常数求导示例 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span>5.1.</span><span class="ps-2">常数求导示例</span></h2>
+        <div><p>以下是一些例题，有完整解答。</p>
+
+<p><strong>(1)</strong> 求</p>
+
+<div class="math">\[
+y = \dfrac{x^5}{7} - \dfrac{3}{5}
+\]</div>
+
+<p>的导数。</p>
+
+<p><span class="math">\(\dfrac{3}{5}\)</span> 是一个加法常数，求导后消失。</p>
+
+<p>因此可以直接写出：</p>
+
+<div class="math">\begin{align*}
+\frac{dy}{dx} &amp;= \frac{1}{7} \times 5 \times x^{5-1} \\
+&amp;= \frac{5}{7} x^4
+\end{align*}</div>
+
+<p><strong>(2)</strong> 求</p>
+
+<div class="math">\[
+y = a\sqrt{x} - \dfrac{1}{2}\sqrt{a}
+\]</div>
+
+<p>的导数。</p>
+
+<p><span class="math">\(\dfrac{1}{2}\sqrt{a}\)</span> 是加法常数，求导后为零；而 <span class="math">\(a\sqrt{x}\)</span> 可以写成指数形式 <span class="math">\(a x^{\frac{1}{2}}\)</span>，于是有：</p>
+
+<div class="math">\begin{align*}
+\frac{dy}{dx} &amp;= a \times \frac{1}{2} \times x^{\frac{1}{2}-1} \\
+&amp;= \frac{a}{2} \times x^{-\frac{1}{2}} \\
+&amp;= \frac{a}{2\sqrt{x}}.
+\end{align*}</div>
+
+<p><strong>(3)</strong> 若</p>
+
+<div class="math">\[
+ay + bx = by - ax + (x+y)\sqrt{a^2 - b^2}
+\]</div>
+
+<p>求 <span class="math">\(y\)</span> 对 <span class="math">\(x\)</span> 的导数。</p>
+
+<p>通常这类表达式需要比我们现在掌握的更多知识才能处理。不过，总是值得先尝试一下，看能不能把它化简。</p>
+
+<p>首先，试着把它整理成 <span class="math">\(y =\)</span> 只含 <span class="math">\(x\)</span> 的表达式。</p>
+
+<p>原式可改写为：</p>
+
+<div class="math">\[
+(a-b)y + (a + b)x = (x+y) \sqrt{a^2 - b^2}
+\]</div>
+
+<p>两边平方得：</p>
+
+<div class="math">\begin{align*}
+&amp;(a-b)^2 y^2 + (a + b)^2 x^2 + 2(a+b)(a-b)xy \\
+= &amp;(x^2 + y^2 + 2xy)(a^2 - b^2)
+\end{align*}</div>
+
+<p>化简后得到：</p>
+
+<div class="math">\begin{align*}
+(a-b)^2y^2 + (a+b)^2 x^2 &amp;= x^2(a^2 - b^2) + y^2(a^2 - b^2) \\
+[(a-b)^2 - (a^2 - b^2)]y^2 &amp;= [(a^2 - b^2) - (a+b)^2]x^2 \\
+2b(b-a)y^2 &amp;= -2b(b+a)x^2
+\end{align*}</div>
+
+<p>因此，</p>
+
+<div class="math">\begin{align*}
+y &amp;= \sqrt{\frac{a+b}{a-b}} x \\
+\frac{dy}{dx} &amp;= \sqrt{\frac{a+b}{a-b}}
+\end{align*}</div>
+
+<p><strong>(4)</strong> 圆柱体的体积公式为</p>
+
+<div class="math">\[
+V = \pi r^2 h
+\]</div>
+
+<p>其中 <span class="math">\(r\)</span> 是底面半径，<span class="math">\(h\)</span> 是高。</p>
+
+<ul>
+<li>当 <span class="math">\(r = 5.5\)</span> 厘米、<span class="math">\(h = 20\)</span> 厘米时，求体积随半径的变化率。</li>
+<li>如果 <span class="math">\(r = h\)</span>，要使半径每变化 1 厘米，体积就变化 400 立方厘米，求此时圆柱体的尺寸。</li>
+</ul>
+
+<p>体积 <span class="math">\(V\)</span> 对半径 <span class="math">\(r\)</span> 的变化率是：</p>
+
+<div class="math">\[
+\frac{dV}{dr} = 2 \pi r h
+\]</div>
+
+<p>当 <span class="math">\(r = 5.5\)</span> 厘米，<span class="math">\(h = 20\)</span> 厘米时，该值为 <span class="math">\(690.8\)</span>。这意味着半径每增加 1 厘米，体积就增加 690.8 立方厘米。我们可以通过计算验证：当 <span class="math">\(r = 5\)</span> 和 <span class="math">\(r = 6\)</span> 时，体积分别为 1570 和 2260.8 立方厘米，两者之差正好是 <span class="math">\(2260.8 - 1570 = 690.8\)</span>。</p>
+
+<p>另外，如果 <span class="math">\(r = h\)</span>，且要求 <span class="math">\(\dfrac{dV}{dr} = 400\)</span>，则：</p>
+
+<div class="math">\begin{align*}
+\frac{dV}{dr} &amp;= 2\pi r^2 = 400 \\
+r &amp;= h = \sqrt{\dfrac{400}{2\pi}} \approx 7.98
+\end{align*}</div>
+
+<p><strong>(5)</strong> 费里辐射高温计的读数 <span class="math">\(\theta\)</span> 与被测物体的摄氏温度 <span class="math">\(t\)</span> 之间的关系为：</p>
+
+<div class="math">\[
+\dfrac{\theta}{\theta_1} = \left(\dfrac{t}{t_1}\right)^4
+\]</div>
+
+<p>其中 <span class="math">\(\theta_1\)</span> 是当物体温度为已知值 <span class="math">\(t_1\)</span> 时的读数。</p>
+
+<p>已知温度为 <span class="math">\(1000^\circ \text{C}\)</span> 时读数为 25，试比较高温计在 <span class="math">\(800^\circ \text{C}\)</span>、<span class="math">\(1000^\circ \text{C}\)</span>、<span class="math">\(1200^\circ \text{C}\)</span> 时的灵敏度。</p>
+
+<p>灵敏度是指读数随温度的变化率，即</p>
+
+<div class="math">\[
+\dfrac{d\theta}{dt}
+\]</div>
+
+<p>原公式可写为：</p>
+
+<div class="math">\[
+\theta = \dfrac{\theta_1}{t_1^4} t^4 = \dfrac{25t^4}{1000^4}
+\]</div>
+
+<p>求导得：</p>
+
+<div class="math">\begin{align*}
+\dfrac{d\theta}{dt} &amp;= \dfrac{100t^3}{1000^4} \\
+&amp;= \dfrac{t^3}{10,000,000,000}
+\end{align*}</div>
+
+<p>当 <span class="math">\(t = 800\)</span>、<span class="math">\(1000\)</span>、<span class="math">\(1200\)</span> 时，对应的 <span class="math">\(\dfrac{d\theta}{dt}\)</span> 分别为 <span class="math">\(0.0512\)</span>、<span class="math">\(0.1\)</span> 和 <span class="math">\(0.1728\)</span>。</p>
+
+<p>由此可见，灵敏度从 <span class="math">\(800^\circ \text{C}\)</span> 到 <span class="math">\(1000^\circ \text{C}\)</span> 约翻了一倍，再从 <span class="math">\(1000^\circ \text{C}\)</span> 到 <span class="math">\(1200^\circ \text{C}\)</span> 又增加了约四分之三。</p></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

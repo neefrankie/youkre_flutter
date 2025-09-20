@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易微积分3: 导数是什么 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span>3.</span><span class="ps-2">导数是什么</span></h2>
+        <div><h2>常量和变量</h2>
+
+<p>在微积分中，处理的都是正在增长的量及其增长率。我们将所有量分为两类：<strong>常量</strong>和<strong>变量</strong>。</p>
+
+<div class="card">
+<div class="card-body">
+<h5 class="card-title">常量</h5>
+
+<p>指那些我们认为值固定不变的量，通常用字母表开头的字母如 <span class="math">\(a\)</span>、<span class="math">\(b\)</span> 或 <span class="math">\(c\)</span> 表示</p>
+</div>
+</div>
+
+<div class="card">
+<div class="card-body">
+<h5 class="card-title">变量</h5>
+
+<p>那些我们认为能够增长或变化的量，用字母表末尾的字母如 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span>、<span class="math">\(u\)</span>、<span class="math">\(v\)</span>、<span class="math">\(w\)</span>，有时也用 <span class="math">\(t\)</span> 表示。</p>
+</div>
+</div>
+
+<h2>变量之间的依赖</h2>
+
+<p>我们通常同时处理多个变量。考虑一个变量如何依赖于另一个变量：例如，</p>
+
+<ul>
+<li>炮弹达到的高度依赖于到达该高度的时间；</li>
+<li>一个给定面积的矩形，长度增加如何导致宽度相应减少；</li>
+<li>梯子的倾斜角度变化如何影响它能达到的高度。</li>
+</ul>
+
+<p>假设有两个这样相互依赖的变量。其中一个变量的变化会导致另一个变量随之变化。设其中一个变量为 <span class="math">\(x\)</span>，依赖于它的另一个变量为 <span class="math">\(y\)</span>。</p>
+
+<p>假设让 <span class="math">\(x\)</span> 变化，也就是说，让它增加一点，增加的量记为 <span class="math">\(dx\)</span>。这样 <span class="math">\(x\)</span> 就变成了 <span class="math">\(x + dx\)</span>。由于 <span class="math">\(x\)</span> 发生了变化，<span class="math">\(y\)</span> 也会随之变化，变成 <span class="math">\(y + dy\)</span>。</p>
+
+<p>这里 <span class="math">\(dy\)</span> 在某些情况下可能是正值，在另一些情况下是负值，并且除非特殊情况，否则不会与 <span class="math">\(dx\)</span> 大小相同。</p>
+
+<h2>举两个例子说明</h2>
+
+<p>（1）设 <span class="math">\(x\)</span> 和 <span class="math">\(y\)</span> 分别为直角三角形（图4）的底边和高，斜边的倾斜角度固定为 <span class="math">\(30°\)</span>。</p>
+
+<p>假设这个三角形角度不变，边长扩大，当底边变为 <span class="math">\(x + dx\)</span> 时，高则变为 <span class="math">\(y + dy\)</span>。这里 <span class="math">\(x\)</span> 的增加导致了 <span class="math">\(y\)</span> 的增加。</p>
+
+<p>新形成的三角形，高为 <span class="math">\(dy\)</span>，底为 <span class="math">\(dx\)</span>，与原三角形相似，显然 <span class="math">\(\dfrac{dy}{dx}\)</span> 的值等于 <span class="math">\(\dfrac{y}{x}\)</span> 的值。</p>
+
+<figure>
+
+<img alt="" src="images/cme-fig-4.svg"/>
+<figcaption>图 4</figcaption>
+</figure>
+
+<p>由于角度是 <span class="math">\(30°\)</span>，根据三角函数，<span class="math">\(\tan 30^\circ = \frac{1}{\sqrt{3}}\)</span>：</p>
+
+<div class="math">\[
+\frac{dy}{dx} = \frac{1}{\sqrt{3}}
+\]</div>
+
+<p>（2）设 <span class="math">\(x\)</span> 代表从墙到梯子底端的距离（图5），<span class="math">\(AB\)</span> 为梯子的固定长度，<span class="math">\(y\)</span> 是梯子沿墙的高度。很明显 <span class="math">\(y\)</span> 依赖于 <span class="math">\(x\)</span>。</p>
+
+<p>如果将底部 <span class="math">\(A\)</span> 拉离墙一些，顶部 <span class="math">\(B\)</span> 就会下降一点。用科学的语言来说，如果把 <span class="math">\(x\)</span> 增加到 <span class="math">\(x + dx\)</span>，那么 <span class="math">\(y\)</span> 会变成 <span class="math">\(y - dy\)</span>；也就是说，当<span class="math">\(x\)</span>有一个正增量时，<span class="math">\(y\)</span>的增量却是负的。</p>
+
+<figure>
+
+<img alt="" src="images/cme-fig-5.svg"/>
+<figcaption>图 5</figcaption>
+</figure>
+
+<p>变化的量具体是多少呢？比如，假设梯子足够长，当底部 <span class="math">\(A\)</span> 距离墙 <span class="math">\(19\)</span> 厘米时，顶部 <span class="math">\(B\)</span> 刚好离地 <span class="math">\(1.8\)</span> 米。现在如果把将底部往外多拉 <span class="math">\(1\)</span> 厘米，顶部会下降多少？全部转换成厘米单位：<span class="math">\(x = 19\)</span> 厘米，<span class="math">\(y = 180\)</span> 厘米。增量 <span class="math">\(dx\)</span> 为 <span class="math">\(1\)</span> 厘米，即 <span class="math">\(x + dx = 20\)</span> 厘米。</p>
+
+<p><span class="math">\(y\)</span> 会减少多少？新的高度将为 <span class="math">\(y - dy\)</span>。根据勾股定理计算出 <span class="math">\(y\)</span> 的新高度能够帮助我们找到 <span class="math">\(dy\)</span> 是多少。如果使用 <span class="math">\(l\)</span> 表示梯子的长度，这是一个常量，那么：</p>
+
+<div class="math">\begin{align*}
+y^2 + x^2 &amp;= l^2 \\
+y^2 &amp;= l^2 - x^2
+\end{align*}</div>
+
+<p>首先求出梯子的长度：</p>
+
+<div class="math">\[
+\sqrt{ (180)^2 + (19)^2 } = 181
+\]</div>
+
+<p>新的高度，即 <span class="math">\(y - dy\)</span>，满足：</p>
+
+<div class="math">\begin{align*}
+(y - dy)^2 &amp;= (181)^2 - (20)^2 \\
+&amp;= 32761 - 400 \\
+&amp;= 32361   \\
+y - dy     &amp;= \sqrt{32361} \\
+&amp;= 179.89
+\end{align*}</div>
+
+<p>由于 <span class="math">\(y\)</span> 是 <span class="math">\(180\)</span> 厘米，所以：</p>
+
+<div class="math">\begin{align*}
+dy &amp;= y - 179.89 \\
+&amp;= 180 - 179.89 \\
+&amp;= 0.11
+\end{align*}</div>
+
+<p>因此，我们看到 <span class="math">\(dx\)</span> 增加 <span class="math">\(1\)</span> 厘米导致 <span class="math">\(dy\)</span> 减少了 <span class="math">\(0.11\)</span> 厘米。</p>
+
+<p>此时 <span class="math">\(dy\)</span> 与 <span class="math">\(dx\)</span> 的比例可以这样表示：</p>
+
+<div class="math">\[
+\frac{dy}{dx} = - \frac{0.11}{1}
+\]</div>
+
+<p>很容易看出（除了某个特定位置外），<span class="math">\(dy\)</span> 的大小通常不同于 <span class="math">\(dx\)</span>。</p>
+
+<div class="card">
+<div class="card-body">
+
+<p>贯穿整个微分学，我们一直在寻找一种奇特的东西，即 <span class="math">\(dy\)</span> 相对于 <span class="math">\(dx\)</span> 的比例，尤其是在两者都无限接近零时的比例。</p>
+</div>
+</div>
+
+<h2>函数</h2>
+
+<p>需要注意的是，只有当 <span class="math">\(y\)</span> 和 <span class="math">\(x\)</span> 之间存在某种关系时，才能求出比例 <span class="math">\(\dfrac{dy}{dx}\)</span>。也就是说，只要 <span class="math">\(x\)</span> 发生变化，<span class="math">\(y\)</span> 也会随之变化。</p>
+
+<p>例如，在前面的第一个例子中，如果三角形的底边 <span class="math">\(x\)</span> 变长了，那么三角形的高 <span class="math">\(y\)</span> 也随之增加；在第二个例子中，如果梯子底部离墙的距离 <span class="math">\(x\)</span> 增大，那么梯子所能到达的高度 <span class="math">\(y\)</span> 就会相应减小，起初变化较慢，但随着 <span class="math">\(x\)</span> 越来越大，变化也越来越快。在这两种情况下，<span class="math">\(x\)</span> 和 <span class="math">\(y\)</span> 的关系是明确的，可以用数学表达式表示，分别是</p>
+
+<div class="math">\[
+\dfrac{y}{x} = \tan 30^\circ
+\]</div>
+
+<p>和</p>
+
+<div class="math">\[
+x^2 + y^2 = l^2
+\]</div>
+
+<p>（其中 <span class="math">\(l\)</span> 是梯子的长度）。</p>
+
+<p>但如果 <span class="math">\(x\)</span> 仍代表梯子底部离墙的距离，而 <span class="math">\(y\)</span> 却不是梯子的高度，而是墙的厚度、墙中的砖块数量，或是墙建成以来的年数，那么对 <span class="math">\(x\)</span> 的任何改变自然不会引起 <span class="math">\(y\)</span> 的任何变化。在这种情况下，<span class="math">\(\dfrac{dy}{dx}\)</span> 完全没有意义，也无法写出它的表达式。</p>
+
+<div class="card">
+<div class="card-body">
+
+<p>每当我们使用微分 <span class="math">\(dx\)</span>、<span class="math">\(dy\)</span>、<span class="math">\(dz\)</span> 等时，就意味着 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 等之间存在某种关系，这种关系被称为关于 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 等的<strong>函数</strong>。</p>
+</div>
+</div>
+
+<p>比如上面给出的两个表达式：<span class="math">\(\dfrac{y}{x} = \tan 30°\)</span> 和 <span class="math">\(x^2 + y^2 = l^2\)</span>，就是关于 <span class="math">\(x\)</span> 和 <span class="math">\(y\)</span> 的函数。</p>
+
+<div class="card">
+<div class="card-body">
+
+<p>这类表达式隐含地（也就是未明显地）给出了用 <span class="math">\(y\)</span> 表示 <span class="math">\(x\)</span> 或者用 <span class="math">\(x\)</span> 表示 <span class="math">\(y\)</span> 的方法，因此它们被称为 <span class="math">\(x\)</span> 和 <span class="math">\(y\)</span> 的<strong>隐函数</strong>。</p>
+</div>
+</div>
+
+<p>它们可以分别改写为以下形式：</p>
+
+<div class="math">\begin{align*}
+y &amp;= x \tan 30°\\
+x &amp;= \frac{y}{\tan 30°}
+\end{align*}</div>
+
+<p>以及</p>
+
+<div class="math">\begin{align*}
+y &amp;= \sqrt{ l^2 - x^2} \\
+x &amp;= \sqrt{ l^2 - y^2}
+\end{align*}</div>
+
+<div class="card">
+<div class="card-body">
+
+<p>最后列出的这些表达式清楚地给出了 <span class="math">\(y\)</span> 用 <span class="math">\(x\)</span> 表示，或 <span class="math">\(x\)</span> 用 <span class="math">\(y\)</span> 表示的形式，因此它们被称为 <span class="math">\(x\)</span> 或 <span class="math">\(y\)</span> 的<strong>显函数</strong>。</p>
+</div>
+</div>
+
+<p>例如，<span class="math">\(x^2 + 3 = 2y - 7\)</span> 是一个关于 <span class="math">\(x\)</span> 和 <span class="math">\(y\)</span> 的隐函数；它可以写成 <span class="math">\(y = \dfrac{x^2 + 10}{2}\)</span>（即 <span class="math">\(y\)</span> 关于 <span class="math">\(x\)</span> 的显函数），或者写成 <span class="math">\(x = \sqrt{2y - 10}\)</span>（即 <span class="math">\(x\)</span> 关于 <span class="math">\(y\)</span> 的显函数）。</p>
+
+<p>可以看出，一个关于 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 等的显函数，其实就是某个量，它的值会随着 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 等变量一个或多个的变化而变化。
+因此，</p>
+
+<ul>
+<li><p>这个显函数的值被称为<strong>因变量</strong>，因为它依赖于函数中其他变量的值；</p>
+</li>
+<li><p>而这些其他变量则被称为<strong>自变量</strong>，因为它们的值不是由函数本身决定的。</p>
+</li>
+</ul>
+
+<p>例如，在 <span class="math">\(u = x^2 \sin \theta\)</span> 中，<span class="math">\(x\)</span> 和 <span class="math">\(\theta\)</span> 是自变量，<span class="math">\(u\)</span> 是因变量。</p>
+
+<p>有时，我们并不知道几个量 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 之间的精确关系，或者不方便表达；只知道这些变量之间存在某种关系，也就是说，如果不影响其他量，就不能单独改变其中任何一个量（<span class="math">\(x\)</span>、<span class="math">\(y\)</span> 或 <span class="math">\(z\)</span>）。这种情况下，就说它们之间存在一个关于 <span class="math">\(x\)</span>、<span class="math">\(y\)</span>、<span class="math">\(z\)</span> 的函数。</p>
+
+<p>这种函数可以用记号 <span class="math">\(F(x, y, z)\)</span> 来表示（隐函数），或者写成 <span class="math">\(x = F(y, z)\)</span>、<span class="math">\(y = F(x, z)\)</span>、或 <span class="math">\(z = F(x, y)\)</span>（显函数）。</p>
+
+<p>有时候也用字母 <span class="math">\(f\)</span> 或 <span class="math">\(\phi\)</span> 来代替 <span class="math">\(F\)</span>，比如 <span class="math">\(y = F(x)\)</span>、<span class="math">\(y = f(x)\)</span> 和 <span class="math">\(y = \phi(x)\)</span> 其实是一回事，都表示 <span class="math">\(y\)</span> 的值在某种方式下依赖于 <span class="math">\(x\)</span>，只是具体依赖关系没有说明。</p>
+
+<h2>导数</h2>
+
+<div class="card">
+<div class="card-body">
+
+<p>我们把</p>
+<div class="math">\[
+\dfrac{dy}{dx}
+\]</div>
+
+<p>称为“<span class="math">\(y\)</span> 关于 <span class="math">\(x\)</span> 的<strong>导数</strong>”。</p>
+<p>导数实际上是一个<strong>函数</strong>，也是一个关于 <span class="math">\(x\)</span> 的函数，用来描述<strong>原函数在每个点上的瞬时变化率</strong>。</p>
+</div>
+</div>
+
+<p>对于定义域内的每一个 <span class="math">\(x\)</span>，导数给出了原函数在该点处的<strong>斜率</strong>，即随着 <span class="math">\(x\)</span> 的微小变化，<strong>原函数变化的速率</strong>。</p>
+
+<p>这使得我们可以通过研究导数函数来了解原始函数的性质，比如在哪里增加或减少、凹凸性等。</p>
+
+<p>在学校学过的普通代数中，总是在寻找某个未知量，它被称作 <span class="math">\(x\)</span> 或 <span class="math">\(y\)</span>；有时候要同时找出两个未知量。现在你要学会一种新的“捕猎”方式。这次不是去抓 <span class="math">\(x\)</span> 或 <span class="math">\(y\)</span>，而是去寻找一个叫 <span class="math">\(\dfrac{dy}{dx}\)</span> 的函数。</p>
+
+<p>求出 <span class="math">\(\dfrac{dy}{dx}\)</span> 的过程叫做<strong>求导</strong>。</p>
+
+<p>但请记住：我们要的是函数在某个点附近，<span class="math">\(dy\)</span> 和 <span class="math">\(dx\)</span> 都<strong>无限小</strong>的时候，在该点的变化比例。导数在某一点的真正值，是在 <span class="math">\(dy\)</span> 和 <span class="math">\(dx\)</span> 都<strong>趋于无穷小的极限情况下</strong>所趋近的那个值。</p>
+
+<p>接下来，我们就来学习如何寻找 <span class="math">\(\dfrac{dy}{dx}\)</span>。</p></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

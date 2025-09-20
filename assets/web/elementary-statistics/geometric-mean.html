@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>概率统计入门: 几何平均数 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">几何平均数</span></h2>
+        <div><p>几何平均数是一种特殊的平均方式。它的做法是：先把所有数字相乘，然后开平方（两个数）、开立方根（三个数），以此类推。</p>
+
+<div class="card">
+<div class="card-header">例：$2$ 和 $18$ 的几何平均数是多少？</div>
+<div class="card-body">
+
+<ul>
+<li>先把它们相乘：<span class="math">\(2 \times 18 = 36\)</span></li>
+<li>然后开平方（因为有两个数）：<span class="math">\(\sqrt{36} = 6\)</span></li>
+</ul>
+<p>一句话写出来就是：</p>
+<div class="math">\begin{align*}
+\text{2 和 18 的几何平均数} &amp;= \sqrt{2 \times 18} \\
+&amp;= 6
+\end{align*}</div>
+
+<p>就像下图一样，面积没变，但是宽高相等了。</p>
+<figure>
+
+<img alt="图片：2×18=6×6" src="images/geometric-mean-2.svg"/>
+</figure>
+
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">例：$4$、$2$ 和 $1$ 的几何平均数是多少？</div>
+<div class="card-body">
+
+<ul>
+<li>先相乘：<span class="math">\(4 \times 2 \times 1 = 8\)</span></li>
+<li>然后开立方根（因为有三个数）：<span class="math">\(\sqrt[3]{8} \approx 2.83\)</span></li>
+</ul>
+<p>一句话写出来就是：</p>
+<div class="math">\begin{align*}
+\text{几何平均数} &amp;= \sqrt[3]{4 \times 2 \times 1} \\
+&amp;\approx 2.83
+\end{align*}</div>
+
+<p>就像下图一样，体积没变，但是边长相等了。</p>
+<figure>
+
+<img alt="图片：4×2×8=2x2x2" src="images/geometric-mean-3.svg"/>
+</figure>
+
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">例：1、3、9、27 和 81 的几何平均数是多少？</div>
+<div class="card-body">
+
+<ul>
+<li>先相乘：<span class="math">\(1 \times 3 \times 9 \times 27 \times 81 = 59049\)</span></li>
+<li>然后开五次方根（因为有五个数）：<span class="math">\(\sqrt[5]{59049} = 9\)</span></li>
+</ul>
+<p>一句话写出来就是：</p>
+<div class="math">\begin{align*}
+\text{几何平均数} &amp;= \sqrt[5]{1 \times 3 \times 9 \times 27 \times 81} \\
+&amp;= 9
+\end{align*}</div>
+
+<p>对于5个数就没法画出来漂亮的图形了，不过依然可以用下面这个等式表示：</p>
+<div class="math">\begin{align*}
+&amp;1 × 3 × 9 × 27 × 81 \\
+&amp;= 9 × 9 × 9 × 9 × 9
+\end{align*}</div>
+
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">例：一个分子和一座山的几何平均数是多少？</div>
+<div class="card-body">
+
+<p>用科学记数法表示：</p>
+<ul>
+<li>一个水分子大约是 <span class="math">\(0.275 \times 10^{-9}\)</span> 米</li>
+<li>珠穆朗玛峰大约是 <span class="math">\(8.8 \times 10^3\)</span> 米</li>
+</ul>
+<p>二者的几何平均数就是：</p>
+<div class="math">\begin{align*}
+&amp;\sqrt{0.275 \times 10^{-9} \times 8.8 \times 10^3} \\
+= &amp;\sqrt{2.42 \times 10^{-6}} \\
+\approx &amp;0.0016 \text{米}
+\end{align*}</div>
+
+<p>也就是 <strong>1.6 毫米</strong>，差不多是一枚硬币的厚度。</p>
+<p>我们可以说：</p>
+<blockquote>
+<p>“一毫米，差不多在分子和高山之间一半的位置。”</p>
+</blockquote>
+</div>
+</div>
+
+<p>再来看一个有意思的：</p>
+
+<div class="card">
+<div class="card-header">例：一个细胞和地球的几何平均数是多少？</div>
+<div class="card-body">
+
+<ul>
+<li>一个皮肤细胞直径大约是 <span class="math">\(3 \times 10^{-8}\)</span> 米</li>
+<li>地球直径大约是 <span class="math">\(1.3 \times 10^7\)</span> 米</li>
+</ul>
+<p>它们的几何平均数等于：</p>
+<div class="math">\begin{align*}
+&amp;\sqrt{3 \times 10^{-8} \times 1.3 \times 10^7} \\
+= &amp;\sqrt{3.9 \times 10^{-1}} \\
+= &amp;\sqrt{0.39} \\
+\approx &amp;0.6 \text{米}
+\end{align*}</div>
+
+<p>一个小孩子大概就有 0.6 米高。可以说：</p>
+<blockquote>
+<p>“一个孩子，差不多在细胞和地球之间一半的位置。”</p>
+</blockquote>
+</div>
+</div>
+
+<p>所以，几何平均数能帮我们在差别很大的数值之间找到一个中间值。</p>
+
+<h2>定义</h2>
+
+<p>对于 <span class="math">\(n\)</span> 个数字，先全部相乘，然后开 <span class="math">\(n\)</span> 次方根（写作 <span class="math">\(\sqrt[n]{}\)</span>）。</p>
+
+<p>更正式地说，n 个数 <span class="math">\(a_1\)</span> 到 <span class="math">\(a_n\)</span> 的几何平均数是：</p>
+
+<div class="math">\[
+\sqrt[n]{a_1 \times a_2 \times \cdots \times a_n}
+\]</div>
+
+<h2>应用</h2>
+
+<p>想比较一些性质差异很大的事物时，几何平均数特别有用。</p>
+
+<div class="card">
+<div class="card-header">例：你想买一台新相机</div>
+<div class="card-body">
+
+<ul>
+<li>一台相机变焦是 200，评分是 8</li>
+<li>另一台变焦是 250，评分是 6</li>
+</ul>
+<p>如果用普通的算术平均数来比：</p>
+<ul>
+<li><span class="math">\((200 + 8) \div 2 = 104\)</span></li>
+<li><span class="math">\((250 + 6) \div 2 = 128\)</span></li>
+</ul>
+<p>你会发现，由于变焦数值太大，评分对结果几乎没影响。</p>
+<p>但如果用几何平均数：</p>
+<ul>
+<li><span class="math">\(\sqrt{200 \times 8} = 40\)</span></li>
+<li><span class="math">\(\sqrt{250 \times 6} \approx 38.7\)</span></li>
+</ul>
+<p>即使第二台变焦更大，但评分低了，整体得分反而更低。</p>
+</div>
+</div>
+
+<p>这说明：几何平均数能让不同量级的数值“公平”地参与比较。</p></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

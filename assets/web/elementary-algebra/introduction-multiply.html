@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>初级代数: 代数乘除 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">代数乘除</span></h2>
+        <div><h2>一个谜题</h2>
+
+<p>下面方块代表的数字是多少？</p>
+
+<div class="math">\[
+\Box \times 4 = 8
+\]</div>
+
+<p>答案是2，对吧？因为 <span class="math">\(2 × 4 = 8\)</span>。</p>
+
+<p>在代数中，我们不用方块，而是用<strong>字母</strong>来表示。所以可以写成：</p>
+
+<div class="math">\[
+x \times 4 = 8 
+\]</div>
+
+<p>但这里的 <span class="math">\(x\)</span> 和乘号“×”长得很像，容易混淆。所以在代数中，<strong>数字和字母之间不写乘号</strong>。我们把数字直接放在字母前面，表示相乘：</p>
+
+<div class="math">\[
+4x = 8
+\]</div>
+
+<p>中文里我们说：“<span class="math">\(4x\)</span> 等于 8”，意思是 <span class="math">\(4\)</span> 个 <span class="math">\(x\)</span> 加起来是 <span class="math">\(8\)</span>。</p>
+
+<p>答案就是：</p>
+
+<div class="math">$$
+x = 2
+$$</div>
+
+<h2>怎么解题</h2>
+
+<p>不要直接说“显然 <span class="math">\(x=2\)</span>”，可以一步步来：</p>
+
+<ul>
+<li>想清楚要<strong>去掉什么</strong>，才能变成 <span class="math">\(x = \cdots\)</span></li>
+<li>用<strong>相反的方法</strong>去掉它（乘的反面是除）</li>
+<li>对<strong>等号两边都</strong>做同样的操作</li>
+</ul>
+
+<p>那乘法的反面是什么？<strong>除法！</strong></p>
+
+<p>来看一个例子。我们要去掉 <span class="math">\(4x = 8\)</span> 中的 <span class="math">\(4\)</span></p>
+
+<p>要去掉它，就用它的反面操作——<strong>除以4</strong></p>
+
+<div class="math">\begin{align*}
+&amp;4x = 8 \\
+\div &amp;4 \\
+\hline \\
+&amp;1
+\end{align*}</div>
+
+<p>对<strong>两边都</strong>这么做：</p>
+
+<div class="math">
+\begin{align*}
+&amp;4x     =  &amp;8 \\
+\div &amp;4 &amp; \div 4 \\
+\hline \\
+&amp;1   &amp; 2
+\end{align*}
+</div>
+
+<p>结果就是：</p>
+
+<div class="math">\[
+1x = 2
+\]</div>
+
+<p>解出来了:</p>
+
+<div class="math">\[
+x = 2
+\]</div>
+
+<h2>为什么要两边都除以4？</h2>
+
+<p>因为要保持平衡。记住一句话：</p>
+
+<div class="text-center"><p><strong>一边动，另一边也要动，这样才能保持等号两边始终平衡！</strong></p></div>
+
+<h2>另一个谜题</h2>
+
+<p>试试看解这个：</p>
+
+<div class="math">\[
+x \div 3 = 5
+\]</div>
+
+<p>我们想要的是 <span class="math">\(x = \cdots\)</span>，但这里有个除以 <span class="math">\(3\)</span>，挡住了路！</p>
+
+<p>如果<strong>乘以 <span class="math">\(3\)</span></strong>，就能抵消“除以 <span class="math">\(3\)</span>”（因为 <span class="math">\(3 \div 3 = 1\)</span>）。那就从两边都乘以 <span class="math">\(3\)</span> 开始：</p>
+
+<div class="math">\[
+\frac{x}{3} \times 3 = 5 \times 3
+\]</div>
+
+<p>算一算：<span class="math">\(\frac{x}{3} \times 3 = 1\)</span>，而 <span class="math">\(5 \times 3 = 15\)</span></p>
+
+<p>结果就是：</p>
+
+<div class="math">\[
+x = 15
+\]</div>
+
+<h2>更复杂的例子</h2>
+
+<p>怎么解这个？</p>
+
+<div class="math">\[
+x \div 3 + 2 = 5
+\]</div>
+
+<p>看起来有点难，但如果<strong>分步来做</strong>，就不难了。</p>
+
+<p><strong>第一步</strong>：去掉 <span class="math">\(+2\)</span>。从原式出发：</p>
+
+<div class="math">\[
+x \div 3 + 2 = 5
+\]</div>
+
+<p>用 <span class="math">\(−2\)</span> 去掉 <span class="math">\(+2\)</span>（因为 <span class="math">\(2 − 2 = 0\)</span>）</p>
+
+<div class="math">\[
+x \div 3 + 2 − 2 = 5 − 2
+\]</div>
+
+<p>算一下，<span class="math">\(2 − 2 = 0\)</span>，<span class="math">\(5 − 2 = 3\)</span>：</p>
+
+<div class="math">\[
+x \div 3 = 3
+\]</div>
+
+<p><strong>第二步</strong>：去掉 <span class="math">\(\div 3\)</span></p>
+
+<p>用 <span class="math">\(×3\)</span> 去掉 <span class="math">\(÷3\)</span>（因为 <span class="math">\(3 ÷ 3 = 1\)</span>）</p>
+
+<div class="math">\[
+x \div 3 \times 3 = 3 \times 3
+\]</div>
+
+<p>算一下，<span class="math">\(\frac{3}{3} = 1\)</span>，<span class="math">\(3×3 = 9\)</span>，所以：</p>
+
+<div class="math">\[
+x = 9
+\]</div>
+
+<h2>熟练之后的做法</h2>
+
+<p>熟练以后可以这样写：</p>
+
+<div class="math">\[
+x \div 3 + 2 = 5
+\]</div>
+
+<p>两边减 <span class="math">\(2\)</span>：</p>
+
+<div class="math">\[
+x \div 3 + 2 - 2 = 5 - 2
+\]</div>
+
+<p>得到：</p>
+
+<div class="math">\[
+x \div 3 = 3
+\]</div>
+
+<p>两边乘 <span class="math">\(3\)</span>：</p>
+
+<div class="math">\[
+x \div 3 \times 3 = 3 \times 3
+\]</div>
+
+<p>得到：</p>
+
+<div class="math">\[
+x = 9
+\]</div>
+
+<p>也可以更快一点：</p>
+
+<div class="math">\[
+x \div 3 + 2 = 5
+\]</div>
+
+<p>减 <span class="math">\(2\)</span>：</p>
+
+<div class="math">\[
+x \div 3 = 3
+\]</div>
+
+<p>乘 <span class="math">\(3\)</span>：</p>
+
+<div class="math">\[
+x = 9
+\]</div>
+
+<h2>真实世界的例子</h2>
+
+<div class="card mb-3">
+<div class="card-header">例子: 小萨网上买了 3 盒巧克力。邮费是 9 元，总花费是 45 元。每盒多少钱？</div>
+<div class="card-body">
+
+<p>用 <span class="math">\(x\)</span> 表示每盒的价格。3 盒 <span class="math">\(x\)</span> 的价格加上邮费 9 元，总共是 45 元：</p>
+<div class="math">\[
+3x + 9 = 45
+\]</div>
+
+<p>开始解题。先写：</p>
+<div class="math">\[
+3x + 9 = 45
+\]</div>
+
+<p>两边减 <span class="math">\(9\)</span>：</p>
+<div class="math">\[
+3x  + 9 - 9 = 45 - 9
+\]</div>
+
+<p>化简得：</p>
+<div class="math">\[
+3x = 36
+\]</div>
+
+<p>两边除以 <span class="math">\(3\)</span>：</p>
+<div class="math">\[
+3x \div 3 = 36 \div 3
+\]</div>
+
+<p>化简得：</p>
+<div class="math">\[
+x = 12
+\]</div>
+
+<p>所以每盒是 12 元</p>
+</div>
+</div>
+
+<p><strong>进阶方法：</strong> 也可以一开始就除以 <span class="math">\(3\)</span>（但要每个项都除）：</p>
+
+<p>原式：</p>
+
+<div class="math">\[
+3x + 9 = 45
+\]</div>
+
+<p>两边除以3：</p>
+
+<div class="math">\[
+\frac{3x}{3} + \frac{9}{3} = \frac{45}{3}
+\]</div>
+
+<p>化简得到：</p>
+
+<div class="math">\[
+x + 3 = 15
+\]</div>
+
+<p>两边减 <span class="math">\(3\)</span>：</p>
+
+<div class="math">\[
+x + 3 - 3 = 15 - 3
+\]</div>
+
+<p>化简得到：</p>
+
+<div class="math">$$
+x = 12
+$$</div>
+
+<p>一样的答案！</p></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

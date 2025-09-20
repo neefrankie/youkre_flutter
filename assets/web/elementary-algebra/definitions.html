@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>初级代数: 代数中的基本定义 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">代数中的基本定义</span></h2>
+        <div><h2>什么是等式？</h2>
+
+<p>等式表示两个事物相等。它中间有等于号 <span class="math">\(=\)</span>，比如：</p>
+
+<div class="math">\[
+x + 2 = 6
+\]</div>
+
+<p>这个等式的意思是：<strong>左边（<span class="math">\(x + 2\)</span>）等于右边（<span class="math">\(6\)</span>）</strong>。</p>
+
+<h2>等式的组成部分</h2>
+
+<p>为了方便讨论，我们给等式的各个部分起了名字（总不能说“那个东西”吧！）</p>
+
+<p>下面是一个等式，表示 <span class="math">\(4x − 7 = 5\)</span>，并标注了各部分名称：</p>
+
+<figure>
+
+<img alt="图示：4 是系数，x 是变量，7 和 5 是常数，− 是运算符" src="images/variable-constant.svg"/>
+</figure>
+
+<p><strong>变量</strong>（Variable）代表一个未知的数，通常用字母表示，如 <span class="math">\(x\)</span> 或 <span class="math">\(y\)</span>，也可以是符号或单词。</p>
+
+<p><strong>常数</strong>（Constant）单独出现的数字叫作常数，比如 <span class="math">\(7\)</span> 和 <span class="math">\(5\)</span>。</p>
+
+<p><strong>系数</strong>（Coefficient）放在变量前面、用来乘以变量的数，就是系数。比如 <span class="math">\(4x\)</span> 表示 <span class="math">\(4\)</span> 乘以 <span class="math">\(x\)</span>，所以 <span class="math">\(4\)</span> 是系数。</p>
+
+<p>没有写数字的变量其实系数是 <span class="math">\(1\)</span>，比如 <span class="math">\(x\)</span> 就是 <span class="math">\(1x\)</span>。</p>
+
+<p>有时候系数也用字母表示，比如 <span class="math">\(a\)</span> 或 <span class="math">\(b\)</span>。</p>
+
+<div class="card">
+<div class="card-header">例子：$ax² + bx + c$</div>
+<div class="card-body">
+
+<ul>
+<li><span class="math">\(x\)</span> 是变量</li>
+<li><span class="math">\(a\)</span> 和 <span class="math">\(b\)</span> 是系数</li>
+<li><span class="math">\(c\)</span> 是常数</li>
+</ul>
+</div>
+</div>
+
+<p><strong>运算符</strong>（Operator）是一个符号，像 <span class="math">\(+\)</span>、<span class="math">\(×\)</span> 这样的符号，表示要对值进行什么操作。</p>
+
+<figure>
+
+<img alt="图示：4x−7 是表达式，4x、7、5 是项" src="images/expression-term.svg"/>
+</figure>
+
+<p><strong>项</strong>（Term）可以是一个数、一个变量，或者数和变量的乘积。</p>
+
+<p><strong>表达式</strong>（Expression）由多个项组成，项之间用 <span class="math">\(+\)</span> 或 <span class="math">\(−\)</span> 分隔。</p>
+
+<p>现在，我们可以这样说：</p>
+
+<ul>
+<li>“这个表达式只有两个项”</li>
+<li>“第二个项是常数”</li>
+<li>“你确定系数真的是 <span class="math">\(4\)</span> 吗？”</li>
+</ul>
+
+<h2>指数（Exponent）</h2>
+
+<p>指数（如 <span class="math">\(x^2\)</span> 中的 <span class="math">\(2\)</span>）表示一个数要乘自己多少次。</p>
+
+<figure class="auto-w">
+
+<img alt="8 的平方图示" src="images/exponent-8-2.svg"/>
+</figure>
+
+<div class="card">
+<div class="card-header">例子</div>
+<div class="card-body">
+
+<div class="math">\[
+8^2 = 8 × 8 = 64
+\]</div>
+
+<div class="math">\[
+y^3 = y × y × y
+\]</div>
+
+<div class="math">\[
+y^2 z = y × y × z
+\]</div>
+
+</div>
+</div>
+
+<p>指数简化了写出多次相乘。</p>
+
+<div class="card">
+<div class="card-header">例子</div>
+<div class="card-body">
+
+<div class="math">\[
+y^4z^2
+\]</div>
+
+<p>比写成</p>
+<div class="math">\[
+y \times y \times y \times y \times z \times z
+\]</div>
+
+<p>更简洁。</p>
+</div>
+</div>
+
+<h2>多项式（Polynomial）</h2>
+
+<p>多项式例子：</p>
+
+<div class="math">\[
+3x^2 + x - 2
+\]</div>
+
+<p>多项式可以包含常数、变量和非负整数指数（0、1、2、3……），但<strong>不能除以变量</strong>。</p>
+
+<figure>
+
+<img alt="多项式" src="images/polynomial.svg"/>
+</figure>
+
+<figure>
+
+<img alt="不是多项式" src="images/not-polynomial.svg"/>
+</figure>
+
+<h2>单项式、二项式、三项式</h2>
+
+<p>根据项的数量，多项式有不同的名字：</p>
+
+<figure>
+
+<img alt="单项式、二项式、三项式" src="images/polynomials.svg"/>
+</figure>
+
+<h2>同类项（Like Terms）</h2>
+
+<p>同类项是指变量及其指数完全相同的项。</p>
+
+<p>换句话说，就是“长得一样”的项。（系数可以不同）</p>
+
+<div class="card">
+<div class="card-header">例子</div>
+<div class="card-body">
+
+<div class="math">\[
+6xy^2
+\]</div>
+
+<div class="math">\[
+-2xy^2
+\]</div>
+
+<div class="math">\[
+\frac{1}{3}xy^2
+\]</div>
+
+<p>这些都是<strong>同类项</strong>，因为它们的变量都是 <span class="math">\(xy^2\)</span>。</p>
+</div>
+</div></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

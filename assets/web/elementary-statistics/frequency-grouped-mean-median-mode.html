@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>概率统计入门: 从分组频表求平均数、中位数和众数 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span class="ps-2">从分组频表求平均数、中位数和众数</span></h2>
+        <div><p>用三个例子说明</p>
+
+<h2>赛跑和调皮的小狗</h2>
+
+<p>我们先从一组原始数据开始（<strong>还不是分组频率数据</strong>）……</p>
+
+<div class="card">
+<div class="card-header">例：阿力测量了 21 个人的短跑成绩（单位：秒），结果如下：</div>
+<div class="card-body">
+
+<div class="text-center"><p>59，65，61，62，53，55，60，70，64，56，58，58，62，62，68，65，56，59，68，61，67</p></div>
+</div>
+</div>
+
+<p>要算<strong>平均数</strong>，阿力把所有数字加起来，再除以个数：</p>
+
+<div class="text-center"><p>平均数 = （59 + 65 + 61 + 62 + 53 + 55 + 60 + 70 + 64 + 56 + 58 + 58 + 62 + 62 + 68 + 65 + 56 + 59 + 68 + 61 + 67）÷ 21
+≈ 61.38095</p></div>
+
+<p>要找<strong>中位数</strong>，阿力把这些数从小到大排好，找出中间那个数：</p>
+
+<p>53，55，56，56，58，58，59，59，60，61，<strong>61</strong>，62，62，62，64，65，65，67，68，68，70</p>
+
+<p>因为有 21 个数，所以中位数是第 11 个数，<strong>61</strong>。</p>
+
+<p>要找<strong>众数</strong>，也就是出现次数最多的数。阿力把这些数排好后统计每个数出现了几次：</p>
+
+<ul>
+<li>53，55</li>
+<li>56，56</li>
+<li>58，58</li>
+<li>59，59</li>
+<li>60</li>
+<li>61，61</li>
+<li><strong>62，62，62</strong></li>
+<li>64</li>
+<li>65，65</li>
+<li>67</li>
+<li>68，68</li>
+<li>70</li>
+</ul>
+
+<p>其中 62 出现了三次，比其他数都多，所以：<strong>众数 = 62</strong></p>
+
+<h2>分组频率表</h2>
+
+<p>接着阿力做了一个<strong>分组频率表</strong>：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>秒数段</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>51 - 55</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>56 - 60</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>61 - 65</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>66 - 70</td>
+  <td>4</td>
+</tr>
+</tbody>
+</table></div>
+
+<figure>
+
+<img alt="分组频率" src="images/grouped-freq-3.svg"/>
+</figure>
+
+<p>意思是：</p>
+
+<ul>
+<li>有 2 个人的成绩在 51 到 55 秒之间</li>
+<li>有 7 个人在 56 到 60 秒之间</li>
+<li>依此类推</li>
+</ul>
+
+<h2>但是！</h2>
+
+<p>突然之间，所有原始数据都丢了，现在只剩下一张分组频率表……</p>
+
+<p>我们可以帮阿力只凭这张表算出平均数、中位数和众数吗？</p>
+
+<p>答案是……不能准确算出来。不过可以<strong>估算</strong>。</p>
+
+<h2>用分组数据估算平均数</h2>
+
+<p>现在只有这张表：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>秒数段</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>51 - 55</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>56 - 60</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>61 - 65</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>66 - 70</td>
+  <td>4</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>每组之间的间隔是 5 秒，比如 51-55、56-60 等。</p>
+
+<p>每组的<strong>中间值</strong>分别是：53、58、63 和 68。</p>
+
+<p>我们可以用这些中间值来<strong>估算平均数</strong>。</p>
+
+<p>为什么可以这样做呢？</p>
+
+<p>比如说，第二组“56 - 60”中有 7 人，我们知道他们成绩都在这个区间内：</p>
+
+<ul>
+<li>有可能全是 56 秒</li>
+<li>也可能是全是 60 秒</li>
+<li>但更可能的是分布在 56 到 60 之间</li>
+</ul>
+
+<p>我们就假设这 7 人都跑了 <strong>58 秒</strong>（中间值）</p>
+
+<p>接下来，把原来的数据换成中间值和次数：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>中间值</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>53</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>58</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>63</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>68</td>
+  <td>4</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>这样想：“2 个人用了 53 秒，7 个人用了 58 秒，8 个人用了 63 秒，4 个人用了 68 秒。”  换句话说，我们<strong>假设</strong>这些数据是这样的：</p>
+
+<div class="text-center"><p>53, 53, 58, 58, 58, 58, 58, 58, 58, 63, 63, 63, 63, 63, 63, 63, 63, 68, 68, 68, 68</p></div>
+
+<p>然后把这些数加起来，再除以 21。更快的方法是：用每个中间值乘以对应的次数：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>中间值 x</th>
+  <th>次数 f</th>
+  <th>中间值 × 次数 fx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>53</td>
+  <td>2</td>
+  <td>106</td>
+</tr>
+<tr>
+  <td>58</td>
+  <td>7</td>
+  <td>406</td>
+</tr>
+<tr>
+  <td>63</td>
+  <td>8</td>
+  <td>504</td>
+</tr>
+<tr>
+  <td>68</td>
+  <td>4</td>
+  <td>272</td>
+</tr>
+<tr>
+  <td>总计：</td>
+  <td><strong>21</strong></td>
+  <td><strong>1288</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<p>于是可以估算平均时间为：</p>
+
+<div class="math">\[
+\text{估算平均数} = \frac{1288}{21} = 61.333\cdots
+\]</div>
+
+<p>这个结果和之前算出的准确值非常接近。</p>
+
+<h2>从分组数据估算中位数</h2>
+
+<p>再来看一下这张表：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>秒数段</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>51 - 55</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>56 - 60</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>61 - 65</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>66 - 70</td>
+  <td>4</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>中位数是中间那个值，在这里是第 11 个数，它落在“61 - 65”这一组里。</p>
+
+<p>我们可以说：“<strong>中位数组是 61 - 65</strong>”</p>
+
+<p>但如果想要一个<strong>估算的中位数值</strong>，就要更仔细地看这组数据。</p>
+
+<p>虽然写的是“61 - 65”，但它实际包括的是从 60.5 到 65.5（不包含 65.5）之间的所有值。</p>
+
+<p>为什么？因为成绩是按整秒记录的，所以实际时间 60.5 会被记为 61，65.4 会被记为 65。</p>
+
+<p>在 60.5 时，已经有 <strong>9</strong> 个人；到了下一个边界 65.5 时，总共有 <strong>17</strong> 个人。</p>
+
+<p>如果在这之间画一条直线，就能找到第 <span class="math">\(n/2\)</span> 个值的位置。</p>
+
+<figure>
+
+<img alt="分组频率" src="images/grouped-freq-4.svg"/>
+</figure>
+
+<p>怎么找到需要画线的这一个点呢？61 - 65 这一组共有8个数，它前面已经有 9 个数，第 11 大约在这一组 1/4 的位置：(11 - 9) / 8。每组的宽度是 5，它的 1/4 位置对应的数值是 (1/4)x5。这一组从 60.5 开始，加上这一段距离：60.5 + ((11 - 9) ÷ 8) ⤫ 5。</p>
+
+<p>有一个公式可以完成这个计算：</p>
+
+<div class="math">\[
+\text{估算的中位数} = L + \frac{\frac{n}{2} - B}{G} \times w
+\]</div>
+
+<p>其中：</p>
+
+<ul>
+<li><span class="math">\(L\)</span> 是中位数组的下限</li>
+<li><span class="math">\(n\)</span> 是总数</li>
+<li><span class="math">\(B\)</span> 是中位数组之前各组的累计次数</li>
+<li><span class="math">\(G\)</span> 是中位数组的次数</li>
+<li><span class="math">\(w\)</span> 是组距</li>
+</ul>
+
+<p>带入这个例子的数据：</p>
+
+<ul>
+<li><span class="math">\(L = 60.5\)</span></li>
+<li><span class="math">\(n = 21\)</span></li>
+<li><span class="math">\(B = 2 + 7 = 9\)</span></li>
+<li><span class="math">\(G = 8\)</span></li>
+<li><span class="math">\(w = 5\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的中位数} \\
+= &amp;60.5 + \frac{21 \div 2 - 9}{8} \times 5  \\
+= &amp;60.5 + 0.9375  \\
+= &amp;61.4375
+\end{align*}</div>
+
+<h2>从分组数据估算众数</h2>
+
+<p>再来看一下这张表：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>秒数段</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>51 - 55</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>56 - 60</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>61 - 65</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>66 - 70</td>
+  <td>4</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>哪个组的次数最多？显然是“61 - 65”这一组。</p>
+
+<p>所以可以说：<strong>众数所在的组是 61 - 65</strong></p>
+
+<p>但也可以做一个更具体的估算。</p>
+
+<p>我们知道这一组包含了最多的数值，但它里面的哪个值最可能成为众数呢？</p>
+
+<p>可以用下面这个公式来估算：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算众数} \\
+= &amp;L +  \frac{f_m - f_{m-1}}{(f_m - f_{m-1}) + (f_m - f_{m+1})} \times w
+\end{align*}</div>
+
+<p>其中：</p>
+
+<ul>
+<li><span class="math">\(L\)</span> 是众数组的下限</li>
+<li><span class="math">\(f_{m-1}\)</span> 是众数组前一组的次数</li>
+<li><span class="math">\(f_m\)</span> 是众数组的次数</li>
+<li><span class="math">\(f_{m+1}\)</span> 是众数组后一组的次数</li>
+<li><span class="math">\(w\)</span> 是组距</li>
+</ul>
+
+<p>带入数据：</p>
+
+<ul>
+<li><span class="math">\(L = 60.5\)</span></li>
+<li><span class="math">\(f_{m-1} = 7\)</span></li>
+<li><span class="math">\(f_m = 8\)</span></li>
+<li><span class="math">\(f_{m+1} = 4\)</span></li>
+<li><span class="math">\(w = 5\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的众数} \\
+= &amp;60.5 + \frac{8 - 7}{(8 - 7) + (8 - 4)} \times 5  \\
+= &amp;60.5 + \frac{1}{5} \times 5  \\
+= &amp;60.5 + 1  \\
+= &amp;61.5
+\end{align*}</div>
+
+<p>最终结果是：</p>
+
+<ul>
+<li>估算平均数：<strong>61.333...</strong></li>
+<li>估算中位数：<strong>61.4375</strong></li>
+<li>估算众数：<strong>61.5</strong></li>
+</ul>
+
+<p>和一开始得到的真实值（平均数 <strong>61.38...</strong>，中位数 <strong>61</strong>，众数 <strong>62</strong>）相比，已经非常接近了。</p>
+
+<p>这就是从分组频率表中估算平均数、中位数和众数的方法。</p>
+
+<p>接下来我们再看两个例子，在练习中加深理解！</p>
+
+<h2>小胡萝卜的例子</h2>
+
+<p>你用特殊的土壤种了 50 根小胡萝卜。把它们挖出来后测量长度（精确到毫米），并分组如下：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>长度（mm）</th>
+  <th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>150 - 154</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>155 - 159</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>160 - 164</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>165 - 169</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>170 - 174</td>
+  <td>9</td>
+</tr>
+<tr>
+  <td>175 - 179</td>
+  <td>11</td>
+</tr>
+<tr>
+  <td>180 - 184</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>185 - 189</td>
+  <td>3</td>
+</tr>
+</tbody>
+</table></div>
+
+<h3>平均数</h3>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>长度（mm）</th>
+  <th>中间值 x</th>
+  <th>次数 f</th>
+  <th>fx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>150 - 154</td>
+  <td>152</td>
+  <td>5</td>
+  <td>760</td>
+</tr>
+<tr>
+  <td>155 - 159</td>
+  <td>157</td>
+  <td>2</td>
+  <td>314</td>
+</tr>
+<tr>
+  <td>160 - 164</td>
+  <td>162</td>
+  <td>6</td>
+  <td>972</td>
+</tr>
+<tr>
+  <td>165 - 169</td>
+  <td>167</td>
+  <td>8</td>
+  <td>1336</td>
+</tr>
+<tr>
+  <td>170 - 174</td>
+  <td>172</td>
+  <td>9</td>
+  <td>1548</td>
+</tr>
+<tr>
+  <td>175 - 179</td>
+  <td>177</td>
+  <td>11</td>
+  <td>1947</td>
+</tr>
+<tr>
+  <td>180 - 184</td>
+  <td>182</td>
+  <td>6</td>
+  <td>1092</td>
+</tr>
+<tr>
+  <td>185 - 189</td>
+  <td>187</td>
+  <td>3</td>
+  <td>561</td>
+</tr>
+<tr>
+  <td>总计</td>
+  <td></td>
+  <td><strong>50</strong></td>
+  <td><strong>8530</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="math">\begin{align*}
+\text{估算的平均数} &amp;= \frac{8530}{50} \\
+&amp;= 170.6 \text{mm}
+\end{align*}</div>
+
+<h3>中位数</h3>
+
+<p>总共有 50 个数据，所以中位数是第 25 和第 26 个数的平均值，落在 <strong>170 - 174</strong> 组中：</p>
+
+<ul>
+<li><span class="math">\(L = 169.5\)</span>（这组的下限）</li>
+<li><span class="math">\(n = 50\)</span></li>
+<li><span class="math">\(B = 5 + 2 + 6 + 8 = 21\)</span></li>
+<li><span class="math">\(G = 9\)</span></li>
+<li><span class="math">\(w = 5\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的中位数} \\
+= &amp;169.5 + \frac{50 \div 2 - 21}{9} \times 5  \\
+= &amp;169.5 + 2.22\cdots  \\
+\approx &amp;171.7 \text{mm}
+\end{align*}</div>
+
+<h3>众数</h3>
+
+<p>次数最多的一组是 <strong>175 - 179</strong>：</p>
+
+<ul>
+<li><span class="math">\(L = 174.5\)</span>（这组的下限）</li>
+<li><span class="math">\(f_{m-1} = 9\)</span></li>
+<li><span class="math">\(f_m = 11\)</span></li>
+<li><span class="math">\(f_{m+1} = 6\)</span></li>
+<li><span class="math">\(w = 5\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的众数} \\
+= &amp;174.5 + \frac{11 - 9}{(11 - 9) + (11 - 6)} \times 5  \\
+= &amp;174.5 + 1.42\cdots  \\
+\approx &amp;175.9 \text{mm}
+\end{align*}</div>
+
+<h2>年龄的例子</h2>
+
+<p>年龄是一个特殊情况。</p>
+
+<p>当说“小萨 17 岁”，她的年龄会保持为 17，直到她满 18 岁生日那天为止。 也就是说，她可能已经 17 岁又 364 天了，但仍然算作 17 岁。</p>
+
+<p>这会影响中间值和组边界的计算方式。</p>
+
+<p>比如：一个岛上住着 112 人，他们的年龄分组如下：</p>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>年龄段</th>
+  <th>人数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0 - 9</td>
+  <td>20</td>
+</tr>
+<tr>
+  <td>10 - 19</td>
+  <td>21</td>
+</tr>
+<tr>
+  <td>20 - 29</td>
+  <td>23</td>
+</tr>
+<tr>
+  <td>30 - 39</td>
+  <td>16</td>
+</tr>
+<tr>
+  <td>40 - 49</td>
+  <td>11</td>
+</tr>
+<tr>
+  <td>50 - 59</td>
+  <td>10</td>
+</tr>
+<tr>
+  <td>60 - 69</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>70 - 79</td>
+  <td>3</td>
+</tr>
+<tr>
+  <td>80 - 89</td>
+  <td>1</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>第一组“0 - 9”中的孩子可能快 10 岁了。因此这组的中间值是 <strong>5</strong>，而不是 4.5。</p>
+
+<p>其他组的中间值分别是：15、25、35、45、55、65、75、85。</p>
+
+<p>在计算中位数和众数时，也使用边界值：0, 10, 20, ... 而不是像前面例子那样用 9.5, 19.5 等。</p>
+
+<h3>平均数</h3>
+
+<div class="table-responsive"><table class="table"><thead>
+<tr>
+  <th>年龄段</th>
+  <th>中间值 x</th>
+  <th>人数 f</th>
+  <th>fx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0 - 9</td>
+  <td>5</td>
+  <td>20</td>
+  <td>100</td>
+</tr>
+<tr>
+  <td>10 - 19</td>
+  <td>15</td>
+  <td>21</td>
+  <td>315</td>
+</tr>
+<tr>
+  <td>20 - 29</td>
+  <td>25</td>
+  <td>23</td>
+  <td>575</td>
+</tr>
+<tr>
+  <td>30 - 39</td>
+  <td>35</td>
+  <td>16</td>
+  <td>560</td>
+</tr>
+<tr>
+  <td>40 - 49</td>
+  <td>45</td>
+  <td>11</td>
+  <td>495</td>
+</tr>
+<tr>
+  <td>50 - 59</td>
+  <td>55</td>
+  <td>10</td>
+  <td>550</td>
+</tr>
+<tr>
+  <td>60 - 69</td>
+  <td>65</td>
+  <td>7</td>
+  <td>455</td>
+</tr>
+<tr>
+  <td>70 - 79</td>
+  <td>75</td>
+  <td>3</td>
+  <td>225</td>
+</tr>
+<tr>
+  <td>80 - 89</td>
+  <td>85</td>
+  <td>1</td>
+  <td>85</td>
+</tr>
+<tr>
+  <td>总计</td>
+  <td></td>
+  <td><strong>112</strong></td>
+  <td><strong>3360</strong></td>
+</tr>
+</tbody>
+</table></div>
+
+<div class="math">\[
+\text{估算的平均数} = \frac{3360}{112} = 30
+\]</div>
+
+<h3>中位数</h3>
+
+<p>总共有 112 人，所以中位数是第 56 和第 57 个人的年龄平均值，落在 <strong>20 - 29</strong> 这一组：</p>
+
+<ul>
+<li><span class="math">\(L = 20\)</span>（这组的下限）</li>
+<li><span class="math">\(n = 112\)</span></li>
+<li><span class="math">\(B = 20 + 21 = 41\)</span></li>
+<li><span class="math">\(G = 23\)</span></li>
+<li><span class="math">\(w = 10\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的中位数} \\
+= &amp;20 + \frac{(112 \div 2) - 41}{23} \times 10  \\
+= &amp;20 + 6.52\cdots  \\
+\approx &amp;26.5
+\end{align*}</div>
+
+<h3>众数</h3>
+
+<p>次数最多的一组是 <strong>20 - 29</strong>：</p>
+
+<ul>
+<li><span class="math">\(L = 20\)</span>（这组的下限）</li>
+<li><span class="math">\(f_{m-1} = 21\)</span></li>
+<li><span class="math">\(f_m = 23\)</span></li>
+<li><span class="math">\(f_{m+1} = 16\)</span></li>
+<li><span class="math">\(w = 10\)</span></li>
+</ul>
+
+<p>代入公式得：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的众数} \\
+= &amp;20 + \frac{23 - 21}{(23 - 21) + (23 - 16)} \times 10 \\
+= &amp;20 + 2.22\cdots \\
+\approx &amp;22.2
+\end{align*}</div>
+
+<h2>小结</h2>
+
+<p>对于分组数据，我们无法得到准确的平均数、中位数和众数，只能进行<strong>估算</strong>。</p>
+
+<p>要估算<strong>平均数</strong>，使用每组的<strong>中间值</strong>：</p>
+
+<div class="math">\[
+\text{估算的平均数} = \frac{\text{中间值 × 次数 的总和}}{\text{次数总和}}
+\]</div>
+
+<p>要估算<strong>中位数</strong>，使用以下公式：</p>
+
+<div class="math">\begin{align*}
+\text{估算的中位数} = L + \frac{(n/2) - B}{G} \times w
+\end{align*}</div>
+
+<p>其中：</p>
+
+<ul>
+<li><span class="math">\(L\)</span> 是中位数组的下限</li>
+<li><span class="math">\(n\)</span> 是总数</li>
+<li><span class="math">\(B\)</span> 是中位数组前各组的累计次数</li>
+<li><span class="math">\(G\)</span> 是中位数组的次数</li>
+<li><span class="math">\(w\)</span> 是组距</li>
+</ul>
+
+<p>要估算<strong>众数</strong>，使用以下公式：</p>
+
+<div class="math">\begin{align*}
+&amp;\text{估算的众数} \\
+= &amp;L + \frac{f_m - f_{m-1}}{(f_m - f_{m-1}) + (f_m - f_{m+1})} \times w
+\end{align*}</div>
+
+<p>其中：</p>
+
+<ul>
+<li><span class="math">\(L\)</span> 是众数组的下限</li>
+<li><span class="math">\(f_{m-1}\)</span> 是众数组前一组的次数</li>
+<li><span class="math">\(f_m\)</span> 是众数组的次数</li>
+<li><span class="math">\(f_{m+1}\)</span> 是众数组后一组的次数</li>
+<li><span class="math">\(w\)</span> 是组距</li>
+</ul></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>

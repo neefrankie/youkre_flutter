@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易微积分4: 根据基本原理找出导数 | 优克 - 数学与计算机科学</title>
+    
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+<link rel="stylesheet" href="../css/katex.min.css"/>
+
+
+    <style>:root {
+    --color-teal: #0d7680;
+    --color-teal20: #052f33;
+    --color-teal30: #08474d;
+    --color-teal40: #0a5e66;
+    --color-teal50: #0d7680;
+    --color-teal60: #0f8e99;
+    --color-teal70: #12a5b3;
+    --color-teal80: #14bdcc;
+    --color-teal90: #17d4e6;
+    --color-teal100: #1aecff;
+    --color-emerald: #009b77;
+    --color-bs-dark: #212529;
+    --color-youkre-yellow: #cabdab;
+    --color-youkre-cyan: #71a9be;
+    --color-bg-gray: #EEEDF1;
+    --header-height: 60px;
+    --footer-height: 60px;
+    --radius: 8px;
+}
+body {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    padding: 8px;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal scrolling of the whole page */
+}
+a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+.bg-emerald {
+    background-color: var(--color-emerald);
+}
+.logo {
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+.logo a img {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+}
+html[data-bs-theme="dark"] #moon {
+    vertical-align: middle;
+    display: none;
+}
+html:not([data-bs-theme="dark"]) #sun {
+    display: none;
+}</style>
+    
+    <style>
+    h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+figure { 
+  text-align: center;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+div.math {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap; /* Prevent breaking long formulas */
+}
+.note {
+    border: 1px solid var(--color-teal);
+    border-radius: 0.375rem;
+    padding: 0.5em;
+}
+.formula-section {
+    display: grid;
+    grid-template-columns: 1fr; /* 在小屏幕上变为单列 */
+    gap: 10px;
+}
+.formula-card {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (min-width: 768px) {
+    .formula-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.card {
+  margin-bottom: 1em;
+}
+    pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #222222 }
+.highlight { background: #000000; color: #CCC }
+.highlight .c { color: #000080 } /* Comment */
+.highlight .err { color: #CCC; border: 1px solid #F00 } /* Error */
+.highlight .esc { color: #CCC } /* Escape */
+.highlight .g { color: #CCC } /* Generic */
+.highlight .k { color: #CDCD00 } /* Keyword */
+.highlight .l { color: #CCC } /* Literal */
+.highlight .n { color: #CCC } /* Name */
+.highlight .o { color: #39C } /* Operator */
+.highlight .x { color: #CCC } /* Other */
+.highlight .p { color: #CCC } /* Punctuation */
+.highlight .ch { color: #000080 } /* Comment.Hashbang */
+.highlight .cm { color: #000080 } /* Comment.Multiline */
+.highlight .cp { color: #000080 } /* Comment.Preproc */
+.highlight .cpf { color: #000080 } /* Comment.PreprocFile */
+.highlight .c1 { color: #000080 } /* Comment.Single */
+.highlight .cs { color: #CD0000; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #CD0000 } /* Generic.Deleted */
+.highlight .ge { color: #CCC; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #CCC; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00CD00 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { color: #CCC; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #CDCD00 } /* Keyword.Constant */
+.highlight .kd { color: #00CD00 } /* Keyword.Declaration */
+.highlight .kn { color: #CD00CD } /* Keyword.Namespace */
+.highlight .kp { color: #CDCD00 } /* Keyword.Pseudo */
+.highlight .kr { color: #CDCD00 } /* Keyword.Reserved */
+.highlight .kt { color: #00CD00 } /* Keyword.Type */
+.highlight .ld { color: #CCC } /* Literal.Date */
+.highlight .m { color: #CD00CD } /* Literal.Number */
+.highlight .s { color: #CD0000 } /* Literal.String */
+.highlight .na { color: #CCC } /* Name.Attribute */
+.highlight .nb { color: #CD00CD } /* Name.Builtin */
+.highlight .nc { color: #00CDCD } /* Name.Class */
+.highlight .no { color: #CCC } /* Name.Constant */
+.highlight .nd { color: #CCC } /* Name.Decorator */
+.highlight .ni { color: #CCC } /* Name.Entity */
+.highlight .ne { color: #669; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #CCC } /* Name.Function */
+.highlight .nl { color: #CCC } /* Name.Label */
+.highlight .nn { color: #CCC } /* Name.Namespace */
+.highlight .nx { color: #CCC } /* Name.Other */
+.highlight .py { color: #CCC } /* Name.Property */
+.highlight .nt { color: #CCC } /* Name.Tag */
+.highlight .nv { color: #00CDCD } /* Name.Variable */
+.highlight .ow { color: #CDCD00 } /* Operator.Word */
+.highlight .pm { color: #CCC } /* Punctuation.Marker */
+.highlight .w { color: #CCC } /* Text.Whitespace */
+.highlight .mb { color: #CD00CD } /* Literal.Number.Bin */
+.highlight .mf { color: #CD00CD } /* Literal.Number.Float */
+.highlight .mh { color: #CD00CD } /* Literal.Number.Hex */
+.highlight .mi { color: #CD00CD } /* Literal.Number.Integer */
+.highlight .mo { color: #CD00CD } /* Literal.Number.Oct */
+.highlight .sa { color: #CD0000 } /* Literal.String.Affix */
+.highlight .sb { color: #CD0000 } /* Literal.String.Backtick */
+.highlight .sc { color: #CD0000 } /* Literal.String.Char */
+.highlight .dl { color: #CD0000 } /* Literal.String.Delimiter */
+.highlight .sd { color: #CD0000 } /* Literal.String.Doc */
+.highlight .s2 { color: #CD0000 } /* Literal.String.Double */
+.highlight .se { color: #CD0000 } /* Literal.String.Escape */
+.highlight .sh { color: #CD0000 } /* Literal.String.Heredoc */
+.highlight .si { color: #CD0000 } /* Literal.String.Interpol */
+.highlight .sx { color: #CD0000 } /* Literal.String.Other */
+.highlight .sr { color: #CD0000 } /* Literal.String.Regex */
+.highlight .s1 { color: #CD0000 } /* Literal.String.Single */
+.highlight .ss { color: #CD0000 } /* Literal.String.Symbol */
+.highlight .bp { color: #CD00CD } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #CCC } /* Name.Function.Magic */
+.highlight .vc { color: #00CDCD } /* Name.Variable.Class */
+.highlight .vg { color: #00CDCD } /* Name.Variable.Global */
+.highlight .vi { color: #00CDCD } /* Name.Variable.Instance */
+.highlight .vm { color: #00CDCD } /* Name.Variable.Magic */
+.highlight .il { color: #CD00CD } /* Literal.Number.Integer.Long */
+    </style>
+    
+    
+</head>
+<body id="top">
+
+
+
+
+<main class="min-vh-100" role="main">
+    <div class="container">
+        
+<div class="row pt-3 justify-content-center">
+    <article class="col-12 col-md-8">
+        <h2 class="text-center"><span>4.</span><span class="ps-2">根据基本原理找出导数</span></h2>
+        <div><p>我们来看看，从基本原理出发，如何对一些简单的函数求导。</p>
+
+<h2>求 <span class="math">\(y=x^2\)</span> 的导数</h2>
+
+<p>先从一个简单的表达式 <span class="math">\(y=x^2\)</span> 开始。</p>
+
+<p>要记住，微积分的核心概念是“变化”，既然 <span class="math">\(y\)</span> 和 <span class="math">\(x^2\)</span> 是相等的，那么很明显，如果 <span class="math">\(x\)</span> 变化了，<span class="math">\(x^2\)</span> 也会随之变化；而 <span class="math">\(x^2\)</span> 一变，<span class="math">\(y\)</span> 也一定会变。</p>
+
+<p>我们要做的，就是找出 <span class="math">\(y\)</span> 的<strong>变化量</strong>和 <span class="math">\(x\)</span> 的<strong>变化量</strong>之间的比例关系。换句话说，我们的任务是求出 <span class="math">\(\dfrac{dy}{dx}\)</span>。</p>
+
+<p>假设 <span class="math">\(x\)</span> 增加了一点，变成 <span class="math">\(x + dx\)</span>；同理，<span class="math">\(y\)</span> 也会增加一点，变成 <span class="math">\(y + dy\)</span>。显然，增长后的 <span class="math">\(y\)</span> 仍等于增长后的 <span class="math">\(x\)</span> 的平方。于是可以写出：</p>
+
+<div class="math">\[
+y + dy = (x + dx)^2.
+\]</div>
+
+<p>展开右边得到：</p>
+
+<div class="math">\[
+y + dy = x^2 + 2x \cdot dx+(dx)^2
+\]</div>
+
+<p>这里的 <span class="math">\((dx)^2\)</span> 是什么意思呢？记得 <span class="math">\(dx\)</span> 表示的是一个很小的量——一点点 <span class="math">\(x\)</span>。那 <span class="math">\((dx)^2\)</span> 就是一点点的一点点，也就是一个更小的小量，称为二阶小量。这种量和其他项相比几乎可以忽略不计，因此可以把它舍去。于是就剩下：</p>
+
+<div class="math">\[
+y + dy = x^2 + 2x \cdot dx
+\]</div>
+
+<p>又因为 <span class="math">\(y = x^2\)</span>，两式相减，得到：</p>
+
+<div class="math">\begin{align*}
+y + dy -y &amp;= x^2 + 2x \cdot dx - x^2 \\
+dy &amp;= 2x \cdot dx
+\end{align*}</div>
+
+<p>两边同时除以 <span class="math">\(dx\)</span>，得：</p>
+
+<div class="math">\[
+\frac{dy}{dx} = 2x
+\]</div>
+
+<p>这就是我们想要找的结果。在这个例子中，<span class="math">\(y\)</span> 随 <span class="math">\(x\)</span> 变化的速率是 <span class="math">\(2x\)</span>。</p>
+
+<div class="card">
+<div class="card-header">注意</div>
+<div class="card-body">
+
+<p><span class="math">\(\dfrac{dy}{dx}\)</span> 就是对 <span class="math">\(y\)</span> 关于 <span class="math">\(x\)</span> 求导的结果。“求导”就是求微分系数，即导数。假设有另一个关于 <span class="math">\(x\)</span> 的函数，例如</p>
+<div class="math">\[
+u = 7x^2 + 3
+\]</div>
+
+<p>如果我们对它求导，就是要算 <span class="math">\(\dfrac{du}{dx}\)</span>，也就是</p>
+<div class="math">\[
+\dfrac{d(7x^2 + 3)}{dx}
+\]</div>
+
+<p>有时候自变量不是 <span class="math">\(x\)</span>，而是时间 <span class="math">\(t\)</span>，例如：</p>
+<div class="math">\[
+y = b + \frac{1}{2} at^2
+\]</div>
+
+<p>这时如果要求对 <span class="math">\(t\)</span> 求导，就是要找到它的导数 <span class="math">\(\dfrac{dy}{dt}\)</span>，也就是</p>
+<div class="math">\[
+\dfrac{d(b + \frac{1}{2} at^2)}{dt}
+\]</div>
+
+</div>
+</div>
+
+<h3>试试代入具体的数值</h3>
+
+<p>设 <span class="math">\(x=100\)</span>，则 <span class="math">\(y=10,000\)</span>。现在让 <span class="math">\(x\)</span> 增加到 <span class="math">\(101\)</span>，即 <span class="math">\(dx = 1\)</span>。那么新的 <span class="math">\(y\)</span> 就是 <span class="math">\(101 × 101 = 10,201\)</span>。如果忽略掉二阶小量，就可以舍去 <span class="math">\(1\)</span>，因为它相对于 <span class="math">\(10,000\)</span> 是微不足道的，因此可以把变化后的 <span class="math">\(y\)</span> 近似为 <span class="math">\(10,200\)</span>。这样，<span class="math">\(y\)</span> 从 <span class="math">\(10,000\)</span> 增加到了 <span class="math">\(10,200\)</span>，增加了 <span class="math">\(200\)</span>，也就是 <span class="math">\(dy = 200\)</span>。</p>
+
+<div class="math">\[
+\dfrac{dy}{dx} = \dfrac{200}{1} = 200
+\]</div>
+
+<p>根据前面推导的公式 <span class="math">\(\dfrac{dy}{dx} = 2x\)</span>，带入 <span class="math">\(x = 100\)</span> 得到结果也是 <span class="math">\(200\)</span>，完全一致。</p>
+
+<p>你可能会说，我们忽略了整整一个单位！</p>
+
+<p>那就再试一次，这次让 <span class="math">\(dx\)</span> 更小一些。</p>
+
+<p>取 <span class="math">\(dx=\frac{1}{10}\)</span>。那么 <span class="math">\(x+dx=100.1\)</span>，计算得：</p>
+
+<div class="math">\begin{align*}
+(x+dx)^2 &amp;= 100.1 × 100.1 \\
+&amp;= 10,020.01.
+\end{align*}</div>
+
+<p>其中最后一位小数 <span class="math">\(0.01\)</span> 相对于 <span class="math">\(10,000\)</span> 来说几乎可以忽略不计，所以可以近似地认为结果是 <span class="math">\(10,020\)</span>。于是 <span class="math">\(dy = 20\)</span>，<span class="math">\(\dfrac{dy}{dx} = \dfrac{20}{0.1} = 200\)</span>，仍然等于 <span class="math">\(2x\)</span>。</p>
+
+<h2>求 <span class="math">\(y = x^3\)</span> 的导数</h2>
+
+<p>我们再来用同样的方法对 <span class="math">\(y = x^3\)</span> 求导。</p>
+
+<p>让 <span class="math">\(y\)</span> 增加到 <span class="math">\(y + dy\)</span>，同时 <span class="math">\(x\)</span> 增加到 <span class="math">\(x + dx\)</span>。</p>
+
+<p>于是有：</p>
+
+<div class="math">\[
+y + dy = (x + dx)^3.
+\]</div>
+
+<p>展开立方项得：</p>
+
+<div class="math">\[
+y + dy = x^3 + 3x^2 \cdot dx + 3x(dx)^2+(dx)^3.
+\]</div>
+
+<p>我们知道，二阶和三阶的小量是可以忽略的。因为当 <span class="math">\(dy\)</span> 和 <span class="math">\(dx\)</span> 都无限小的时候，<span class="math">\((dx)^2\)</span> 和 <span class="math">\((dx)^3\)</span> 会更小得多。所以可以把这些项舍去，剩下：</p>
+
+<div class="math">\[
+y + dy=x^3+3x^2 \cdot dx
+\]</div>
+
+<p>又因原式是 <span class="math">\(y = x^3\)</span>，将它从上式中减去，得到：</p>
+
+<div class="math">\[
+dy = 3x^2 \cdot dx
+\]</div>
+
+<p>即：</p>
+
+<div class="math">\[
+\frac{dy}{dx} = 3x^2
+\]</div>
+
+<h2>求 <span class="math">\(y = x^4\)</span> 的导数</h2>
+
+<p>再来看 <span class="math">\(y = x^4\)</span> 的求导。同样地，让 <span class="math">\(y\)</span> 和 <span class="math">\(x\)</span> 各增加一点，得：</p>
+
+<div class="math">\[
+y + dy = (x+dx)^4
+\]</div>
+
+<p>展开四次</p>
+
+<div class="math">\begin{align*}
+y + dy = x^4 + 4x^3 dx + 6x^2(dx)^2 \\
++ 4x(dx)^3+(dx)^4
+\end{align*}</div>
+
+<p>然后，将所有包含更高次幂 <span class="math">\(dx\)</span> 的项去掉，因为它们相比之下可以忽略不计，得到：</p>
+
+<div class="math">\[
+y + dy = x^4+4x^3 dx.
+\]</div>
+
+<p>再减去原来的 <span class="math">\(y = x^4\)</span>，得：</p>
+
+<div class="math">\[
+dy = 4x^3\, dx
+\]</div>
+
+<p>即：</p>
+
+<div class="math">\[
+\frac{dy}{dx} = 4x^3
+\]</div></div>
+    </article>
+</div>
+
+    </div>
+</main>
+
+
+
+
+
+<script defer src="../js/katex.min.js"></script>
+<script defer src="../js/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+        ]
+    });
+});
+</script>
+
+
+</body>
+</html>
