@@ -46,27 +46,22 @@ class _LevelDetailPage extends State<LevelDetailPage> {
       widget.courseViewModel.updateSession();
     });
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: widget.courseViewModel),
-        ChangeNotifierProvider(
-          create: (_) {
-            final vm = LevelDetailViewModel();
-            vm.loadData(
-              course: widget.courseViewModel.course,
-              level: widget.courseViewModel.currentLevel,
-              courseSession: widget.courseViewModel.courseSession,
-            );
-            widget.courseViewModel.updateSession();
-            return vm;
-          },
-        ),
-      ],
-      child: Consumer<CourseViewModel>(
+    return ChangeNotifierProvider(
+      create: (_) {
+        final vm = LevelDetailViewModel();
+        vm.loadData(
+          course: widget.courseViewModel.course,
+          level: widget.courseViewModel.currentLevel,
+          courseSession: widget.courseViewModel.courseSession,
+        );
+        widget.courseViewModel.updateSession();
+        return vm;
+      },
+      child: Consumer<LevelDetailViewModel>(
         builder: (context, vm, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(vm.navTitle),
+              title: Text(widget.courseViewModel.navTitle),
               actions: [_buildNextButton(context)],
             ),
             body: _buildBody(context),
@@ -105,7 +100,6 @@ class _LevelDetailPage extends State<LevelDetailPage> {
   }
 
   Widget swipingPage(BuildContext context) {
-    final courseVm = context.watch<CourseViewModel>();
     final vm = context.watch<LevelDetailViewModel>();
     // Expanded 必须包裹 PageView，否则 Column 会无限高。
     return Expanded(
@@ -117,7 +111,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
         itemBuilder: (context, index) {
           final exercise = vm.currentExercise;
           final levelProgress = vm.levelProgress;
-          final courseSession = courseVm.courseSession;
+          final courseSession = widget.courseViewModel.courseSession;
 
           if (exercise == null) {
             return Text('Error: no exercise found');
@@ -151,13 +145,12 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     ExerciseProgress exerciseProgress,
   ) async {
     final vm = context.watch<LevelDetailViewModel>();
-    final courseVm = context.watch<CourseViewModel>();
 
     await vm.updateLevelProgress(exerciseProgress);
 
     final levelProgress = vm.levelProgress;
     if (levelProgress != null && levelProgress.isCompleted) {
-      courseVm.addCompletedLevel(levelProgress);
+      widget.courseViewModel.addCompletedLevel(levelProgress);
     }
   }
 
@@ -205,8 +198,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
   }
 
   Widget _nextOrFinishButton(BuildContext context) {
-    final courseVm = context.watch<CourseViewModel>();
-    if (courseVm.hasNextLevel) {
+    if (widget.courseViewModel.hasNextLevel) {
       return FilledButton(
         onPressed: () {
           _onNextLevel(context);
