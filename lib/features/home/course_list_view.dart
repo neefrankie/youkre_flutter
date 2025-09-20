@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youkre_flutter/core/data/exercise_data_source.dart';
 import 'package:youkre_flutter/features/exercise/course_detail_page.dart';
 import 'package:youkre_flutter/core/models/course.dart';
-
-import 'course_item_card.dart';
+import 'package:youkre_flutter/features/exercise/course_item_card.dart';
 
 class CourseListView extends StatefulWidget {
 

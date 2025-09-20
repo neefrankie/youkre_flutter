@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youkre_flutter/features/exercise/course_list_view.dart';
+import 'package:youkre_flutter/features/home/course_list_view.dart';
 
 import '../quiz/daily_quiz_view.dart';
 
