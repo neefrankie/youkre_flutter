@@ -1,23 +1,20 @@
-import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/foundation.dart';
 
-part 'course_session.g.dart';
+part 'course_session.freezed.dart';
 
-@CopyWith()
-class CourseSession {
-  final String id;
-  final String courseId;
-  final DateTime startedAt;
-  final DateTime? completedAt;
-  final int? lastLevelIndex;
+@freezed
+abstract class CourseSession with _$CourseSession {
+  const CourseSession._();
 
-  CourseSession({
-    required this.id,
-    required this.courseId,
-    required this.startedAt,
-    this.completedAt,
-    this.lastLevelIndex,
-  });
+  const factory CourseSession({
+    required String id,
+    required String courseId,
+    required DateTime startedAt,
+    DateTime? completedAt,
+    int? lastLevelIndex,
+  }) = _CourseSession;
 
   factory CourseSession.newSession(String courseId) {
     return CourseSession(
@@ -66,25 +63,27 @@ class CourseSession {
   }
 }
 
-@CopyWith()
-class LevelProgress {
-  final String id;
-  final String levelId;
-  final int score;
-  final int total;
-  final DateTime startedAt;
-  final DateTime? completedAt;
-  final int? lastExerciseIndex;
+@freezed
+abstract class LevelProgress with _$LevelProgress {
 
-  LevelProgress({
-    required this.id,
-    required this.levelId,
-    required this.total,
-    required this.score,
-    required this.startedAt,
-    this.completedAt,
-    this.lastExerciseIndex
-  });
+  // final String id;
+  // final String levelId;
+  // final int score;
+  // final int total;
+  // final DateTime startedAt;
+  // final DateTime? completedAt;
+  // final int? lastExerciseIndex;
+  const LevelProgress._();
+
+  const factory LevelProgress({
+    required String id,
+    required String levelId,
+    required int score,
+    required int total,
+    required DateTime startedAt,
+    DateTime? completedAt,
+    int? lastExerciseIndex,
+  }) = _LevelProgress;
 
   factory LevelProgress.newSession({
     required String levelId,
@@ -122,23 +121,25 @@ class LevelProgress {
   }
 }
 
-@CopyWith()
-class ExerciseProgress {
-  final String id;
-  final String exerciseId;
-  final int? selectedIndex;
-  final bool isCorrect;
-  final DateTime startedAt;
-  final DateTime? completedAt;
+@freezed
+abstract class ExerciseProgress with _$ExerciseProgress {
+  // final String id;
+  // final String exerciseId;
+  // final int? selectedIndex;
+  // final bool isCorrect;
+  // final DateTime startedAt;
+  // final DateTime? completedAt;
 
-  ExerciseProgress({
-    required this.id,
-    required this.exerciseId,
-    this.selectedIndex,
-    required this.isCorrect,
-    required this.startedAt,
-    this.completedAt,
-  });
+  const ExerciseProgress._();
+
+  const factory ExerciseProgress({
+    required String id,
+    required String exerciseId,
+    int? selectedIndex,
+    required bool isCorrect,
+    required DateTime startedAt,
+    required DateTime? completedAt,
+  }) = _ExerciseProgress;
 
   factory ExerciseProgress.newSession(String exerciseId) {
     return ExerciseProgress(
