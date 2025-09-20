@@ -47,9 +47,9 @@ dependencies:
   uuid: ^4.5.1
   drift: ^2.28.1
   drift_flutter: ^0.2.6
-  copy_with_extension: ^9.1.0
   flutter_inappwebview: ^6.1.5
   flutter_svg: ^2.2.1
+  freezed_annotation: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +64,7 @@ dev_dependencies:
   json_serializable: ^6.11.0
   drift_dev: ^2.28.2
   build_runner: ^2.7.1
-  copy_with_extension_gen: ^9.1.0
+  freezed: ^3.2.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -78,8 +78,20 @@ flutter:
   uses-material-design: true
   assets:
     - assets/web/
+    - assets/web/calculus-made-easy/
+    - assets/web/calculus-made-easy/images/
+    - assets/web/elementary-algebra/
+    - assets/web/elementary-algebra/images/
+    - assets/web/elementary-statistics/
+    - assets/web/elementary-statistics/images/
+    - assets/web/elementary-trigonometry/
+    - assets/web/elementary-trigonometry/images/
+    - assets/web/js/
+    - assets/web/css/
+    - assets/web/css/fonts/
     - assets/images/cover/
     - assets/images/exercise/
+    - assets/db/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
