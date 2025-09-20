@@ -26,13 +26,10 @@ class TocScreen extends StatelessWidget {
             vm.loadData(course);
             return vm;
           },
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Consumer<TocViewModel>(
+          child: Consumer<TocViewModel>(
               builder: (context, vm, child) {
                 return _buildBody(context);
               }
-            ),
           ),
       ),
     );
@@ -47,29 +44,42 @@ class TocScreen extends StatelessWidget {
       return Text('加载失败: ${vm.error}');
     }
 
-    return ListView(
-      children: List.generate(vm.tocDisplayEntries.length, (index) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: vm.tocDisplayEntries.length,
+      separatorBuilder: (context, index) {
+        return SizedBox(height: 16,);
+      },
+      itemBuilder: (context, index) {
         final entry = vm.tocDisplayEntries[index];
+        if (entry.slug.isEmpty) {
+          return Text(
+            entry.title,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          );
+        }
         return TextCardView(
-            onTap: () {
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
                   builder: (context) => WebViewPage(
                     course: course,
                     entry: entry,
                   )
-                ),
-              );
-            },
-            child: Expanded(
-              child: TitleSummaryView(
-                title: entry.title,
-                summary: entry.summary,
               ),
+            );
+          },
+          child: Expanded(
+            child: TitleSummaryView(
+              title: entry.title,
+              summary: entry.summary,
             ),
+          ),
         );
-      }),
+      },
     );
   }
 }
