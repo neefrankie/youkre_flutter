@@ -34,8 +34,13 @@ class BookListPage extends StatelessWidget {
       return Text('加载失败: ${vm.error}');
     }
 
-    return ListView(
-      children: List.generate(vm.courses.length, (index) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: vm.courses.length,
+      separatorBuilder: (context, index) {
+        return SizedBox(height: 16,);
+      },
+      itemBuilder: (context, index) {
         final course = vm.courses[index];
         return TextCardView(
           onTap: () {
@@ -51,7 +56,7 @@ class BookListPage extends StatelessWidget {
             summary: course.summary,
           ),
         );
-      }),
+      },
     );
   }
 
