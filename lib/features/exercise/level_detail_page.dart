@@ -179,13 +179,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    FilledButton(
-                      onPressed: () {
-                        _onRestart(context);
-                        SheetManager.dismiss(context);
-                      },
-                      child: Text('再做一遍'),
-                    ),
+                    _restartButton(context),
                     _nextOrFinishButton(context),
                   ],
                 ),
@@ -194,6 +188,16 @@ class _LevelDetailPage extends State<LevelDetailPage> {
           );
         },
       ),
+    );
+  }
+
+  Widget _restartButton(BuildContext context) {
+    return FilledButton(
+      onPressed: () {
+        _onRestart(context);
+        SheetManager.dismiss(context);
+      },
+      child: Text('再做一遍'),
     );
   }
 
