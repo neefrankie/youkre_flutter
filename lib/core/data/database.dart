@@ -278,7 +278,7 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
     ).map((row) {
       return LevelProgressEntity(
         id: row.read('id'),
-        levelId: row.read('level_dd'),
+        levelId: row.read('level_id'),
         score: row.read('score'),
         total: row.read('total'),
         startedAt: row.read('started_at') as DateTime,
