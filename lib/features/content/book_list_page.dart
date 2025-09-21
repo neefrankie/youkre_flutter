@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/ui/widgets/icon_title_summary.dart';
-import 'package:youkre_flutter/core/ui/widgets/text_card_view.dart';
+import 'package:youkre_flutter/core/ui/widgets/tap_card_view.dart';
 import 'package:youkre_flutter/features/content/toc_screen.dart';
 import 'package:youkre_flutter/features/content/viewmodel/book_list_viewmodel.dart';
 
@@ -42,7 +42,7 @@ class BookListPage extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         final course = vm.courses[index];
-        return TextCardView(
+        return TapCardView(
           onTap: () {
             Navigator.push(
                 context,

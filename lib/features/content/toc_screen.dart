@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/models/course.dart';
-import 'package:youkre_flutter/core/ui/widgets/text_card_view.dart';
+import 'package:youkre_flutter/core/ui/widgets/tap_card_view.dart';
 import 'package:youkre_flutter/core/ui/widgets/title_summary_view.dart';
 import 'package:youkre_flutter/features/content/webview_page.dart';
 import 'package:youkre_flutter/features/content/viewmodel/toc_viewodel.dart';
@@ -60,7 +60,7 @@ class TocScreen extends StatelessWidget {
             ),
           );
         }
-        return TextCardView(
+        return TapCardView(
           onTap: () {
             Navigator.push(
               context,
