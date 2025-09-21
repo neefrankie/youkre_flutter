@@ -158,7 +158,7 @@ class MarkdownParser {
     if (match != null && match.groupCount >= 2) {
       final url = match.group(2)!.trim();
       final String stem = path.basenameWithoutExtension(url);
-      final assetPath = path.join('assets', 'images', 'exercise','$stem.png');
+      final assetPath = path.join('assets', 'images', 'exercise','$stem.svg');
       return ImageBlock(assetPath);
     }
     return null;
