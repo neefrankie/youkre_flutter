@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:youkre_flutter/core/ui/theme/app_colors.dart';
 
-class TextCardView extends StatelessWidget {
+class TapCardView extends StatelessWidget {
   final GestureTapCallback onTap;
   final Widget child;
 
-  const TextCardView({
+  const TapCardView({
     super.key,
     required this.onTap,
     required this.child
@@ -13,12 +12,9 @@ class TextCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appColors = Theme.of(context).extension<AppColors>();
-
     return Card(
-      color: appColors?.contentBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         child: Padding(
