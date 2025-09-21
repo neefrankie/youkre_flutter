@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/data/database.dart';
 import 'package:youkre_flutter/core/services/database_service.dart';
 import 'package:youkre_flutter/core/services/preference_service.dart';
+import 'package:youkre_flutter/core/services/theme_manager.dart';
 
 import 'app.dart';
 
@@ -20,7 +22,14 @@ void main() async {
   final dbPath = await dbService.getDatabasePath();
   print('db path: $dbPath');
 
+  final themeManager = ThemeManager();
+
   AppDatabase.instance();
-  runApp(const App());
+  runApp(
+    ChangeNotifierProvider.value(
+      value: themeManager,
+      child: const App(),
+    )
+  );
 }
 
