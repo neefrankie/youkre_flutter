@@ -277,15 +277,15 @@ class LevelDao extends DatabaseAccessor<AppDatabase> with _$LevelDaoMixin {
       readsFrom: {levelProgressSchema},
     ).map((row) {
       return LevelProgressEntity(
-        id: row.read('id'),
-        levelId: row.read('level_id'),
-        score: row.read('score'),
-        total: row.read('total'),
-        startedAt: row.read('started_at') as DateTime,
-        completedAt: row.read('completed_at') as DateTime?,
-        lastExerciseIndex: row.read('last_exercise_index') as int?,
-        contentVersion: row.read('content_version'),
-        courseSessionId: row.read('course_sessionId'),
+        id: row.read<String>('id'),
+        levelId: row.read<String>('level_id'),
+        score: row.read<int>('score'),
+        total: row.read<int>('total'),
+        startedAt: row.read<DateTime>('started_at'),
+        completedAt: row.read<DateTime?>('completed_at'),
+        lastExerciseIndex: row.read<int?>('last_exercise_index'),
+        contentVersion: row.read<int>('content_version'),
+        courseSessionId: row.read<String>('course_session_id'),
       );
     }).get();
 
