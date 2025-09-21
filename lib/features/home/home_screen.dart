@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youkre_flutter/features/content/book_list_page.dart';
 import 'package:youkre_flutter/features/home/home_page.dart';
-import 'package:youkre_flutter/features/home/tex_example_page.dart';
+import 'package:youkre_flutter/features/settings/settings_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: '学习',
           ),
           NavigationDestination(
+            selectedIcon: Icon(Icons.person),
             icon: Icon(Icons.person_outline),
             label: '设置',
           ),
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: <Widget>[
           HomePage(),
           BookListPage(),
-          TeXExamplePage(),
+          SettingsPage(),
         ][_selectedIndex],
       ),
     );

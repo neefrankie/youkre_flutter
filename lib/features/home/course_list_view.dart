@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:youkre_flutter/core/data/exercise_data_source.dart';
+import 'package:youkre_flutter/core/ui/widgets/tap_card_view.dart';
+import 'package:youkre_flutter/core/ui/widgets/title_figure_view.dart';
 import 'package:youkre_flutter/features/exercise/course_detail_page.dart';
 import 'package:youkre_flutter/core/models/course.dart';
-import 'package:youkre_flutter/features/exercise/course_item_card.dart';
 
 class CourseListView extends StatefulWidget {
 
@@ -36,11 +37,12 @@ class _CourseListView extends State<CourseListView> {
             crossAxisSpacing: 8,
             children: List.generate(snapshot.data!.length, (index) {
               final course = snapshot.data![index];
-              return CourseItemCard(
-                course: course,
-                onTap: () {
-                  onTap(course);
-                },
+              return TapCardView(
+                  onTap: () { onTap(course); },
+                  child: TitleFigureView(
+                    title: course.title,
+                    imagePath: course.exerciseCoverPath(),
+                  )
               );
             }),
           );
