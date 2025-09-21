@@ -28,12 +28,7 @@ class ExerciseView extends StatelessWidget {
 
         ...List.generate(
           exercise.multipleChoice.choices.length,
-              (index) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: buildChoiceItem(index),
-            );
-          },
+          buildChoiceItem,
         ),
         if (extra != null) extra!,
       ],
@@ -43,15 +38,18 @@ class ExerciseView extends StatelessWidget {
   Widget buildChoiceItem(int index) {
     final choice = exercise.multipleChoice.choices[index];
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: selectedIndex == null ? () => onClick(index) : null,
-      child: ChoiceOptionView(
-        choice: choice,
-        isLatex: exercise.multipleChoice.isLatex,
-        correctIndex: exercise.multipleChoice.correctIndex,
-        itemIndex: index,
-        selectedIndex: selectedIndex,
+    return Padding( // Margin
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: selectedIndex == null ? () => onClick(index) : null,
+        child: ChoiceOptionView(
+          choice: choice,
+          isLatex: exercise.multipleChoice.isLatex,
+          correctIndex: exercise.multipleChoice.correctIndex,
+          itemIndex: index,
+          selectedIndex: selectedIndex,
+        ),
       ),
     );
   }
