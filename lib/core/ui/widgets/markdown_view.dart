@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:youkre_flutter/core/services/markdown_service.dart';
-
-final List<double> fontSizes = [28.0,24.0,20.0,18.0,16.0,14.0];
+import 'package:youkre_flutter/core/ui/widgets/math_widget.dart';
+import 'package:youkre_flutter/core/ui/widgets/table_widget.dart';
+import 'package:youkre_flutter/core/utils/markdown_parser.dart';
 
 class MarkdownView extends StatelessWidget {
   final String markdown;
   final bool isScrollable;
+  final TextAlign titleAlign;
   final ScrollController? controller;
 
   const MarkdownView({
     super.key,
     required this.markdown,
     this.isScrollable = false,
+    this.titleAlign = TextAlign.center,
     this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    final widgets = MarkdownService.buildWidgets(markdown);
+    final widgets = _buildWidgets(context, markdown);
 
     if (isScrollable) {
       return ListView.separated(
@@ -38,5 +40,77 @@ class MarkdownView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: widgets,
     );
+  }
+
+  List<Widget> _buildWidgets(BuildContext context, String markdown) {
+    final blocks = MarkdownParser.parse(markdown);
+    return blocks.map((block) => _blockToWidget(context, block)).toList();
+  }
+
+  Widget _blockToWidget(BuildContext context, MarkdownBlock block) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (block is HeadingBlock) {
+      TextStyle? style;
+      TextAlign align = titleAlign;
+
+      switch (block.level) {
+        case 1:
+          style = textTheme.displayLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+          );
+        case 2:
+          style = textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+          );
+        case 3:
+          style = textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+          );
+        default:
+          style = textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+          );
+          align = TextAlign.start;
+      }
+      return Text(
+        block.text,
+        style: style,
+        textAlign: align,
+      );
+    } else if (block is ParagraphBlock) {
+      return SizedBox(
+        width: double.infinity,
+        child: Text(
+          block.text,
+          textAlign: TextAlign.start,
+        ),
+      );
+    } else if (block is ListItemBlock) {
+      return Column(
+        children: block.items.map((item) {
+          return Row(
+            spacing: 8,
+            children: [
+              Text("•"),
+              Text(item)
+            ],
+          );
+        }).toList(),
+      );
+    } else if (block is MathBlock) {
+      return MathBlockWidget(latex: block.latex);
+    } else if (block is TableBlock) {
+      return TableWidget(rows: block.cells);
+    } else if (block is ImageBlock) {
+      return Image(image: AssetImage(block.src));
+    }
+
+    return SizedBox();
   }
 }
