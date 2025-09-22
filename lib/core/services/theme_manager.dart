@@ -1,6 +1,8 @@
 // theme_manager.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ThemeManager extends ChangeNotifier {
   static const String _keyThemeMode = 'theme_mode';
@@ -8,6 +10,23 @@ class ThemeManager extends ChangeNotifier {
   late ThemeMode _themeMode;
 
   ThemeMode get themeMode => _themeMode;
+
+  String get resolvedTheme {
+    switch (_themeMode) {
+      case ThemeMode.dark:
+        return 'dark';
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.system:
+      // ✅ 使用 MediaQuery 来获取当前系统的实际主题
+        final brightness = PlatformDispatcher.instance.platformBrightness;
+        return brightness == Brightness.dark ? 'dark' : 'light';
+    }
+  }
+
+  String get jsThemeScript {
+    return "document.documentElement.setAttribute('data-bs-theme', '$resolvedTheme')";
+  }
 
   ThemeManager() {
     // 初始化时从本地读取
