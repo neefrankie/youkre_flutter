@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:youkre_flutter/core/models/exercise.dart';
+import 'package:youkre_flutter/core/models/exercise_level.dart';
 import 'package:youkre_flutter/core/services/sheet_manager.dart';
 import 'package:youkre_flutter/core/ui/widgets/bottom_sheet.dart';
 import 'package:youkre_flutter/features/exercise/viewmodel/course_viewmodel.dart';
@@ -59,6 +61,9 @@ class _LevelDetailPage extends State<LevelDetailPage> {
       },
       child: Consumer<LevelDetailViewModel>(
         builder: (context, vm, child) {
+          final level = widget.courseViewModel.currentLevel;
+          final exercise = vm.currentExercise;
+
           return Scaffold(
             appBar: AppBar(
               title: Text(widget.courseViewModel.navTitle),
@@ -66,21 +71,33 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             ),
             body: _buildBody(context),
             // bottomNavigationBar: _isLastAnswered ? finishButton() : null,
-            bottomNavigationBar: SafeArea(
-              bottom: true,
-              top: false,
-              child: ExerciseBottomBar(),
-            ),
+            bottomNavigationBar: _buildBottomBar(level, exercise),
           );
         },
       ),
     );
   }
 
+  Widget? _buildBottomBar(ExerciseLevel? level, Exercise? exercise) {
+    if (level != null && exercise != null) {
+      return SafeArea(
+        bottom: true,
+        top: false,
+        child: ExerciseBottomBar(
+          course: widget.courseViewModel.course,
+          level: level,
+          exercise: exercise
+        ),
+      );
+    }
+
+    return null;
+  }
+
   Widget _buildNextButton(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
     return TextButton(
-      onPressed: () {
+      onPressed: vm.isLast ? null : () {
         vm.advance();
         _goToPage(vm.currentPage);
       },
@@ -96,7 +113,29 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     if (vm.error != null) {
       return Text('加载失败: ${vm.error}');
     }
-    return Column(children: [Text(vm.progressText), swipingPage(context)]);
+    return Column(
+      children: [
+        Text(vm.progressText),
+        swipingPage(context),
+        if (vm.isLast && vm.lastAnswered) finishButton(context)
+      ],
+    );
+  }
+
+  Widget finishButton(BuildContext context) {
+    // final vm = context.watch<LevelDetailViewModel>();
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      width: double.infinity,
+      child: FilledButton(
+        onPressed: () {
+          _presentSummary(context);
+        },
+        child: Expanded(child: const Text(
+          '完成',
+        )),
+      ),
+    );
   }
 
   Widget swipingPage(BuildContext context) {
@@ -127,12 +166,8 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             exercise: exercise,
             levelProgress: levelProgress,
             courseSession: courseSession,
-            isLast: vm.isLast,
-            onSummary: () {
-              _presentSummary(context);
-            },
             onAnswer: (ExerciseProgress progress) {
-              _onExerciseAnswered(context, progress);
+              vm.updateLevelProgress(progress);
             },
           );
         },
@@ -140,22 +175,8 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     );
   }
 
-  Future<void> _onExerciseAnswered(
-    BuildContext context,
-    ExerciseProgress exerciseProgress,
-  ) async {
-    final vm = context.watch<LevelDetailViewModel>();
-
-    await vm.updateLevelProgress(exerciseProgress);
-
-    final levelProgress = vm.levelProgress;
-    if (levelProgress != null && levelProgress.isCompleted) {
-      widget.courseViewModel.addCompletedLevel(levelProgress);
-    }
-  }
-
   void _presentSummary(BuildContext context) {
-    final vm = context.watch<LevelDetailViewModel>();
+    final vm = context.read<LevelDetailViewModel>();
 
     SheetManager.presentSheet(
       context,
@@ -170,6 +191,7 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             child: Column(
               spacing: 16,
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Text('🎉完成本节练习'),
                 Text(
