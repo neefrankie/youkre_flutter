@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:youkre_flutter/core/models/course.dart';
-import 'package:youkre_flutter/core/models/toc_entry.dart';
+import 'package:provider/provider.dart';
+import 'package:youkre_flutter/core/services/theme_manager.dart';
 
 class WebViewPage extends StatefulWidget {
-  final Course course;
-  final TocDisplayEntry entry;
+  final String title;
+  final String courseSlug;
+  final String chapterSlug;
 
   const WebViewPage({
     super.key,
-    required this.course,
-    required this.entry
+    required this.courseSlug,
+    required this.chapterSlug,
+    required this.title
   });
 
   @override
@@ -44,16 +46,18 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.course.title),
+        title: Text(widget.title),
       ),
       body: InAppWebView(
         // onLoadStart: (controller, url) async {
         //   await _startServerIfNeeded();
         // },
         initialUrlRequest: URLRequest(
-          url: WebUri('http://localhost:8080/${widget.course.slug}/${widget.entry.slug}.html'),
+          url: WebUri('http://localhost:8080/${widget.courseSlug}/${widget.chapterSlug}.html'),
         ),
         onLoadResource: (controller, resource) {
           print('Loaded: ${resource.url}');
@@ -64,6 +68,9 @@ class _WebViewPageState extends State<WebViewPage> {
         },
         onReceivedHttpError: (controller, request, response) {
           print(' onHttpError: ${request.url}, status: ${response.statusCode}');
+        },
+        onLoadStop: (controller, webUri) async {
+          await controller.evaluateJavascript(source: themeManager.jsThemeScript);
         },
       ),
     );

@@ -66,8 +66,9 @@ class TocScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => WebViewPage(
-                    course: course,
-                    entry: entry,
+                    title: course.title,
+                    courseSlug: course.slug,
+                    chapterSlug: entry.slug,
                   )
               ),
             );
