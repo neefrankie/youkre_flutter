@@ -15,6 +15,10 @@ class DailyQuizViewModel extends ChangeNotifier {
 
   final _prefs = PreferenceService();
 
+  CourseKind get currentCourseKind {
+    return _prefs.getCourse();
+  }
+
   Future<void> getOrFindExercise() async {
     isLoading = true;
     notifyListeners();
@@ -45,10 +49,12 @@ class DailyQuizViewModel extends ChangeNotifier {
       final exercise = await ExerciseDataSource().findRandomExercise(kind);
       this.exercise = exercise;
       isLoading = false;
-      notifyListeners();
 
       final dailyExInfo = DailyExerciseInfo.today(exerciseId: exercise.id);
       await _prefs.saveDailyExerciseInfo(dailyExInfo);
+      await _prefs.setCourse(kind);
+
+      notifyListeners();
     } catch (e) {
       error = e.toString();
       notifyListeners();
@@ -85,9 +91,6 @@ class DailyQuizViewModel extends ChangeNotifier {
       logger.info('course not changed.');
       return;
     }
-
-    isLoading = true;
-    notifyListeners();
 
     await _loadNewDailyExercise(newCourseKind);
   }
