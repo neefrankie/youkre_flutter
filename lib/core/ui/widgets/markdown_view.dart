@@ -109,6 +109,8 @@ class MarkdownView extends StatelessWidget {
       return TableWidget(rows: block.cells);
     } else if (block is ImageBlock) {
       return Image(image: AssetImage(block.src));
+    } else if (block is SeparatorBlock) {
+      return Divider();
     }
 
     return SizedBox();

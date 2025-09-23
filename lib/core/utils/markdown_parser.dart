@@ -42,6 +42,10 @@ class TableBlock extends MarkdownBlock {
   TableBlock(this.cells);
 }
 
+class SeparatorBlock extends MarkdownBlock {
+
+}
+
 abstract class InlineElement {}
 
 class InlineText extends InlineElement {
@@ -55,10 +59,6 @@ class InlineMath extends InlineElement {
 }
 
 class MarkdownParser {
-  static final Map<String, String> pathMapping = {
-    '/images/exercise': 'assets/images/exercise',
-    '/images/cover': 'assets/images/cover',
-  };
 
   static List<MarkdownBlock> parse(String input) {
     final lines = input.split("\n\n");
@@ -86,6 +86,8 @@ class MarkdownParser {
         }
       } else if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
         blocks.add(parseTable(trimmed));
+      } else if (isSeparatorLine(trimmed)) {
+        blocks.add(SeparatorBlock());
       } else {
         blocks.add(ParagraphBlock(trimmed));
       }
@@ -189,6 +191,14 @@ class MarkdownParser {
       final trimmed = cell.trim();
       return trimmed.isNotEmpty && trimmed.split('').every((c) => c == '-' || c == ':');
     });
+  }
+
+  static bool isSeparatorLine(String line) {
+    if (line.startsWith('---')) {
+      return line.split('').every((c) => c == '-');
+    }
+
+    return false;
   }
 
   static List<InlineElement> parseInlineElements(String text) {
