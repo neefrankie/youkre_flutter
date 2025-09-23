@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
 import 'package:youkre_flutter/core/models/exercise_level.dart';
@@ -22,6 +23,8 @@ class LevelDetailPage extends StatefulWidget {
 }
 
 class _LevelDetailPage extends State<LevelDetailPage> {
+  final logger = Logger('LevelDetailPage');
+
   final PageController _pageController = PageController();
   SummaryAction? _pendingAction;
 
@@ -62,8 +65,6 @@ class _LevelDetailPage extends State<LevelDetailPage> {
       },
       child: Consumer<LevelDetailViewModel>(
         builder: (context, vm, child) {
-          final level = widget.courseViewModel.currentLevel;
-          final exercise = vm.currentExercise;
 
           final action = _pendingAction;
           if (action != null) {
@@ -86,13 +87,15 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             }
           }
 
+          final level = widget.courseViewModel.currentLevel;
+          final exercise = vm.currentExercise;
+
           return Scaffold(
             appBar: AppBar(
               title: Text(widget.courseViewModel.navTitle),
               actions: [_buildNextButton(context)],
             ),
             body: _buildBody(context),
-            // bottomNavigationBar: _isLastAnswered ? finishButton() : null,
             bottomNavigationBar: _buildBottomBar(level, exercise),
           );
         },
