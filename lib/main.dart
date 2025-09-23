@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/data/database.dart';
 import 'package:youkre_flutter/core/services/database_service.dart';
@@ -9,6 +11,14 @@ import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Logger.root.level = kDebugMode ? Level.FINE : Level.WARNING;
+
+  Logger.root.onRecord.listen((record) {
+    if (kDebugMode) {
+      print('${record.level.name} [${record.loggerName}] ${record.message}');
+    }
+  });
 
   final prefs = PreferenceService();
   await prefs.init();
