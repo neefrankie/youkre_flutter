@@ -10,30 +10,23 @@ class LevelDetailViewModel extends ChangeNotifier {
 
   LevelDetailViewModel();
 
-  bool _loading = true;
-  String? _error;
-  LevelProgress? _levelProgress;
-  List<Exercise> _exercises = [];
   final Map<String, ExerciseProgress> _exerciseStates = {};
-
   int _currentPage = 0;
 
-  bool get isLoading => _loading;
-  String? get error => _error;
-  LevelProgress? get levelProgress => _levelProgress;
-  List<Exercise> get exercises => _exercises;
+  bool isLoading = true;
+  String? error;
+  LevelProgress? levelProgress;
+  List<Exercise> exercises = [];
   int get currentPage => _currentPage;
 
-  bool showSummary = false;
-
-  bool get isLast => _currentPage == _exercises.length - 1;
+  bool get isLast => _currentPage == exercises.length - 1;
 
   bool get lastAnswered {
-    if (_exercises.isEmpty) {
+    if (exercises.isEmpty) {
       return false;
     }
 
-    final progress = _exerciseStates[_exercises.last.id];
+    final progress = _exerciseStates[exercises.last.id];
     if (progress == null) {
       return false;
     }
@@ -41,17 +34,17 @@ class LevelDetailViewModel extends ChangeNotifier {
     return progress.isCompleted;
   }
 
-  String get progressText => '${_currentPage+1} / ${_exercises.length}';
+  String get progressText => '${_currentPage+1} / ${exercises.length}';
 
   Exercise? get currentExercise {
-    if (currentPage >= _exercises.length) {
+    if (currentPage >= exercises.length) {
       return null;
     }
 
-    return _exercises[currentPage];
+    return exercises[currentPage];
   }
 
-  int get score => _exercises.fold(0, (prev, ex) {
+  int get score => exercises.fold(0, (prev, ex) {
     if (_exerciseStates[ex.id]?.isCorrect == true) {
       return prev + 1;
     } else {
@@ -59,34 +52,34 @@ class LevelDetailViewModel extends ChangeNotifier {
     }
   });
 
-  bool get allAnswered => _exercises.every((ex) => _exerciseStates.containsKey(ex.id));
+  bool get allAnswered => exercises.every((ex) => _exerciseStates.containsKey(ex.id));
 
   void onPageChanged(int index) {
     _currentPage = index;
     notifyListeners();
   }
 
-  void onSummary() {
-    showSummary = true;
+  ExerciseProgress? getExerciseProgress(String exerciseId) {
+    return _exerciseStates[exerciseId];
   }
 
   void advance() {
-    if (_currentPage < _exercises.length - 1) {
+    if (_currentPage < exercises.length - 1) {
       _currentPage += 1;
     }
   }
 
   void setLevelComplete() {
-    _levelProgress = _levelProgress?.markComplete();
+    levelProgress = levelProgress?.markComplete();
   }
 
   void resetState() {
-    _loading = false;
-    _error = null;
+    print("resetting state");
+    isLoading = true;
+    error = null;
     _currentPage = 0;
-    _levelProgress = null;
+    levelProgress = null;
     _exerciseStates.clear();
-    showSummary = false;
     notifyListeners();
   }
 
@@ -95,19 +88,20 @@ class LevelDetailViewModel extends ChangeNotifier {
     required CourseSession? courseSession,
     required Course course,
   }) async {
-    _loading = true;
+    print('loading data');
+    isLoading = true;
     notifyListeners();
 
     if (courseSession == null) {
-      _loading = false;
-      _error = 'Missing course session';
+      isLoading = false;
+      error = 'Missing course session';
       notifyListeners();
       return;
     }
 
     if (level == null) {
-      _loading = false;
-      _error = 'Missing level';
+      isLoading = false;
+      error = 'Missing level';
       notifyListeners();
       return;
     }
@@ -122,6 +116,7 @@ class LevelDetailViewModel extends ChangeNotifier {
           session: courseSession,
           exerciseCount: exercises.length,
       );
+      print('loaded level progress ${levelProgress.id}');
 
       final allExerciseProgress = await db.exerciseDao.allProgressOfLevel(
         levelProgressId: levelProgress.id
@@ -130,13 +125,13 @@ class LevelDetailViewModel extends ChangeNotifier {
       for (var ep in allExerciseProgress) {
         _syncExerciseProgress(ep);
       }
-      _levelProgress = levelProgress;
-      _exercises = exercises;
+      this.levelProgress = levelProgress;
+      this.exercises = exercises;
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
+      error = e.toString();
     } finally {
-      _loading = false;
+      isLoading = false;
       notifyListeners();
     }
   }
@@ -150,39 +145,40 @@ class LevelDetailViewModel extends ChangeNotifier {
     required CourseSession? courseSession,
     required Course course,
   }) async {
-    _loading = true;
+    isLoading = true;
     notifyListeners();
 
     if (courseSession == null) {
-      _loading = false;
-      _error = 'Missing course session';
+      isLoading = false;
+      error = 'Missing course session';
       notifyListeners();
       return;
     }
 
     if (level == null) {
-      _loading = false;
-      _error = 'Missing level';
+      isLoading = false;
+      error = 'Missing level';
       notifyListeners();
       return;
     }
 
     try {
       final db = AppDatabase.instance();
-
-      final levelProgress = await db.levelDao.loadOrCreateProgress(
+      print('create new level progress');
+      final levelProgress = await db.levelDao.createProgress(
         level,
-        session: courseSession,
+        courseSession: courseSession,
         exerciseCount: exercises.length,
       );
+      print('new level progress ${levelProgress.id}');
 
-      _levelProgress = levelProgress;
-      _exercises = exercises;
+      this.levelProgress = levelProgress;
+      this.exercises = exercises;
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
+      error = e.toString();
     } finally {
-      _loading = false;
+      isLoading = false;
       notifyListeners();
     }
   }
@@ -199,7 +195,7 @@ class LevelDetailViewModel extends ChangeNotifier {
   Future<void> updateLevelProgress(ExerciseProgress exerciseProgress) async {
     _syncExerciseProgress(exerciseProgress);
 
-    final progress = _levelProgress?.moveExercise(
+    final progress = levelProgress?.moveExercise(
       lastIndex: currentPage,
       score: score,
     );
@@ -214,9 +210,13 @@ class LevelDetailViewModel extends ChangeNotifier {
     required Course course,
   }) async {
     setLevelComplete();
+    print('restart current level: ${level?.id}');
     
-    final progress = _levelProgress;
+    final progress = levelProgress;
+    print('current level progress ${progress?.id}');
+
     if (progress != null) {
+      print('update level progress');
       await _updateProgress(progress);
     }
 
@@ -234,7 +234,7 @@ class LevelDetailViewModel extends ChangeNotifier {
   }) async {
     setLevelComplete();
 
-    final progress = _levelProgress;
+    final progress = levelProgress;
     if (progress != null) {
       await _updateProgress(progress);
     }
