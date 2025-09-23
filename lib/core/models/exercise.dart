@@ -23,6 +23,14 @@ class Exercise extends Equatable {
     this.explanation,
   });
 
+  String get fullAnswer {
+    if (explanation == null) {
+      return prompts;
+    }
+
+    return '$prompts\n\n---\n\n$explanation';
+  }
+
   factory Exercise.fromJson(Map<String, dynamic> json) => _$ExerciseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExerciseToJson(this);
