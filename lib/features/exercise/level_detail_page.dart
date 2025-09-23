@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
 import 'package:youkre_flutter/core/models/exercise_level.dart';
-import 'package:youkre_flutter/core/services/sheet_manager.dart';
-import 'package:youkre_flutter/core/ui/widgets/bottom_sheet.dart';
+import 'package:youkre_flutter/features/exercise/summary_action.dart';
+import 'package:youkre_flutter/features/exercise/summary_page.dart';
 import 'package:youkre_flutter/features/exercise/viewmodel/course_viewmodel.dart';
 import 'package:youkre_flutter/features/exercise/exercise_detail_view.dart';
 import 'package:youkre_flutter/features/exercise/viewmodel/level_viewmodel.dart';
@@ -22,6 +23,7 @@ class LevelDetailPage extends StatefulWidget {
 
 class _LevelDetailPage extends State<LevelDetailPage> {
   final PageController _pageController = PageController();
+  SummaryAction? _pendingAction;
 
   @override
   void initState() {
@@ -56,13 +58,33 @@ class _LevelDetailPage extends State<LevelDetailPage> {
           level: widget.courseViewModel.currentLevel,
           courseSession: widget.courseViewModel.courseSession,
         );
-        widget.courseViewModel.updateSession();
         return vm;
       },
       child: Consumer<LevelDetailViewModel>(
         builder: (context, vm, child) {
           final level = widget.courseViewModel.currentLevel;
           final exercise = vm.currentExercise;
+
+          final action = _pendingAction;
+          if (action != null) {
+            _pendingAction = null;
+
+            switch (action) {
+              case SummaryAction.restart:
+                _onRestart(context);
+                break;
+              case SummaryAction.nextLevel:
+                _onNextLevel(context);
+                break;
+              case SummaryAction.exit:
+                if (context.mounted) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                    if (context.mounted) Navigator.pop(context);
+                  });
+                }
+                break;
+            }
+          }
 
           return Scaffold(
             appBar: AppBar(
@@ -116,29 +138,13 @@ class _LevelDetailPage extends State<LevelDetailPage> {
     return Column(
       children: [
         Text(vm.progressText),
-        swipingPage(context),
-        if (vm.isLast && vm.lastAnswered) finishButton(context)
+        _buildSwipingPage(context),
+        if (vm.isLast && vm.lastAnswered) _finishButton(context)
       ],
     );
   }
 
-  Widget finishButton(BuildContext context) {
-    // final vm = context.watch<LevelDetailViewModel>();
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      width: double.infinity,
-      child: FilledButton(
-        onPressed: () {
-          _presentSummary(context);
-        },
-        child: Expanded(child: const Text(
-          '完成',
-        )),
-      ),
-    );
-  }
-
-  Widget swipingPage(BuildContext context) {
+  Widget _buildSwipingPage(BuildContext context) {
     final vm = context.watch<LevelDetailViewModel>();
     // Expanded 必须包裹 PageView，否则 Column 会无限高。
     return Expanded(
@@ -148,20 +154,21 @@ class _LevelDetailPage extends State<LevelDetailPage> {
         physics: const AlwaysScrollableScrollPhysics(),
         onPageChanged: vm.onPageChanged,
         itemBuilder: (context, index) {
-          final exercise = vm.currentExercise;
+          // I used to commit an error here by using
+          // vm.currentExercise, resulting to all exercising
+          // retrieving the same row.
+          final exercise = vm.exercises[index];
           final levelProgress = vm.levelProgress;
           final courseSession = widget.courseViewModel.courseSession;
 
-          if (exercise == null) {
-            return Text('Error: no exercise found');
-          }
           if (levelProgress == null) {
             return Text('Error: no level progress');
           }
           if (courseSession == null) {
             return Text('Error: not course session');
           }
-
+          // Since each exercise detail view retrieves its own progress
+          // upon shown, each swipe resulting a new db query.
           return ExerciseDetailView(
             exercise: exercise,
             levelProgress: levelProgress,
@@ -169,77 +176,52 @@ class _LevelDetailPage extends State<LevelDetailPage> {
             onAnswer: (ExerciseProgress progress) {
               vm.updateLevelProgress(progress);
             },
+            // Used cached data.
+            // Two points to cache: first time loaded; clicked a choice.
+            cachedExerciseProgress: vm.getExerciseProgress(exercise.id),
           );
         },
       ),
     );
   }
 
-  void _presentSummary(BuildContext context) {
-    final vm = context.read<LevelDetailViewModel>();
+  Widget _finishButton(BuildContext context) {
 
-    SheetManager.presentSheet(
-      context,
-      child: BottomSheetContainer(
-        onDismiss: () {
-          SheetManager.dismiss(context);
-        },
-        title: '总结',
-        builder: (context, scrollController) {
-          return Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              spacing: 16,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text('🎉完成本节练习'),
-                Text(
-                  '答对 ${vm.levelProgress?.score} / ${vm.levelProgress?.total}',
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _restartButton(context),
-                    _nextOrFinishButton(context),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _restartButton(BuildContext context) {
-    return FilledButton(
-      onPressed: () {
-        _onRestart(context);
-        SheetManager.dismiss(context);
-      },
-      child: Text('再做一遍'),
-    );
-  }
-
-  Widget _nextOrFinishButton(BuildContext context) {
-    if (widget.courseViewModel.hasNextLevel) {
-      return FilledButton(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      width: double.infinity,
+      child: FilledButton(
         onPressed: () {
-          _onNextLevel(context);
-          SheetManager.dismiss(context);
+          _navigateAndTakeAction(context);
         },
-        child: Text('下一节'),
-      );
+        child: const Text('完成'),
+      ),
+    );
+  }
+
+  Future<void> _navigateAndTakeAction(BuildContext context) async {
+    final vm = Provider.of<LevelDetailViewModel>(context, listen: false);
+
+    final action = await Navigator.push<SummaryAction>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SummaryPage(
+            total: vm.levelProgress?.total ?? 0,
+            score: vm.levelProgress?.score ?? 0,
+            hasNextLevel: widget.courseViewModel.hasNextLevel
+          )
+        )
+    );
+
+    if (!context.mounted) {
+      return;
     }
 
-    return OutlinedButton(
-      onPressed: () {
-        _onFinish();
-      },
-      child: Text('已完成所有练习'),
-    );
+    if (action != null) {
+      setState(() {
+        _pendingAction = action;
+      });
+    }
   }
 
   void _onRestart(BuildContext context) {
@@ -254,8 +236,6 @@ class _LevelDetailPage extends State<LevelDetailPage> {
         widget.courseViewModel.addCompletedLevel(prevLevelProgress);
       }
     });
-
-    SheetManager.dismiss(context);
   }
 
   void _onNextLevel(BuildContext context) {
@@ -273,11 +253,6 @@ class _LevelDetailPage extends State<LevelDetailPage> {
       }
     });
 
-    SheetManager.dismiss(context);
-  }
-
-  void _onFinish() {
-    SheetManager.dismiss(context);
-    Navigator.pop(context);
+    widget.courseViewModel.updateSession();
   }
 }
