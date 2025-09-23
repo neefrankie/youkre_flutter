@@ -8,8 +8,8 @@ import 'package:youkre_flutter/features/content/webview_page.dart';
 import 'package:youkre_flutter/features/exercise/explanation_page.dart';
 
 class ExerciseBottomBar extends StatelessWidget {
-  final Course course;
-  final ExerciseLevel level;
+  final Course? course;
+  final ExerciseLevel? level;
   final Exercise exercise;
 
   const ExerciseBottomBar({
@@ -21,54 +21,71 @@ class ExerciseBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Divider(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconLabelButton(
-              icon: Icons.menu_book,
-              label: '了解更多',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WebViewPage(
-                      title: course.title,
-                      courseSlug: level.courseSlug,
-                      chapterSlug: level.chapterSlug,
-                    ),
-                  )
-                );
-              },
-            ),
-            // IconLabelButton(
-            //   icon: Icons.share,
-            //   label: '分享',
-            //   onPressed: () {
-            //
-            //   },
-            // ),
-            if (exercise.explanation != null)
-            IconLabelButton(
-              icon: Icons.question_mark,
-              label: '解析',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ExplanationPage(markdown: exercise.fullAnswer)
-                  )
-                );
-              },
-            ),
-          ],
-        )
-      ],
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _moreButton(context),
+              if (exercise.explanation != null) _answerButton(context),
+            ],
+          )
+        ],
+      ),
     );
   }
 
+  Widget _answerButton(BuildContext context) {
+    return IconLabelButton(
+      icon: Icons.question_mark,
+      label: '解析',
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ExplanationPage(markdown: exercise.fullAnswer)
+            )
+        );
+      },
+    );
+  }
+
+  Widget _shareButton(BuildContext context) {
+    return IconLabelButton(
+      icon: Icons.share,
+      label: '分享',
+      onPressed: () {
+
+      },
+    );
+  }
+
+  Widget _moreButton(BuildContext context) {
+    if (course != null && level != null) {
+      return IconLabelButton(
+        icon: Icons.menu_book,
+        label: '了解更多',
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WebViewPage(
+                  title: course!.title,
+                  courseSlug: level!.courseSlug,
+                  chapterSlug: level!.chapterSlug,
+                ),
+              )
+          );
+        },
+      );
+    } else {
+      return SizedBox();
+    }
+  }
 }
