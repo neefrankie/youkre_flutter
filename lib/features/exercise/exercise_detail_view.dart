@@ -12,6 +12,7 @@ class ExerciseDetailView extends StatelessWidget {
   final LevelProgress levelProgress;
   final CourseSession courseSession;
   final ValueChanged<ExerciseProgress> onAnswer;
+  final ExerciseProgress? cachedExerciseProgress;
 
   const ExerciseDetailView({
     super.key,
@@ -19,6 +20,7 @@ class ExerciseDetailView extends StatelessWidget {
     required this.levelProgress,
     required this.courseSession,
     required this.onAnswer,
+    this.cachedExerciseProgress,
   });
 
   @override
@@ -27,9 +29,10 @@ class ExerciseDetailView extends StatelessWidget {
       create: (_) {
         final vm = ExerciseViewModel();
         vm.loadData(
-            exercise: exercise,
-            courseSession: courseSession,
-            levelProgress: levelProgress
+          exercise: exercise,
+          courseSession: courseSession,
+          levelProgress: levelProgress,
+          cachedExerciseProgress: cachedExerciseProgress,
         );
         return vm;
       },
