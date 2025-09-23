@@ -3,11 +3,9 @@ import 'package:youkre_flutter/core/models/course.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
 import 'package:youkre_flutter/core/models/exercise_level.dart';
 
-import 'package:youkre_flutter/core/services/sheet_manager.dart';
-import 'package:youkre_flutter/core/ui/widgets/bottom_sheet.dart';
 import 'package:youkre_flutter/core/ui/widgets/icon_label_button.dart';
-import 'package:youkre_flutter/core/ui/widgets/markdown_view.dart';
 import 'package:youkre_flutter/features/content/webview_page.dart';
+import 'package:youkre_flutter/features/exercise/explanation_page.dart';
 
 class ExerciseBottomBar extends StatelessWidget {
   final Course course;
@@ -58,31 +56,18 @@ class ExerciseBottomBar extends StatelessWidget {
             IconLabelButton(
               icon: Icons.question_mark,
               label: '解析',
-              onPressed: () { presentExplanation(context, exercise.explanation!); },
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ExplanationPage(markdown: exercise.fullAnswer)
+                  )
+                );
+              },
             ),
           ],
         )
       ],
-    );
-  }
-
-  void presentExplanation(BuildContext context, String markdown) {
-    SheetManager.presentSheet(
-        context,
-        child: BottomSheetContainer(
-          onDismiss: () {
-            SheetManager.dismiss(context);
-          },
-          title: '解析',
-          builder: (context, scrollController) {
-            return MarkdownView(
-              markdown: markdown,
-              isScrollable: true,
-              controller: scrollController,
-            );
-          },
-        ),
-        isScrollControlled: true
     );
   }
 
