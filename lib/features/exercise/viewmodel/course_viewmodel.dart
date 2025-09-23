@@ -60,7 +60,6 @@ class CourseViewModel extends ChangeNotifier {
 
   ExerciseLevel? moveToNextLevel() {
     _session = _session?.advanceLevel(_levels.length - 1);
-    notifyListeners();
     return currentLevel;
   }
 
