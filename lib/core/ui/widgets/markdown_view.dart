@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:logging/logging.dart';
 import 'package:youkre_flutter/core/ui/widgets/math_widget.dart';
 import 'package:youkre_flutter/core/ui/widgets/table_widget.dart';
 import 'package:youkre_flutter/core/utils/markdown_parser.dart';
 
 class MarkdownView extends StatelessWidget {
+  final logger = Logger('MarkdownView');
+
   final String markdown;
   final bool isScrollable;
   final TextAlign titleAlign;
   final ScrollController? controller;
 
-  const MarkdownView({
+  MarkdownView({
     super.key,
     required this.markdown,
     this.isScrollable = false,
@@ -108,7 +112,10 @@ class MarkdownView extends StatelessWidget {
     } else if (block is TableBlock) {
       return TableWidget(rows: block.cells);
     } else if (block is ImageBlock) {
-      return Image(image: AssetImage(block.src));
+      logger.info('image: ${block.src}');
+      return Center(
+        child: SvgPicture.asset(block.src, fit: BoxFit.contain),
+      );
     } else if (block is SeparatorBlock) {
       return Divider();
     }
