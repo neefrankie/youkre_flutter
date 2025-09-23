@@ -9,13 +9,27 @@ class ExerciseViewModel extends ChangeNotifier {
   String? error;
   ExerciseProgress? exerciseProgress;
 
-  int? selectedIndex;
+  int? get selectedIndex {
+    return exerciseProgress?.selectedIndex;
+  }
 
   Future<void> loadData({
     required Exercise exercise,
     required LevelProgress levelProgress,
     required CourseSession courseSession,
+    ExerciseProgress? cachedExerciseProgress,
   }) async {
+    print('loading exercise data ${exercise.id}');
+
+    // Used cached data to avoid query db.
+    if (cachedExerciseProgress != null) {
+      print('use cached exercise progress');
+      exerciseProgress = cachedExerciseProgress;
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
     notifyListeners();
 
@@ -26,9 +40,10 @@ class ExerciseViewModel extends ChangeNotifier {
           courseSession: courseSession,
           levelProgress: levelProgress
       );
+      print('loaded exercise progress ${progress.id}, level ${exercise.levelId}, exercise ${progress.exerciseId}');
+      print('exercise selected index: ${progress.selectedIndex}');
 
       exerciseProgress = progress;
-      selectedIndex = progress.selectedIndex;
       notifyListeners();
     } catch (e) {
       error = e.toString();
@@ -40,16 +55,17 @@ class ExerciseViewModel extends ChangeNotifier {
   }
 
   ExerciseProgress checkAnswer(int selected, Exercise exercise) {
-    selectedIndex = selected;
     notifyListeners();
 
     final progress = exerciseProgress;
+    // If the data is not created yet. Usually won't happen.
     if (progress == null) {
       final newProgress = ExerciseProgress.newSession(exercise.id);
       exerciseProgress = newProgress;
       notifyListeners();
       return newProgress;
     }
+    // Don't allow change
     if (progress.isCompleted) {
       return progress;
     }
