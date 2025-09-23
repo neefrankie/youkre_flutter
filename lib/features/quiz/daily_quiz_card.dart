@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youkre_flutter/core/ui/widgets/markdown_view.dart';
 import 'package:youkre_flutter/core/ui/widgets/tap_card_view.dart';
-import 'package:youkre_flutter/features/quiz/daily_quiz_page.dart';
+import 'package:youkre_flutter/features/quiz/quiz_detail_page.dart';
 import 'package:youkre_flutter/core/models/exercise.dart';
 
 class DailyQuizCard extends StatelessWidget {
