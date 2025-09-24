@@ -23,14 +23,15 @@ void main() async {
   final prefs = PreferenceService();
   await prefs.init();
 
+  final logger = Logger('main');
   final dbService = DatabaseService();
   final success = await dbService.ensureDatabaseCopied();
   if (!success) {
-    print('DB initialization failed. App cannot run.');
+    logger.info('DB initialization failed. App cannot run.');
   }
 
   final dbPath = await dbService.getDatabasePath();
-  print('db path: $dbPath');
+  logger.info('db path: $dbPath');
 
   final themeManager = ThemeManager();
 
