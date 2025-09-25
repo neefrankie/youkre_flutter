@@ -23,9 +23,11 @@ class TitleFigureView extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         Expanded(
-          child: SvgPicture.asset(
-            imagePath,
-            fit: BoxFit.contain,
+          child: Center(
+            child: SvgPicture.asset(
+              imagePath,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ],
