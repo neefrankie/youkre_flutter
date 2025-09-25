@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:youkre_flutter/core/ui/widgets/markdown_view.dart';
 
-class StudyPage extends StatelessWidget {
+class MarkdownDemoPage extends StatelessWidget {
 
-  const StudyPage({super.key});
+  const MarkdownDemoPage({super.key});
 
   final String example = r"""
 # Welcome to SwiftUI
@@ -57,6 +57,11 @@ $$
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownView(markdown: example, isScrollable: true);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Markdown Demo'),
+      ),
+      body: MarkdownView(markdown: example, isScrollable: true),
+    );
   }
 }
