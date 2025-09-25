@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:math' as math;
 import 'package:path/path.dart' as path;
+import 'package:youkre_flutter/core/utils/inline_parser.dart';
 
 sealed class MarkdownBlock {}
 
@@ -12,12 +13,13 @@ class HeadingBlock extends MarkdownBlock {
 }
 
 class ParagraphBlock extends MarkdownBlock {
-  final String text;
-  ParagraphBlock(this.text);
+  final List<InlineElement> inlineElements;
+
+  ParagraphBlock(this.inlineElements);
 }
 
 class ListItemBlock extends MarkdownBlock {
-  final List<String> items;
+  final List<List<InlineElement>> items;
 
   ListItemBlock(this.items);
 }
@@ -42,21 +44,7 @@ class TableBlock extends MarkdownBlock {
   TableBlock(this.cells);
 }
 
-class SeparatorBlock extends MarkdownBlock {
-
-}
-
-abstract class InlineElement {}
-
-class InlineText extends InlineElement {
-  final String text;
-  InlineText(this.text);
-}
-
-class InlineMath extends InlineElement {
-  final String latex;
-  InlineMath(this.latex);
-}
+class SeparatorBlock extends MarkdownBlock { }
 
 class MarkdownParser {
 
@@ -86,10 +74,10 @@ class MarkdownParser {
         }
       } else if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
         blocks.add(parseTable(trimmed));
-      } else if (isSeparatorLine(trimmed)) {
+      } else if (_isSeparatorLine(trimmed)) {
         blocks.add(SeparatorBlock());
       } else {
-        blocks.add(ParagraphBlock(trimmed));
+        blocks.add(ParagraphBlock(InlineParser.parse(trimmed)));
       }
     }
 
@@ -135,18 +123,18 @@ class MarkdownParser {
   }
   
   static MarkdownBlock parseMultiLineLatex(String input) {
-    // .replaceAllMapped(RegExp(r'\\begin\{(\w+)\*\}'), (m) => r'\begin{${m[1]}}')
-    //         .replaceAllMapped(RegExp(r'\\end\{(\w+)\*\}'), (m) => r'\end{${m[1]}}');
     final tex = input.replaceAll(r'{align*}', r'{aligned}');
     return MathBlock(latex: tex, multiLine: true);
   }
 
   static MarkdownBlock parseList(String line) {
     final items = line
-        .split('\n')
-        .map((item) => item.trim().substring(2).trim()) // 移除 `- ` 或 `* `
-        .toList();
-    
+      .split('\n')
+      .map((item) {
+        final line = item.trim().substring(2).trim();
+        return InlineParser.parse(line);
+      }) // 移除 `- ` 或 `* `
+      .toList();
     return ListItemBlock(items);
   }
 
@@ -177,7 +165,7 @@ class MarkdownParser {
             .split('|')
             .map((cell) => cell.trim())
             .toList();
-        if (!isSeparatorRow(cells)) {
+        if (!_isSeparatorRow(cells)) {
           rows.add(cells);
         }
       }
@@ -186,49 +174,18 @@ class MarkdownParser {
     return TableBlock(rows);
   }
 
-  static bool isSeparatorRow(List<String> row) {
+  static bool _isSeparatorRow(List<String> row) {
     return row.every((cell) {
       final trimmed = cell.trim();
       return trimmed.isNotEmpty && trimmed.split('').every((c) => c == '-' || c == ':');
     });
   }
 
-  static bool isSeparatorLine(String line) {
+  static bool _isSeparatorLine(String line) {
     if (line.startsWith('---')) {
       return line.split('').every((c) => c == '-');
     }
 
     return false;
-  }
-
-  static List<InlineElement> parseInlineElements(String text) {
-    final result = <InlineElement>[];
-    int start = 0;
-
-    while (start < text.length) {
-      int dollar = text.indexOf(r'$', start);
-      if (dollar == -1) {
-        result.add(InlineText(text.substring(start)));
-        break;
-      }
-
-      // 添加前面的文本
-      if (dollar > start) {
-        result.add(InlineText(text.substring(start, dollar)));
-      }
-
-      int nextDollar = text.indexOf(r'$', dollar + 1);
-      if (nextDollar == -1) {
-        result.add(InlineText(text.substring(dollar)));
-        break;
-      }
-
-      String latex = text.substring(dollar + 1, nextDollar);
-      result.add(InlineMath(latex));
-
-      start = nextDollar + 1;
-    }
-
-    return result;
   }
  }
