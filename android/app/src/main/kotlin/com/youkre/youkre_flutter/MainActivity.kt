@@ -1,4 +1,4 @@
-package com.example.youkre_flutter
+package com.youkre.youkre_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
