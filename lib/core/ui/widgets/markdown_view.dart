@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
-import 'package:youkre_flutter/core/ui/widgets/math_widget.dart';
+import 'package:youkre_flutter/core/ui/widgets/inline_renderer.dart';
+import 'package:youkre_flutter/core/ui/widgets/list_item_view.dart';
+import 'package:youkre_flutter/core/ui/widgets/math_text_view.dart';
 import 'package:youkre_flutter/core/ui/widgets/table_widget.dart';
 import 'package:youkre_flutter/core/utils/markdown_parser.dart';
 
@@ -87,46 +89,37 @@ class MarkdownView extends StatelessWidget {
         style: style,
         textAlign: align,
       );
-    } else if (block is ParagraphBlock) {
+    }
+
+    if (block is ParagraphBlock) {
       return SizedBox(
         width: double.infinity,
-        child: Text(
-          block.text,
-          textAlign: TextAlign.start,
+        child: InlineMarkdownView(
+          elements: block.inlineElements,
         ),
       );
-    } else if (block is ListItemBlock) {
-      return Column(
-        children: block.items.map((item) {
-          return Row(
-            spacing: 8,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "•",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: Text(
-                  item,
-                  softWrap: true,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
-          );
-        }).toList(),
-      );
-    } else if (block is MathBlock) {
-      return MathBlockWidget(latex: block.latex);
-    } else if (block is TableBlock) {
+    }
+
+    if (block is ListItemBlock) {
+      return ListItemView(block: block);
+    }
+
+    if (block is MathBlock) {
+      return MathTexView(latex: block.latex);
+    }
+
+    if (block is TableBlock) {
       return TableWidget(rows: block.cells);
-    } else if (block is ImageBlock) {
+    }
+
+    if (block is ImageBlock) {
       logger.info('image: ${block.src}');
       return Center(
         child: SvgPicture.asset(block.src, fit: BoxFit.contain),
       );
-    } else if (block is SeparatorBlock) {
+    }
+
+    if (block is SeparatorBlock) {
       return Divider();
     }
 
