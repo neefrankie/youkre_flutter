@@ -100,9 +100,19 @@ class MarkdownView extends StatelessWidget {
         children: block.items.map((item) {
           return Row(
             spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("•"),
-              Text(item)
+              Text(
+                "•",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Expanded(
+                child: Text(
+                  item,
+                  softWrap: true,
+                  textAlign: TextAlign.left,
+                ),
+              ),
             ],
           );
         }).toList(),
