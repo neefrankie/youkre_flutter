@@ -106,7 +106,7 @@ class MarkdownParser {
 
   static MarkdownBlock parseSquareLatex(String line) {
     final content = line.substring(2, line.length - 2).trim();
-    return MathBlock(latex: content);
+    return parseMultiLineLatex(content);
   }
 
   static bool _isDollarLatex(String line) {
@@ -115,7 +115,7 @@ class MarkdownParser {
 
   static MarkdownBlock parseDollarLatex(String line) {
     final content = line.substring(2, line.length - 2).trim();
-    return MathBlock(latex: content);
+    return parseMultiLineLatex(content);
   }
 
   static bool _isAlignLatex(String line) {
